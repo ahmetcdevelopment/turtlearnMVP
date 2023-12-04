@@ -1,0 +1,128 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<!--=================================
+  Modal login -->
+<div class="modal login fade show" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="loginModalLabel">Log in & Register</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @* <form id="loginOrRegisterForm" method="post" onsubmit="return false" asp-controller="User" asp-action="Login"> *@
+                <ul class="nav nav-tabs nav-tabs-02 justify-content-center" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="login-tab" data-bs-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="false"> <span> Log in</span></a>
+                    </li>
+                    <p>&nbsp;</p>
+                    <li class="nav-item">
+                        <a class="nav-link" id="register-tab" data-bs-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="true"><span>Register</span></a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
+                        <div id="partialLogin"></div>
+
+                        <script type="text/javascript">
+                            $(document).ready(function () {
+                                $.ajax({
+                                    url: '/User/Login',
+                                    type: 'GET',
+                                    success: function (result) {
+                                        $('#partialLogin').html(result);
+                                    },
+                                    error: function () {
+                                        console.error('Error loading partial view');
+                                    }
+                                });
+                            });
+                        </script>
+                    </div>
+                    <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
+                        <div id="partialRegister"></div>
+
+                        <script type="text/javascript">
+                            $(document).ready(function () {
+                                $.ajax({
+                                    url: '/User/Register',
+                                    type: 'GET',
+                                    success: function (result) {
+                                        $('#partialRegister').html(result);
+                                    },
+                                    error: function () {
+                                        console.error('Error loading partial view');
+                                    }
+                                });
+                            });
+                        </script>
+
+                    </div>
+                   
+                </div>
+            </div>
+            @* </form> *@
+        </div>
+    </div>
+</div>
+
+<!--=================================
+Modal login -->
+<script>
+    $(document).ready(function () {
+        // // Handle click event on the login tab
+        // $('#login-tab').on('click', function () {
+        //     // Set the value of RegUserTypeId to -1
+        //     $('input[name="RegUserTypeId"]').val('-1');
+        // });
+
+        // Handle click event on the register tab
+        $('#register-tab').on('click', function () {
+            // Optionally, you can set the value to a different value when the register tab is clicked
+            // $('input[name="RegUserTypeId"]').val('some-other-value');
+        });
+
+        $('#registerButton').on('click', function () {
+            submitLoginForm(0);
+        });
+
+        $('#loginButton').on('click', function () {
+            submitLoginForm(1);
+        });
+
+        function submitLoginForm(submitType) {
+            // Serialize the form data
+            var formData = $('#loginOrRegisterForm').serialize();
+
+            // Add the submitType to the form data
+            formData += '&submitType=' + submitType;
+
+            // Make an AJAX request to submit the form
+            $.ajax({
+                url: $('#loginOrRegisterForm').attr('action'),
+                type: 'POST',
+                data: formData,
+                success: function (data) {
+                    // Handle the success response
+                    if (data != null) {
+
+                        window.alert(data.message);
+                        window.location.reload();
+                    }
+
+                    // You can redirect or perform other actions based on the response
+                },
+                error: function (error) {
+                    // Handle the error response
+                    if (error != null) {
+
+                        // window.alert(error.message);
+                    }
+                }
+            });
+        }
+    });
+</script>
