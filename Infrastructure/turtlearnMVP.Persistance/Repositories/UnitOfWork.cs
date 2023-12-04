@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using turtlearnMVP.Application.Persistance;
 using turtlearnMVP.Application.Persistance.Abstract;
+using turtlearnMVP.Application.Persistance.Repositories;
 using turtlearnMVP.Persistance.Context;
 using turtlearnMVP.Persistance.Repositories.EntityFramework;
 
@@ -27,6 +28,7 @@ namespace turtlearnMVP.Persistance.Repositories
         private EfHomeworkRepository _EfHomeworkRepository;
         private EfHomeworkTransferRepository _EfHomeworkTransferRepository;
         private EfSessionRepository _EfSessionRepository;
+        private EfSessionRollCallRepository _EfSessionRollCallRepository;
         public ICategoyRepository Categories => _EfCategoryRepository ?? new EfCategoryRepository(_Context);
 
         public ICourseRepository Courses => _EfCourseRepository ?? new EfCourseRepository(_Context);
@@ -42,6 +44,8 @@ namespace turtlearnMVP.Persistance.Repositories
         public IHomeworkTransferRepository HomeworkTransfers => _EfHomeworkTransferRepository ?? new EfHomeworkTransferRepository(_Context);
 
         public ISessionRepository Sessions => _EfSessionRepository ?? new EfSessionRepository(_Context);
+
+        public ISessionRollCallRepository SessionRollCalls => _EfSessionRollCallRepository ?? new EfSessionRollCallRepository(_Context);
 
         public async ValueTask DisposeAsync()
         {

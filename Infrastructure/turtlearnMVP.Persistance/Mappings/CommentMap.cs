@@ -13,7 +13,26 @@ namespace turtlearnMVP.Persistance.Mappings
     {
         public void Configure(EntityTypeBuilder<Comment> builder)
         {
-            throw new NotImplementedException();
+            builder.HasKey(c => c.Id);
+            builder.Property(c => c.Id).ValueGeneratedOnAdd();
+
+            builder.Property(c => c.CourseId).IsRequired();
+
+            builder.Property(c => c.StudentId).IsRequired();
+
+            builder.Property(c => c.Text).IsRequired();
+            builder.Property(c => c.Text).HasMaxLength(250);
+
+            builder.Property(c => c.Rating).IsRequired();
+
+            builder.Property(c => c.IsDeleted).IsRequired().HasDefaultValue(false);
+
+            builder.Property(c => c.UpdateUserId).IsRequired();
+
+            builder.Property(c => c.UpdateDate).IsRequired();
+
+
+            builder.ToTable("Comments");
         }
     }
 }

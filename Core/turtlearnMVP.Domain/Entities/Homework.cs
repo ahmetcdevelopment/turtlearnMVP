@@ -24,6 +24,7 @@ namespace turtlearnMVP.Domain.Entities
         /// </summary>
         [StringLength(200)]
         public string Title { get; set; }
+        public string UploadFile { get; set; }// Eğitmen bir ödev dosyası yüklediyse burada tutulur.
 
         //ödevin dosyalarnı içeren bir property gerekli
         public DateTime StartDate { get; set; }//ödevin başlangıç zamanı

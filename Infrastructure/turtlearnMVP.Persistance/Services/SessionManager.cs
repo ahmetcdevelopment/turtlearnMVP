@@ -3,35 +3,72 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TurtLearn.Shared.Utilities.Extensions;
+using TurtLearn.Shared.Utilities.Messages;
 using TurtLearn.Shared.Utilities.Results.Abstract;
+using TurtLearn.Shared.Utilities.Results.ComplexTypes;
+using TurtLearn.Shared.Utilities.Results.Concrete;
+using turtlearnMVP.Application.Persistance;
 using turtlearnMVP.Application.Persistance.Services;
 using turtlearnMVP.Domain.DTOs;
 using turtlearnMVP.Domain.Entities;
+using turtlearnMVP.Domain.Enums;
 
 namespace turtlearnMVP.Persistance.Services
 {
     public class SessionManager : ISessionService
     {
-        public IQueryable<SessionDTO> _QueryableSessions => throw new NotImplementedException();
+        private readonly IUnitOfWork _UnitOfWork;
+
+        public SessionManager(IUnitOfWork unitOfWork)
+        {
+            _UnitOfWork = unitOfWork;
+        }
+        private static string _tableNameTR = TableExtensions.GetTableTitle<Session>();
+
+        public IQueryable<SessionDTO> _QueryableSessions => _UnitOfWork.Sessions.GetAllQueryableRecords();
 
         public IDataResult<IList<SessionDTO>> FetchAllDtos()
         {
-            throw new NotImplementedException();
+            var allQueryableRecords = _UnitOfWork.Sessions.GetAllQueryableRecords();
+            var SessionList = allQueryableRecords.ToList();
+            return SessionList == null || SessionList.Count <= 0 ?
+                new DataResult<List<SessionDTO>>(ResultStatus.Error, new List<SessionDTO>()) :
+                new DataResult<List<SessionDTO>>(ResultStatus.Success, SessionList);
         }
 
-        public Task<IDataResult<Session>> GetById(int id)
+        public async Task<IDataResult<Session>> GetById(int id)
         {
-            throw new NotImplementedException();
+            var session = await _UnitOfWork.Sessions.GetByIdAsync(id);
+            return session == null || session.Id <= 0 ?
+                new DataResult<Session>(ResultStatus.Error, Messages.ResultIsNotFound, session) :
+                new DataResult<Session>(ResultStatus.Success, session); ;
         }
 
-        public Task<IResult> InsertAsync(Session entity)
+        public async Task<IResult> InsertAsync(Session entity)
         {
-            throw new NotImplementedException();
+            var message = Messages.FailedAdd(_tableNameTR);
+            if (entity != null || entity.Id < 0)
+            {
+                await _UnitOfWork.Sessions.AddAsync(entity);
+                message = Messages.SuccessAdd(_tableNameTR);
+                await _UnitOfWork.SaveChanges();
+                return new Result(ResultStatus.Success, message);
+            }
+            return new Result(ResultStatus.Error, message);
         }
 
-        public Task<IResult> UpdateOrDelete(Session entity)
+        public async Task<IResult> UpdateOrDelete(Session entity)
         {
-            throw new NotImplementedException();
+            var message = Messages.FailedUpdate(_tableNameTR);
+            if (entity != null || entity.Id > 0)
+            {
+                await _UnitOfWork.Sessions.UpdateAsync(entity);
+                message = Messages.SuccessUpdate(_tableNameTR);
+                await _UnitOfWork.SaveChanges();
+                return new Result(ResultStatus.Success, message);
+            }
+            return new Result(ResultStatus.Error, message);
         }
     }
 }

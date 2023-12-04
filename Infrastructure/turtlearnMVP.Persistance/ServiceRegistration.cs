@@ -24,6 +24,7 @@ namespace turtlearnMVP.Persistance
             services.AddScoped<IHomeworkService, HomeworkManager>();
             services.AddScoped<IHomeworkTransferService, HomeworkTransferManager>();
             services.AddScoped<ISessionService, SessionManager>();
+            services.AddScoped<ISessionRollCallService, SessionRollCallManager>();
         }
     }
 }

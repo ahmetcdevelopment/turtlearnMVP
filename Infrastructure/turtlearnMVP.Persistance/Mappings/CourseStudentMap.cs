@@ -13,7 +13,17 @@ namespace turtlearnMVP.Persistance.Mappings
     {
         public void Configure(EntityTypeBuilder<CourseStudent> builder)
         {
-            throw new NotImplementedException();
+            builder.HasKey(cs => cs.Id);
+            builder.Property(cs => cs.Id).ValueGeneratedOnAdd();
+
+            builder.Property(cs => cs.CourseId).IsRequired();
+
+            builder.Property(cs => cs.StudentId).IsRequired();
+
+            builder.Property(cs => cs.UpdateUserId).IsRequired();
+            builder.Property(cs=>cs.UpdateDate).IsRequired();
+
+            builder.ToTable("CourseStudents");
         }
     }
 }

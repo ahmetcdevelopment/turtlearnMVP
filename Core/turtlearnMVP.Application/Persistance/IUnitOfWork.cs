@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using turtlearnMVP.Application.Persistance.Abstract;
+using turtlearnMVP.Application.Persistance.Repositories;
 
 namespace turtlearnMVP.Application.Persistance
 {
@@ -17,6 +18,7 @@ namespace turtlearnMVP.Application.Persistance
         IHomeworkRepository Homeworks { get; }
         IHomeworkTransferRepository HomeworkTransfers { get; }
         ISessionRepository Sessions { get; }
+        ISessionRollCallRepository SessionRollCalls { get; }
         Task<int> SaveChanges();
     }
 }

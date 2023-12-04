@@ -7,10 +7,11 @@ using TurtLearn.Shared.DataAccess.Repositories;
 using turtlearnMVP.Domain.DTOs;
 using turtlearnMVP.Domain.Entities;
 
-namespace turtlearnMVP.Application.Persistance.Abstract
+namespace turtlearnMVP.Application.Persistance.Repositories
 {
-    public interface IHomeworkTransferRepository : IRepository<HomeworkTransfer>
+    public interface ISessionRollCallRepository : IRepository<SessionRollCall>
     {
-        IQueryable<HomeworkTransferDTO> GetAllQueryableRecords();
+        IQueryable<SessionRollCallDTO> GetAllQueryableRecords();
+
     }
 }

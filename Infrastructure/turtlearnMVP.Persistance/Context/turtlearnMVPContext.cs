@@ -5,8 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TurtLearn.Shared.DataAccess.Mappings;
 using TurtLearn.Shared.Entities.Concrete;
 using turtlearnMVP.Domain.Entities;
+using turtlearnMVP.Persistance.Mappings;
 
 namespace turtlearnMVP.Persistance.Context
 {
@@ -20,12 +22,28 @@ namespace turtlearnMVP.Persistance.Context
         public DbSet<Homework> Homeworks { get; set; }
         public DbSet<HomeworkTransfer> HomeworkTransfers { get; set; }
         public DbSet<Session> Sessions { get; set; }
+        public DbSet<SessionRollCall> SessionRollCalls { get; set; }
         public turtlearnMVPContext(DbContextOptions options) : base(options)
         {
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder);
+            builder.ApplyConfiguration(new RoleClaimMap());
+            builder.ApplyConfiguration(new RoleMap());
+            builder.ApplyConfiguration(new UserClaimMap());
+            builder.ApplyConfiguration(new UserLoginMap());
+            builder.ApplyConfiguration(new UserMap());
+            builder.ApplyConfiguration(new UserRoleMap());
+            builder.ApplyConfiguration(new UserTokenMap());
+            builder.ApplyConfiguration(new CategoryMap());
+            builder.ApplyConfiguration(new CommentMap());
+            builder.ApplyConfiguration(new CourseEnrollmentMap());
+            builder.ApplyConfiguration(new CourseMap());
+            builder.ApplyConfiguration(new CourseStudentMap());
+            builder.ApplyConfiguration(new HomeworkMap());
+            builder.ApplyConfiguration(new HomeworkTransferMap());
+            builder.ApplyConfiguration(new SessionMap());
+            builder.ApplyConfiguration(new SessionRollCallMap());
         }
     }
 }

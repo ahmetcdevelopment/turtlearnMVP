@@ -13,18 +13,14 @@ namespace turtlearnMVP.Domain.Entities
     /// <summary>
     /// Kursların her bir oturumu
     /// </summary>
-    public class Session : IEntity
+    public class Session : EntityBase<int>, IEntity
     {
 
         /// <summary>
         /// Ait olduğu kurs
         /// </summary>
         public int CourseId { get; set; }// oturum hangi kursa ait.
-
-        /// <summary>
-        /// katılacak öğrenci
-        /// </summary>
-        public int StudentId { get; set; }//User tablosundan çekeceğiz.
+        public string Name { get; set; }// Oturumun ismi nedir - 1.oturum vs vs
 
         /// <summary>
         /// 13:24 23.02.2023
