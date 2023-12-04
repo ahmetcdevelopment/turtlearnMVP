@@ -6,4 +6,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\turtlearnMVP.Infrastructure\turtlearnMVP.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\turtlearnMVP.Persistance\turtlearnMVP.Persistance.csproj" />
+  </ItemGroup>
+
 </Project>
