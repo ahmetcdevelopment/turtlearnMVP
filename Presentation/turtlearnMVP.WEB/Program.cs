@@ -1,9 +1,10 @@
+using turtlearnMVP.Persistance;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-//builder.Services.LoadMyPersistanceServices();
+builder.Services.LoadMyPersistanceServices();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
