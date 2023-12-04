@@ -5892,3 +5892,21 @@ textarea.form-control {
       padding-bottom: 7px; } }
 
 /*# sourceMappingURL=../css/style.css.map */
+
+/*************************
+       zurafworks custom
+*************************/
+
+/* _Layout.cshtml Login Butonu için */
+.zurafworks-login-button {
+    cursor: pointer;
+    background-color: #d9eee1;
+    padding: 2px;
+    border-radius: 50px;
+}
+
+@media (max-width: 991px) {
+    .zurafworks-login-button {
+        background-color: #43533e;
+    }
+}
