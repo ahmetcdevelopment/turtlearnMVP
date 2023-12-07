@@ -52,6 +52,9 @@ namespace TurtLearn.Shared.DataAccess.Mappings
             {
                 Id = 1,
                 UserName = "adminuser",
+                FirstName = "admin",
+                LastName = "admin",
+                Photo = "https://pbs.twimg.com/media/C8QqGm4UQAAUiET.jpg",
                 NormalizedUserName = "ADMINUSER",
                 Email = "adminuser@gmail.com",
                 NormalizedEmail = "ADMINUSER@GMAIL.COM",
@@ -65,6 +68,9 @@ namespace TurtLearn.Shared.DataAccess.Mappings
             {
                 Id = 2,
                 UserName = "editoruser",
+                FirstName = "editor",
+                LastName = "editor ",
+                Photo = "https://pbs.twimg.com/media/C8QqGm4UQAAUiET.jpg",
                 NormalizedUserName = "EDITORUSER",
                 Email = "editoruser@gmail.com",
                 NormalizedEmail = "EDITORUSER@GMAIL.COM",

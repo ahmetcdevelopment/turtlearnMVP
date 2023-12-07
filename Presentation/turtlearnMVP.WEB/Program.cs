@@ -1,10 +1,32 @@
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using TurtLearn.Shared.Entities.Concrete;
 using turtlearnMVP.Persistance;
+using turtlearnMVP.Persistance.Context;
+
 var builder = WebApplication.CreateBuilder(args);
+
+//Database
+builder.Services.AddDbContext<turtlearnMVPContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("DevelopmentDB")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 builder.Services.LoadMyPersistanceServices();
+
+builder.Services.AddIdentity<User, Role>(options =>
+{
+    options.Password.RequireDigit = false; // şifrede rakam bulunsun mu?
+    options.Password.RequiredLength = 5; // şifre en az kaç karakterden oluþsun?
+    options.Password.RequiredUniqueChars = 0; // unique karakterlerden kaç tane olsun
+    options.Password.RequireNonAlphanumeric = false;// küçük karakterler zorunlu kýlýnsýn mý?
+    options.Password.RequireUppercase = false;// büyük karakterler zorunlu kýlýnsýn mý?
+
+    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+$";
+    options.User.RequireUniqueEmail = true; // tüm emailler eþsiz olsun mu?
+
+}).AddEntityFrameworkStores<turtlearnMVPContext>().AddDefaultTokenProviders();
+
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -12,13 +34,13 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie = new CookieBuilder
     {
         Name = "turtlearnCookie",
-        HttpOnly = true,//kullan�c�n�n js ile bizim cookie bilgilerimizi g�rmesini engelliyoruz
-        SameSite = SameSiteMode.Strict, //cookie bilgileri sadece kendi sitemizden geldi�inde i�lensin
-        SecurePolicy = CookieSecurePolicy.SameAsRequest //always olmal� 
+        HttpOnly = true,//kullanıcının js ile bizim cookie bilgilerimizi görmesini engelliyoruz
+        SameSite = SameSiteMode.Strict, //cookie bilgileri sadece kendi sitemizden geldiğinde işlensin
+        SecurePolicy = CookieSecurePolicy.SameAsRequest //always olmalı 
     };
-    options.SlidingExpiration = true; //kullan�c� sitemize girdi�inde s�re tan�n�yor
-    options.ExpireTimeSpan = System.TimeSpan.FromMinutes(15); // 15 dakikatekrar giri� gerekmeyecek
-    options.AccessDeniedPath = new PathString("/Shared/AccessDenied"); //yetkisiz eri�im
+    options.SlidingExpiration = true; //kullanıcı sitemize girdiğinde süre tanınıyor
+    options.ExpireTimeSpan = System.TimeSpan.FromMinutes(15); // 15 dakikatekrar giriş gerekmeyecek
+    options.AccessDeniedPath = new PathString("/Shared/AccessDenied"); //yetkisiz erişim
 });
 var app = builder.Build();
 
@@ -34,7 +56,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

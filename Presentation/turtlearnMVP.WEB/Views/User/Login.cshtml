@@ -24,7 +24,6 @@
         </div>
         <div class="row">
             <div class="mb-3 col-sm-1">
-                
             </div>
             <div class="mb-3 col-sm-4">
                 <label>
@@ -48,6 +47,35 @@
     </div>
 </div>
 
+<script type="text/javascript">
+
+    $('#loginButton').on('click', function () {
+        submitLoginForm();
+    });
+
+    function submitLoginForm() {
+        var formData = $('#LoginForm').serialize();
+
+        $.ajax({
+            url: $('#LoginForm').attr('action'),
+            type: 'POST',
+            data: formData,
+            success: function (data) {
+                if (data != null) {
+
+                    window.alert(data.message);
+                    window.location.reload();
+                }
+            },
+            error: function (error) {
+                if (error != null) {
+                     window.alert(error.message);
+                }
+            }
+        });
+    }
+
+</script>
 
 
 @* Tokenle Girme

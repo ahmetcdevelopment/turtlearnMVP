@@ -58,6 +58,7 @@ NOTE: This is main stylesheet of template, This file contains the styling for th
 *****************************/
 :root {
     --theme-color: #538662;
+    --error-color: #bb2525;
 }
 body {
   font-family: "Quicksand", sans-serif;
@@ -5910,3 +5911,51 @@ textarea.form-control {
         background-color: #43533e;
     }
 }
+
+/* Kýrmýzý Renkli Error ya da Çýkýþ Butonlarý Ýçin*/
+
+.show > .btn-error.dropdown-toggle {
+    background: var(--error-color);
+    border-color: var(--error-color);
+}
+
+.btn-error {
+    background: var(--error-color);
+    border-color: var(--error-color);
+    color: #ffffff;
+}
+
+    .btn-error:hover {
+        background: #1c1a1f;
+        border-color: #1c1a1f;
+        color: #ffffff;
+    }
+
+        .btn-error:hover:not(:disabled):not(.disabled).active {
+            background: #1c1a1f;
+            border-color: #1c1a1f;
+        }
+
+        .btn-error:hover:not(:disabled):not(.disabled):active {
+            background: #1c1a1f;
+            border-color: #1c1a1f;
+        }
+
+    .btn-error:not(:disabled):not(.disabled):active:focus {
+        background: #1c1a1f;
+        border-color: #1c1a1f;
+        color: var(--theme-color);
+    }
+
+    .btn-error:not(:disabled):not(.disabled).active,
+    .btn-error:not(:disabled):not(.disabled):active,
+    .show > .btn-error.dropdown-toggle {
+        background: var(--error-color);
+        border-color: var(--error-color);
+    }
+
+    .btn-error.focus,
+    .btn-error:focus {
+        background: var(--error-color);
+        border-color: var(--error-color);
+    }

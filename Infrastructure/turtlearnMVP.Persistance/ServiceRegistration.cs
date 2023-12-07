@@ -1,11 +1,14 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TurtLearn.Shared.Entities.Concrete;
 using turtlearnMVP.Application.Persistance;
 using turtlearnMVP.Application.Persistance.Services;
+using turtlearnMVP.Persistance.Context;
 using turtlearnMVP.Persistance.Repositories;
 using turtlearnMVP.Persistance.Services;
 

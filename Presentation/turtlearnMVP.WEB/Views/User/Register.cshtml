@@ -55,6 +55,39 @@
         <button id="registerButton" class="btn btn-primary">Sign up</button>
     </div>
 </div>
+
+
+<script type="text/javascript">
+
+    $('#registerButton').on('click', function () {
+        submitRegisterForm();
+    });
+
+    function submitRegisterForm() {
+        var formData = $('#RegisterForm').serialize();
+
+        $.ajax({
+            url: $('#RegisterForm').attr('action'),
+            type: 'POST',
+            data: formData,
+            success: function (data) {
+                if (data != null) {
+
+                    window.alert(data.message);
+                    window.location.reload();
+                }
+            },
+            error: function (error) {
+                if (error != null) {
+                    window.alert(error.message);
+                }
+            }
+        });
+    }
+
+</script>
+
+
 @*
     Tokenle kayıt
 

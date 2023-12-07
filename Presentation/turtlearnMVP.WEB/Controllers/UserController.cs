@@ -26,7 +26,6 @@ namespace turtlearnMVP.WEB.Controllers
             return View();
         }
 
-        [HttpGet]
         public async Task<IActionResult> LoginOrRegisterPartial()
         {
             return PartialView();
@@ -50,7 +49,8 @@ namespace turtlearnMVP.WEB.Controllers
                     var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, false);
                     if (result.Succeeded)
                     {
-                        return Json(new { success = true, redirectUrl = Url.Action("Index", "Home") });
+                        HttpContext.Response.Cookies.Append("UserProfilePhoto", user.Photo);
+                        return Json(new { success = true, message = "Giriş Başarılı!", redirectUrl = Url.Action("Index", "Home") });
                     }
                     else
                     {
@@ -96,7 +96,7 @@ namespace turtlearnMVP.WEB.Controllers
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
-
+                    HttpContext.Response.Cookies.Append("UserProfilePhoto", user.Photo);
                     return Json(new { success = true, redirectUrl = Url.Action("Index", "Home") });
                 }
                 else
@@ -113,11 +113,12 @@ namespace turtlearnMVP.WEB.Controllers
         }
 
         [Authorize]
-        [HttpGet]
+        //[HttpGet]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home", new { Area = "" });
+            Response.Cookies.Delete("UserProfilePhoto");
+            return Json(new { success = true, message = "Çıkış Başarılı!", redirectUrl = Url.Action("Index", "Home") });
         }
     }
 }
