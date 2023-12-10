@@ -5959,3 +5959,16 @@ textarea.form-control {
         background: var(--error-color);
         border-color: var(--error-color);
     }
+
+/*.widget-title-left,
+.widget-title-right {
+    flex: 1;
+}*/
+
+.widget-title-left {
+    text-align: left;
+}
+
+.widget-title-right {
+    text-align: right;
+}

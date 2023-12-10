@@ -39,7 +39,46 @@
     <link rel="stylesheet" href="~/css/magnific-popup/magnific-popup.css" />
 
     <!-- Template Style -->
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="~/css/style.css" />
+    <style>
+        .brand-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .admin-text {
+            position: absolute;
+            bottom: -10px;
+            right: -25px;
+        }
+    </style>
+
+
+    <!-- JQGRID -->
+    <!-- Include jQuery first -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <!-- Include jQuery UI -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/themes/redmond/jquery-ui.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+    <!-- Other CSS files -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/css/ui.jqgrid.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.2/dist/sweetalert2.min.css">
+    <link href="~/js/jquery-ui-1.12.1.custom/jquery-ui.css" rel="stylesheet" />
+    <link href="~/js/jquery-ui-1.12.1.custom/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/js/jquery-ui-1.12.1.custom/jquery-ui.structure.css" rel="stylesheet" />
+    <link href="~/js/jquery-ui-1.12.1.custom/jquery-ui.structure.min.css" rel="stylesheet" />
+    <link href="~/js/jquery-ui-1.12.1.custom/jquery-ui.theme.css" rel="stylesheet" />
+    <link href="~/js/jquery-ui-1.12.1.custom/jquery-ui.theme.min.css" rel="stylesheet" />
+
+    <!-- Include other JavaScript files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/jquery.jqgrid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.2/dist/sweetalert2.all.min.js"></script>
+
+    <!-- Ensure jQuery.noConflict() is called after jQuery is loaded -->
+    <script>var $ = jQuery.noConflict(false);</script>
+    <!-- JQGRID -->
 </head>
 <body>
     <div id="loginOrRegisterPartialZone"></div>
@@ -50,10 +89,16 @@
             <div class="container-fluid position-relative px-0">
                 <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"><i class="fas fa-align-left"></i></button>
                 <a class="navbar-brand" href="index.html">
-                    <img class="img-fluid" src="images/logo-dark.png" alt="logo">
+                    <div class="brand-wrapper">
+                        <img class="img-fluid" src="~/images/logo-dark.png" alt="logo">
+                        <span style="color: black" class="admin-text">admin</span>
+                    </div>
                 </a>
                 <a class="navbar-brand navbar-brand-sticky" href="index.html">
-                    <img class="img-fluid" src="images/logo.png" alt="logo">
+                    <div class="brand-wrapper">
+                        <img class="img-fluid" src="~/images/logo.png" alt="logo">
+                        <span class="admin-text">admin</span>
+                    </div>
                 </a>
                 <div class="search-category ms-auto">
                     <div class="form-group select-border course-category">
@@ -290,7 +335,7 @@
     </div>
     </nav>
     </header> *@
-    <div class="container">
+    <div style="max-width:90vw !important;"  class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

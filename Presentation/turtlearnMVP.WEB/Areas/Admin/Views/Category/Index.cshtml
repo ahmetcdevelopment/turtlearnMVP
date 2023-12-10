@@ -1,0 +1,103 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Category";
+}
+<!--=================================
+   blog single -->
+<section style="max-width:100vw !important;" class="space-ptb">
+    @* <div  style="max-width:1000vw !important;" class="container"> *@
+    <div class="row">
+        <div class="col-md-12 col-xl-12 mt-4 mt-md-0 order-2 order-lg-1">
+            <div class="blog-sidebar">
+                <div class="widgets">
+                    <div class="widget">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h3>
+                                    Category
+                                </h3>
+                            </div>
+                            <div class="col-md-4">
+                            </div>
+                            <div class="col-md-4 widget-title-right">
+                                <button class="btn btn-primary">
+                                    <i class="fa fa-plus"></i>   <span style="font-weight:bold">ADD</span>
+                                </button>
+                            </div>
+                            @* <div class="widget-title"> *@
+                            @*  <div class="widget-title-left">Widget Title Left</div>
+                            <div class="widget-title-right">Widget Title Right</div> *@
+                        </div>
+                        <div class="widget-content">
+                            <table id="jqGrid"></table>
+                            <div id="jqGridPager"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* </div> *@
+</section>
+<!--=================================
+blog single -->
+<script type="text/javascript">
+    var grid = $("#jqGrid");
+
+    grid.jqGrid({
+        url: '/Admin/Category/GetCategories',
+        mtype: "GET",
+        datatype: "json",
+        colnames: ["Id", "Category"],
+        colModel: [
+            { label: 'Id', name: 'Id', key: true, width: 15, hidden: true },
+            { label: 'Category', name: 'Name', width: 100, sorttype: function (cell, obj) { return turkishToLower(cell); } },
+            {
+                name: 'actions',
+                index: 'actions',
+                width: 15,
+                align: 'center',
+                sortable: false,
+                formatter: function (cellvalue, options, rowObject) {
+                    return '<button class="edit_btn" >Edit</button>&nbsp;&nbsp;&nbsp;' +
+                        '<button href="#" class="del_btn" >Delete</button>';
+                }
+            }
+        ],
+        loadonce: true,
+        navOptions: { reloadGridOptions: { fromServer: true } },
+        multiSort: true,
+        multiSelect: true,
+        sortable: true,
+        viewrecords: true,
+        search: true,
+        //width: "auto",
+        height: 250,
+        rowNum: 9,
+        pager: "#jqGridPager",
+
+
+    });
+
+    function setGridWidth() {
+        var containerWidth = $('.container').width(); // Container'ın genişliğini alın
+
+        // jqGrid'in genişliğini hesaplayın
+        var gridWidth = containerWidth - 50;
+
+        // jqGrid'in genişliğini ayarlayın
+        grid.jqGrid('setGridWidth', gridWidth);
+    }
+
+    $(document).ready(function () {
+
+        setGridWidth();
+
+    });
+
+    $(window).on('resize', function () {
+        setGridWidth();
+    });
+</script>
