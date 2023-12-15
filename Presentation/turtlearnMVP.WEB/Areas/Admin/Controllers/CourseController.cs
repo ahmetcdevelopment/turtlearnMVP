@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Text.Json;
 using TurtLearn.Shared.Searching;
 using TurtLearn.Shared.Utilities.Messages;
 using TurtLearn.Shared.Utilities.Results.ComplexTypes;
@@ -15,15 +16,16 @@ using turtlearnMVP.WEB.Helpers;
 
 namespace turtlearnMVP.WEB.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CourseController : Controller
     {
         private readonly ICourseService _CourseService;
         private readonly ICategoryService _CategoryService;
-        private readonly ISearch<CourseDTO> _Search;
-        public CourseController(ICourseService courseService, ISearch<CourseDTO> search, ICategoryService categoryService)
+        //private readonly ISearch<CourseDTO> _Search;
+        public CourseController(ICourseService courseService, /*ISearch<CourseDTO> search,*/ ICategoryService categoryService)
         {
             _CourseService = courseService;
-            _Search = search;
+            //_Search = search;
             _CategoryService = categoryService;
         }
 
@@ -32,11 +34,11 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
             var model = new CourseListViewModel();
             return View(model);
         }
-        public async Task<JsonResult> GetAllToGrid(CourseDTO courseDto)
+        public async Task<JsonResult> GetAllToGrid()
         {
-            var courses = _CourseService._QueryableCourses;
-            courses = new CourseQueryDTO(_Search).GetFilteredData(courses, courseDto);
-            return Json(await courses.ToListAsync());
+            var courses = _CourseService.FetchAllDtos();
+            var jsonCourses = JsonSerializer.Serialize(courses.Data);
+            return Json(jsonCourses);
         }
         [HttpGet]
         public async Task<IActionResult> AddOrUpdate(int? id)
@@ -89,7 +91,8 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
                     var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                     result.Data.UpdateUserId = userId != null && int.TryParse(userId, out int _userId) ? _userId : 0;
                 }
-                return Json(new { Result = result });
+                var addOrUpdateResult = result.Data.Id > 0 ? await _CourseService.InsertAsync(result.Data) : await _CourseService.UpdateOrDelete(result.Data);
+                return Json(new { Result = addOrUpdateResult });
             }
             return Json(new { Result = new Result(ResultStatus.Error, Messages.PageIsNotFound) });
         }
