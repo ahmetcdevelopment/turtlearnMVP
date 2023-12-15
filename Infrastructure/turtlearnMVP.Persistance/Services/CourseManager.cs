@@ -35,7 +35,7 @@ namespace turtlearnMVP.Persistance.Services
             var CourseList = allQueryableRecords.ToList();
             CourseList.ForEach(course =>
             {
-                course.StatusTitle = course.Status > 0 ? EnumExtensions.GetEnumTitle<CourseStatus>(course.Status) : string.Empty;
+                course.StatusTitle = course.Status > 0 ? EnumExtensions.GetEnumTitle<CourseStatus>((int)course.Status) : string.Empty;
             });
             return CourseList == null || CourseList.Count <= 0 ?
                 new DataResult<List<CourseDTO>>(ResultStatus.Error, new List<CourseDTO>()) :
@@ -46,7 +46,7 @@ namespace turtlearnMVP.Persistance.Services
         {
             var course = await _UnitOfWork.Courses.GetByIdAsync(id);
             return course == null || course.Id <= 0 ?
-                new DataResult<Course>(ResultStatus.Error, Messages.ResultIsNotFound, course) :
+                new DataResult<Course>(ResultStatus.Error, Messages.ResultIsNotFound, new Course()) :
                 new DataResult<Course>(ResultStatus.Success, course);
         }
 
