@@ -1,14 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TurtLearn.Shared.Entities.Concrete;
+using TurtLearn.Shared.Searching;
 using turtlearnMVP.Application.Persistance;
 using turtlearnMVP.Application.Persistance.Services;
-using turtlearnMVP.Persistance.Context;
+using turtlearnMVP.Domain.DTOs;
 using turtlearnMVP.Persistance.Repositories;
 using turtlearnMVP.Persistance.Services;
 
@@ -28,6 +23,8 @@ namespace turtlearnMVP.Persistance
             services.AddScoped<IHomeworkTransferService, HomeworkTransferManager>();
             services.AddScoped<ISessionService, SessionManager>();
             services.AddScoped<ISessionRollCallService, SessionRollCallManager>();
+
+            services.AddScoped<ISearch<CategoryDTO>, Search<CategoryDTO>>();
         }
     }
 }
