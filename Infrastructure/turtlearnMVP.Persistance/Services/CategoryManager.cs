@@ -50,10 +50,10 @@ namespace turtlearnMVP.Persistance.Services
 
         public async Task<IDataResult<Category>> GetById(int id)
         {
-            var categoy = await _UnitOfWork.Categories.GetByIdAsync(id);
-            return categoy == null || categoy.Id <= 0 ?
-                new DataResult<Category>(ResultStatus.Error, Messages.ResultIsNotFound, categoy) :
-                new DataResult<Category>(ResultStatus.Success, categoy);
+            var category = await _UnitOfWork.Categories.GetByIdAsync(id);
+            return category == null || category.Id <= 0 ?
+                new DataResult<Category>(ResultStatus.Error, Messages.ResultIsNotFound, new Category()) :
+                new DataResult<Category>(ResultStatus.Success, category);
         }
 
         public async Task<IResult> InsertAsync(Category entity)

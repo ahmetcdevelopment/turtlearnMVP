@@ -22,13 +22,10 @@
                             <div class="col-md-4">
                             </div>
                             <div class="col-md-4 widget-title-right">
-                                <button class="btn btn-primary">
+                                <button id="addButton" class="btn btn-primary">
                                     <i class="fa fa-plus"></i>   <span style="font-weight:bold">ADD</span>
                                 </button>
                             </div>
-                            @* <div class="widget-title"> *@
-                            @*  <div class="widget-title-left">Widget Title Left</div>
-                            <div class="widget-title-right">Widget Title Right</div> *@
                         </div>
                         <div class="widget-content">
                             <table id="jqGrid"></table>
@@ -39,7 +36,7 @@
             </div>
         </div>
     </div>
-    @* </div> *@
+    <div id="partialEditContent"></div>
 </section>
 <!--=================================
 blog single -->
@@ -47,22 +44,28 @@ blog single -->
     var grid = $("#jqGrid");
 
     grid.jqGrid({
-        url: '/Admin/Category/GetCategories',
+        url: '/Admin/Category/GetAllToGrid',
         mtype: "GET",
         datatype: "json",
-        colnames: ["Id", "Category"],
+        colNames: ["Id", "UserTypeId", "ContactName", "CompanyName", "CompanyWebsite", "CompanyAddress", "DialCode", "Phone", "Email", "Actions"],
         colModel: [
-            { label: 'Id', name: 'Id', key: true, width: 15, hidden: true },
-            { label: 'Category', name: 'Name', width: 100, sorttype: function (cell, obj) { return turkishToLower(cell); } },
+            { name: 'Id', key: true, width: 15, hidden: true },
+            { name: 'Name', width: 100 },
+            { name: 'ContactName', width: 100 },
+            { name: 'CompanyName', width: 100 },
+            { name: 'CompanyWebsite', width: 100 },
+            { name: 'CompanyAddress', width: 100 },
+            { name: 'DialCode', width: 100 },
+            { name: 'Phone', width: 100 },
+            { name: 'Email', width: 100 },
             {
                 name: 'actions',
-                index: 'actions',
-                width: 15,
+                width: 100,
                 align: 'center',
                 sortable: false,
                 formatter: function (cellvalue, options, rowObject) {
-                    return '<button class="edit_btn" >Edit</button>&nbsp;&nbsp;&nbsp;' +
-                        '<button href="#" class="del_btn" >Delete</button>';
+                    return '<button style="padding:10px;" class="btn btn-sm btn-primary" onclick="editRow(' + options.rowId + ')">Edit</button>&nbsp;&nbsp;&nbsp;' +
+                        '<button style="padding:10px;" class="btn btn-sm btn-error" onclick="deleteRow(' + options.rowId + ')">Delete</button>';
                 }
             }
         ],
@@ -74,12 +77,12 @@ blog single -->
         viewrecords: true,
         search: true,
         //width: "auto",
-        height: 250,
-        rowNum: 9,
+        height: "auto",
+        rowNum: 15,
         pager: "#jqGridPager",
 
-
     });
+
 
     function setGridWidth() {
         var containerWidth = $('.container').width(); // Container'ın genişliğini alın
@@ -99,5 +102,63 @@ blog single -->
 
     $(window).on('resize', function () {
         setGridWidth();
+    });
+
+    function editRow(rowId) {
+        // $("#partialZoneContent").load("/User/Login");
+        $.ajax({
+            url: 'Admin/Category/AddOrUpdate/' + rowId,
+            type: 'GET',
+            // data: { id: item.Id },
+            success: function (result) {
+                $('#partialEditContent').html(result);
+                $('#editModal').modal('show');
+
+            },
+            error: function () {
+                console.error('Error loading partial view');
+            }
+        });
+    }
+
+    // Function to handle the "Delete" button click
+    function deleteRow(rowId) {
+        // $("#partialZoneContent").load("/User/Login");
+        $.ajax({
+            url: '/User/Delete/' + rowId,
+            type: 'GET',
+            // data: { id: item.Id },
+            success: function (result) {
+                $('#partialZoneContent').html(result);
+                $('#loginModal').modal('show');
+
+            },
+            error: function () {
+                console.error('Error loading partial view');
+            }
+        });
+    }
+    function setGridWidth() {
+        var containerWidth = $('#gridContainer').width(); // Container'ın genişliğini alın
+
+        // jqGrid'in genişliğini hesaplayın
+        var gridWidth = containerWidth;
+
+        // jqGrid'in genişliğini ayarlayın
+        grid.jqGrid('setGridWidth', gridWidth);
+    }
+
+    $(document).ready(function () {
+
+        setGridWidth();
+
+    });
+
+    $(window).on('resize', function () {
+        setGridWidth();
+    });
+
+    $(document).on('click', '#addButton', function () {
+        editRow(0);
     });
 </script>

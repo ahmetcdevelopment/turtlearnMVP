@@ -1,0 +1,130 @@
+﻿@using turtlearnMVP.WEB.Areas.Admin.Models;
+@model CategoryEditViewModel;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<!--=================================
+  Modal login -->
+<div class="modal login fade show" id="editModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="loginModalLabel">User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm" method="post" onsubmit="return false" asp-controller="User" asp-action="Edit">
+
+                    <div class="row my-4 align-items-center">
+                        <div class="row">
+                            <div class="mb-3 col-sm-12">
+                                @Html.TextBoxFor(m => m.Name, new { @class = "form-control form-setting", @placeholder = "Category Name" })
+                                @Html.ValidationMessageFor(m => m.Name)
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="mb-3 col-sm-12">
+                                @* @Html.TextBoxFor(m => m.CompanyName, new { @class = "form-control form-setting", @placeholder = "Company Name" })
+                                @Html.ValidationMessageFor(m => m.CompanyName) *@
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="mb-3 col-sm-12">
+                                @* @Html.TextBoxFor(m => m.CompanyWebsite, new { @class = "form-control form-setting", @placeholder = "Company Website" })
+                                @Html.ValidationMessageFor(m => m.CompanyWebsite) *@
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="mb-3 col-sm-12">
+                                @* @Html.TextBoxFor(m => m.CompanyAddress, new { @class = "form-control form-setting", @placeholder = "Company Address" })
+                                @Html.ValidationMessageFor(m => m.CompanyAddress) *@
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="mb-3 col-sm-3">
+                               @*  @Html.DropDownListFor(m => m.DialCode,Model.DialCodes, new { @class = "form-control form-setting", @placeholder = "Dial Code" })
+                                @Html.ValidationMessageFor(m => m.DialCode) *@
+                            </div>
+                            <div class="mb-3 col-sm-9">
+                              @*   @Html.TextBoxFor(m => m.Phone, new { @class = "form-control form-setting", @placeholder = "Phone Number" })
+                                @Html.ValidationMessageFor(m => m.Phone) *@
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="mb-3 col-sm-12">
+                               @*  @Html.TextBoxFor(m => m.Email, new { @class = "form-control form-setting", @placeholder = "Email Address" })
+                                @Html.ValidationMessageFor(m => m.Email) *@
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <button id="cancelButton" class="btn btn-error">Cancel</button>
+                            </div>
+                            <div class="col-sm-6 text-lg-end">
+                                <button id="saveButton" class="btn btn-primary">Save</button>
+
+                            </div>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--=================================
+Modal login -->
+<script>
+    $(document).ready(function () {
+        // // Handle click event on the login tab
+        // $('#login-tab').on('click', function () {
+        //     // Set the value of RegUserTypeId to -1
+        //     $('input[name="RegUserTypeId"]').val('-1');
+        // });
+
+        // Handle click event on the register tab
+        $('#register-tab').on('click', function () {
+            // Optionally, you can set the value to a different value when the register tab is clicked
+            // $('input[name="RegUserTypeId"]').val('some-other-value');
+        });
+
+        $('#registerButton').on('click', function () {
+            submitForm(0);
+        });
+
+        $('#saveButton').on('click', function () {
+            submitForm(1);
+        });
+
+        function submitForm(submitType) {
+            // Serialize the form data
+            var formData = $('#editForm').serialize();
+
+            // Make an AJAX request to submit the form
+            $.ajax({
+                url: $('#editForm').attr('action'),
+                type: 'POST',
+                data: formData,
+                success: function (data) {
+                    // Handle the success response
+                    if (data != null) {
+
+                        window.alert(data.message);
+                        window.location.reload();
+                    }
+
+                    // You can redirect or perform other actions based on the response
+                },
+                error: function (error) {
+                    // Handle the error response
+                    if (error != null) {
+
+                        // window.alert(error.message);
+                    }
+                }
+            });
+        }
+    });
+</script>
