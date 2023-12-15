@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TurtLearn.Shared.Searching;
 using TurtLearn.Shared.Utilities.Extensions;
 using TurtLearn.Shared.Utilities.Messages;
 using TurtLearn.Shared.Utilities.Results.Abstract;
@@ -11,6 +13,7 @@ using TurtLearn.Shared.Utilities.Results.Concrete;
 using turtlearnMVP.Application.Persistance;
 using turtlearnMVP.Application.Persistance.Services;
 using turtlearnMVP.Domain.DTOs;
+using turtlearnMVP.Domain.DTOs.QueryDTOs;
 using turtlearnMVP.Domain.Entities;
 using turtlearnMVP.Domain.Enums;
 using turtlearnMVP.Persistance.Repositories;
@@ -20,10 +23,11 @@ namespace turtlearnMVP.Persistance.Services
     public class CategoryManager : ICategoryService
     {
         private readonly IUnitOfWork _UnitOfWork;
-
-        public CategoryManager(IUnitOfWork unitOfWork)
+        private readonly ISearch<CategoryDTO> _Search;
+        public CategoryManager(IUnitOfWork unitOfWork, ISearch<CategoryDTO> search)
         {
             _UnitOfWork = unitOfWork;
+            _Search = search;
         }
 
         private static string _tableNameTR = TableExtensions.GetTableTitle<Category>();
@@ -77,5 +81,16 @@ namespace turtlearnMVP.Persistance.Services
             }
             return new Result(ResultStatus.Error, message);
         }
+
+        //public async Task<System.Web.Mvc.Rendering.SelectList> getSelectList(CategoryDTO? categoryDTO)
+        //{
+        //    var categoryList = categoryDTO == null ? _QueryableCategories
+        //        : new CategoryQueryDTO(_Search).GetFilteredData(_QueryableCategories, categoryDTO);
+        //    return new System.Web.Mvc.Rendering.SelectList(await categoryList.Select((CategoryDTO item) => new SelectListItem
+        //    {
+        //        Text = string.Concat(item.Name),
+        //        Value = item.Id.ToString()
+        //    }).ToListAsync(), "Value", "Text");
+        //}
     }
 }
