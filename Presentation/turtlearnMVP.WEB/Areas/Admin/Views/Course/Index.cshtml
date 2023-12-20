@@ -8,6 +8,7 @@
    blog single -->
 <section style="max-width:100vw !important;" class="space-ptb">
     @* <div  style="max-width:1000vw !important;" class="container"> *@
+    <div id="addCoursePartialZone" aria-hidden="true"></div>
     <div class="row">
         <div class="col-md-12 col-xl-12 mt-4 mt-md-0 order-2 order-lg-1">
             <div class="blog-sidebar">
@@ -22,7 +23,7 @@
                             <div class="col-md-4">
                             </div>
                             <div class="col-md-4 widget-title-right">
-                                <button class="btn btn-primary">
+                                <button class="btn btn-primary" id="btnAddCourse">
                                     <i class="fa fa-plus"></i>   <span style="font-weight:bold">Ekle</span>
                                 </button>
                             </div>
@@ -50,7 +51,7 @@ blog single -->
         url: '/Admin/Course/GetAllToGrid',
         mtype: "GET",
         datatype: "json",
-        colnames: ["Id", "TeacherName","TeacherLastName","CategoryName","StartDateStr","EndDateStr","Quota","Name","PricePerHour","TotalHour","TotalPrice","StatusTitle"],
+        colnames: ["Id", "TeacherName", "TeacherLastName", "CategoryName", "StartDateStr", "EndDateStr", "Quota", "Name", "PricePerHour", "TotalHour", "TotalPrice", "StatusTitle"],
         colModel: [
             { label: 'Id', name: 'Id', key: true, width: 15, hidden: true },
             { label: 'TeacherName', name: 'TeacherName', width: 100, sorttype: function (cell, obj) { return turkishToLower(cell); } },
@@ -99,5 +100,27 @@ blog single -->
 
     $(window).on('resize', function () {
         setGridWidth();
+    });
+    $(document).on('click', '#btnAddCourse', function () {
+        // var row = $(this).closest('tr.jqgrow');
+        // var rowId = row.attr('id');
+        debugger;
+
+        // $("#partialZoneContent").load("/User/Login");
+        $.ajax({
+            url: '/Admin/Course/AddOrUpdate',
+            type: 'GET',
+            // data: { id: item.Id },
+            success: function (result) {
+                $('#addCoursePartialZone').html(result);
+                $('#loginModal').modal('show');
+
+            },
+            error: function () {
+                console.error('Error loading partial view');
+            }
+        });
+
+
     });
 </script>

@@ -1,0 +1,96 @@
+﻿@model turtlearnMVP.WEB.Areas.Admin.Models.CourseEditViewModel
+@{
+    Layout = null;
+}
+<!--=================================
+  Modal login -->
+<div class="modal login fade show" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <!-- modal-lg sınıfını ekledik -->
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="loginModalLabel">Kurs Ekle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="loginOrRegisterForm" method="post" onsubmit="return false" asp-controller="User" asp-action="Login">
+                <div class="row" style="margin-left:2%;">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Kurs Adı:</label> @Html.ValidationMessageFor(m => m.Name)
+                                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control ml-2", @maxlength = "100" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Kota:</label> @Html.ValidationMessageFor(m => m.Quota)
+                                    @Html.TextBoxFor(m => m.Quota, new { @class = "form-control ml-2", @maxlength = "100" })
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--=================================
+Modal login -->
+<script>
+    $(document).ready(function () {
+        // // Handle click event on the login tab
+        // $('#login-tab').on('click', function () {
+        //     // Set the value of RegUserTypeId to -1
+        //     $('input[name="RegUserTypeId"]').val('-1');
+        // });
+
+        // Handle click event on the register tab
+        $('#register-tab').on('click', function () {
+            // Optionally, you can set the value to a different value when the register tab is clicked
+            // $('input[name="RegUserTypeId"]').val('some-other-value');
+        });
+
+        $('#registerButton').on('click', function () {
+            submitLoginForm(0);
+        });
+
+        $('#loginButton').on('click', function () {
+            submitLoginForm(1);
+        });
+
+        function submitLoginForm(submitType) {
+            // Serialize the form data
+            var formData = $('#loginOrRegisterForm').serialize();
+
+            // Add the submitType to the form data
+            formData += '&submitType=' + submitType;
+
+            // Make an AJAX request to submit the form
+            $.ajax({
+                url: $('#loginOrRegisterForm').attr('action'),
+                type: 'POST',
+                data: formData,
+                success: function (data) {
+                    // Handle the success response
+                    if (data != null) {
+
+                        window.alert(data.message);
+                        window.location.reload();
+                    }
+
+                    // You can redirect or perform other actions based on the response
+                },
+                error: function (error) {
+                    // Handle the error response
+                    if (error != null) {
+
+                        // window.alert(error.message);
+                    }
+                }
+            });
+        }
+    });
+</script>
