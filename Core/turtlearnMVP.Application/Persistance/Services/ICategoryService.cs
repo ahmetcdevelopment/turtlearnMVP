@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Mvc;
+//using Microsoft.AspNetCore.Mvc.Rendering;
 using TurtLearn.Shared.Utilities.Results.Abstract;
 using turtlearnMVP.Domain.DTOs;
 using turtlearnMVP.Domain.Entities;
@@ -17,6 +17,6 @@ namespace turtlearnMVP.Application.Persistance.Services
         Task<IResult> UpdateOrDelete(Category entity);
         IDataResult<IList<CategoryDTO>> FetchAllDtos();
         Task<IDataResult<Category>> GetById(int id);
-        //Task<SelectList> getSelectList(CategoryDTO? categoryDTO);
+        //SelectList GetAsSelectList();
     }
 }

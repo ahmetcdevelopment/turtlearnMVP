@@ -5972,3 +5972,8 @@ textarea.form-control {
 .widget-title-right {
     text-align: right;
 }
+.form-setting {
+    color: #000000;
+    font-weight: bold;
+    margin: 10px 0px 10px 0px;
+}

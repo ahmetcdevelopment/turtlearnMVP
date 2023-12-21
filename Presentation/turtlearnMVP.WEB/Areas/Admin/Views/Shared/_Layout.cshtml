@@ -79,6 +79,9 @@
     <!-- Ensure jQuery.noConflict() is called after jQuery is loaded -->
     <script>var $ = jQuery.noConflict(false);</script>
     <!-- JQGRID -->
+    <!-- Gritter.js script -->
+    <script src="https://cdn.jsdelivr.net/npm/gritter@1.7.4/js/jquery.gritter.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/gritter@1.7.4/css/jquery.gritter.min.css" rel="stylesheet">
 </head>
 <body>
     <div id="loginOrRegisterPartialZone"></div>
@@ -371,12 +374,17 @@
     <!-- Template Scripts (Do not remove)-->
     <script src="~/js/custom.js"></script>
     <script type="text/javascript">
-        $(document).on('click', '#loginbtn', function () {
-            // var row = $(this).closest('tr.jqgrow');
-            // var rowId = row.attr('id');
-            debugger;
 
-            // $("#partialZoneContent").load("/User/Login");
+
+
+
+        function setGridWidth(targetGrid) {
+            var widgetContainer = targetGrid.closest('.widget-content');
+            var containerWidth = widgetContainer.width();
+            targetGrid.jqGrid('setGridWidth', containerWidth);
+        }
+        $(document).on('click', '#loginbtn', function () {
+
             $.ajax({
                 url: '/User/LoginOrRegisterPartial',
                 type: 'GET',
@@ -413,6 +421,67 @@
                     // console.error('Error loading partial view');
                 }
             });
+
+
+        });
+        $(document).ready(function () {
+
+            openEditForm = function (controllerUrl, id) {
+                debugger;
+                $.ajax({
+                    url: controllerUrl + '/AddOrUpdate',
+                    type: 'GET',
+                    data: { id: id },
+                    success: function (result) {
+                        $('#partialEditContent').html(result);
+                        $('#editModal').modal('show');
+                        $.gritter.add({
+                            title: 'Başarılı',
+                            text: result.message,
+                            class_name: 'gritter-success',
+                            sticky: false,
+                            time: 5000
+                        });
+                    },
+                    error: function () {
+                        $.gritter.add({
+                            title: 'Hata',
+                            text: result.message,
+                            class_name: 'gritter-error',
+                            sticky: false,
+                            time: 5000
+                        });
+                    }
+                });
+            };
+
+            deleteRow = function (controllerUrl, id) {
+                debugger;
+                $.ajax({
+                    url: controllerUrl + '/Delete',
+                    type: 'GET',
+                    data: { id: id },
+                    success: function (result) {
+                        $.gritter.add({
+                            title: 'Başarılı',
+                            text: result.message,
+                            class_name: 'gritter-success',
+                            sticky: false,
+                            time: 5000
+                        });
+                        reloadGrid();
+                    },
+                    error: function () {
+                        $.gritter.add({
+                            title: 'Hata',
+                            text: result.message,
+                            class_name: 'gritter-error',
+                            sticky: false,
+                            time: 5000
+                        });
+                    }
+                });
+            };
 
 
         });

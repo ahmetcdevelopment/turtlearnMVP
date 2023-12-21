@@ -24,7 +24,7 @@ namespace turtlearnMVP.WEB.Helpers
 
                 items.Add(new SelectListItem
                 {
-                    Value = value.ToString(),
+                    Value = Convert.ToInt32(value).ToString(),
                     Text = title
                 });
             }

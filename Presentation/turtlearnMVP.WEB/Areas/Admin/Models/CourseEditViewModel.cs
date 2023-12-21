@@ -6,7 +6,7 @@ namespace turtlearnMVP.WEB.Areas.Admin.Models
     {
         public SelectList SelCategories { get; set; }
         public SelectList SelStatus { get; set; }
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public int TeacherId { get; set; } //UserId'den. her kursun bir öğretmeni vardır.
 
         public int CategoryId { get; set; } //mat türkçe cart curt

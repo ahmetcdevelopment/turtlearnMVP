@@ -2,13 +2,15 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-    ViewData["Title"] = "Kurslar";
+    ViewData["Title"] = "Category";
 }
+@* <!-- Gritter.js script -->
+<script src="https://cdn.jsdelivr.net/npm/gritter@1.7.4/js/jquery.gritter.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/gritter@1.7.4/css/jquery.gritter.min.css" rel="stylesheet"> *@
 <!--=================================
    blog single -->
 <section style="max-width:100vw !important;" class="space-ptb">
     @* <div  style="max-width:1000vw !important;" class="container"> *@
-    <div id="addCoursePartialZone" aria-hidden="true"></div>
     <div class="row">
         <div class="col-md-12 col-xl-12 mt-4 mt-md-0 order-2 order-lg-1">
             <div class="blog-sidebar">
@@ -23,13 +25,10 @@
                             <div class="col-md-4">
                             </div>
                             <div class="col-md-4 widget-title-right">
-                                <button class="btn btn-primary" id="btnAddCourse">
+                                <button onclick="openEditForm('/Admin/Course',0)" id="addButton" class="btn btn-primary">
                                     <i class="fa fa-plus"></i>   <span style="font-weight:bold">Ekle</span>
                                 </button>
                             </div>
-                            @* <div class="widget-title"> *@
-                            @*  <div class="widget-title-left">Widget Title Left</div>
-                            <div class="widget-title-right">Widget Title Right</div> *@
                         </div>
                         <div class="widget-content">
                             <table id="jqGrid"></table>
@@ -40,7 +39,7 @@
             </div>
         </div>
     </div>
-    @* </div> *@
+    <div id="partialEditContent"></div>
 </section>
 <!--=================================
 blog single -->
@@ -48,22 +47,32 @@ blog single -->
     var grid = $("#jqGrid");
 
     grid.jqGrid({
-        url: '/Admin/Course/GetAllToGrid',
+        url: '/Admin/Course/GetAllToGrid', // Update the URL to match the CourseDTO
         mtype: "GET",
         datatype: "json",
-        colnames: ["Id", "TeacherName", "TeacherLastName", "CategoryName", "StartDateStr", "EndDateStr", "Quota", "Name", "PricePerHour", "TotalHour", "TotalPrice", "StatusTitle"],
+        colNames: ["Id", "Öğretmen Adı", "Öğretmen Soyadı", "Kategorisi", "Başlangıç Tarihi", "Bitiş Tarihi", "Kota", "Kurs Adı", "Saatlik Ücret", "Toplam Saat", "Toplam Fiyat", "Açıklama", "Durum", "Actions"],
         colModel: [
-            { label: 'Id', name: 'Id', key: true, width: 15, hidden: true },
-            { label: 'TeacherName', name: 'TeacherName', width: 100, sorttype: function (cell, obj) { return turkishToLower(cell); } },
+            { name: 'Id', key: true, width: 15, hidden: true },
+            { name: 'TeacherName', width: 100 },
+            { name: 'TeacherLastName', width: 100 },
+            { name: 'CategoryName', width: 100 },
+            { name: 'StartDateStr', width: 100 },
+            { name: 'EndDateStr', width: 100 },
+            { name: 'Quota', width: 100 },
+            { name: 'Name', width: 100 },
+            { name: 'PricePerHour', width: 100 },
+            { name: 'TotalHour', width: 100 },
+            { name: 'TotalPrice', width: 100 },
+            { name: 'Description', width: 100 },
+            { name: 'StatusTitle', width: 100 },
             {
                 name: 'actions',
-                index: 'actions',
-                width: 15,
+                width: 100,
                 align: 'center',
                 sortable: false,
                 formatter: function (cellvalue, options, rowObject) {
-                    return '<button class="edit_btn" >Edit</button>&nbsp;&nbsp;&nbsp;' +
-                        '<button href="#" class="del_btn" >Delete</button>';
+                    return '<button style="padding:5px;" class="btn btn-sm btn-primary" onclick="openEditForm(\'/Admin/Course\',' + options.rowId + ')">Edit</button>&nbsp;&nbsp;&nbsp;' +
+                        '<button style="padding:5px;" class="btn btn-sm btn-error" onclick="deleteRow(\'/Admin/Course\',' + options.rowId + ')">Delete</button>';
                 }
             }
         ],
@@ -74,53 +83,30 @@ blog single -->
         sortable: true,
         viewrecords: true,
         search: true,
-        //width: "auto",
-        height: 250,
-        rowNum: 9,
+        width: "auto",
+        height: "400",
+        rowNum: 15,
         pager: "#jqGridPager",
-
-
     });
-
-    function setGridWidth() {
-        var containerWidth = $('.container').width(); // Container'ın genişliğini alın
-
-        // jqGrid'in genişliğini hesaplayın
-        var gridWidth = containerWidth - 50;
-
-        // jqGrid'in genişliğini ayarlayın
-        grid.jqGrid('setGridWidth', gridWidth);
-    }
 
     $(document).ready(function () {
 
-        setGridWidth();
+        setGridWidth(grid);
 
     });
 
     $(window).on('resize', function () {
-        setGridWidth();
+        setGridWidth(grid);
     });
-    $(document).on('click', '#btnAddCourse', function () {
-        // var row = $(this).closest('tr.jqgrow');
-        // var rowId = row.attr('id');
-        debugger;
 
-        // $("#partialZoneContent").load("/User/Login");
-        $.ajax({
-            url: '/Admin/Course/AddOrUpdate',
-            type: 'GET',
-            // data: { id: item.Id },
-            success: function (result) {
-                $('#addCoursePartialZone').html(result);
-                $('#loginModal').modal('show');
+    
+    function reloadGrid() {
+        grid.jqGrid('setGridParam', { datatype: 'json' }).trigger('reloadGrid');
+    }
 
-            },
-            error: function () {
-                console.error('Error loading partial view');
-            }
-        });
+    function closeModal() {
+        $('#editModal').modal('hide');
+    }
 
-
-    });
+    setGridWidth(grid);
 </script>

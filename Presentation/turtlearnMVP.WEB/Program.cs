@@ -6,11 +6,14 @@ using turtlearnMVP.Persistance.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
 //Database
 builder.Services.AddDbContext<turtlearnMVPContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("DevelopmentDB")));
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+//builder.Services.AddControllersWithViews();
 
 builder.Services.LoadMyPersistanceServices();
 

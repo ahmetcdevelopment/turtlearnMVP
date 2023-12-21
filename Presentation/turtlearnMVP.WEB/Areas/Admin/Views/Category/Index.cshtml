@@ -4,6 +4,9 @@
 @{
     ViewData["Title"] = "Category";
 }
+@* <!-- Gritter.js script -->
+<script src="https://cdn.jsdelivr.net/npm/gritter@1.7.4/js/jquery.gritter.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/gritter@1.7.4/css/jquery.gritter.min.css" rel="stylesheet"> *@
 <!--=================================
    blog single -->
 <section style="max-width:100vw !important;" class="space-ptb">
@@ -16,14 +19,14 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <h3>
-                                    Category
+                                    Kategori
                                 </h3>
                             </div>
                             <div class="col-md-4">
                             </div>
                             <div class="col-md-4 widget-title-right">
-                                <button id="addButton" class="btn btn-primary">
-                                    <i class="fa fa-plus"></i>   <span style="font-weight:bold">ADD</span>
+                                <button onclick="openEditForm('/Admin/Category',0)" id="addButton" class="btn btn-primary">
+                                    <i class="fa fa-plus"></i>   <span style="font-weight:bold">Ekle</span>
                                 </button>
                             </div>
                         </div>
@@ -47,25 +50,22 @@ blog single -->
         url: '/Admin/Category/GetAllToGrid',
         mtype: "GET",
         datatype: "json",
-        colNames: ["Id", "UserTypeId", "ContactName", "CompanyName", "CompanyWebsite", "CompanyAddress", "DialCode", "Phone", "Email", "Actions"],
+        colNames: ["Id", "İsim", "İçerik", "Sınıf Düzeyi", "Fotoğraf", "Açıklama", "Actions"],
         colModel: [
             { name: 'Id', key: true, width: 15, hidden: true },
             { name: 'Name', width: 100 },
-            { name: 'ContactName', width: 100 },
-            { name: 'CompanyName', width: 100 },
-            { name: 'CompanyWebsite', width: 100 },
-            { name: 'CompanyAddress', width: 100 },
-            { name: 'DialCode', width: 100 },
-            { name: 'Phone', width: 100 },
-            { name: 'Email', width: 100 },
+            { name: 'Content', width: 100 },
+            { name: 'SinifDuzeyiTitle', width: 100 },
+            { name: 'Photo', width: 100 },
+            { name: 'Description', width: 100 },
             {
                 name: 'actions',
                 width: 100,
                 align: 'center',
                 sortable: false,
                 formatter: function (cellvalue, options, rowObject) {
-                    return '<button style="padding:10px;" class="btn btn-sm btn-primary" onclick="editRow(' + options.rowId + ')">Edit</button>&nbsp;&nbsp;&nbsp;' +
-                        '<button style="padding:10px;" class="btn btn-sm btn-error" onclick="deleteRow(' + options.rowId + ')">Delete</button>';
+                    return '<button style="padding:5px;" class="btn btn-sm btn-primary" onclick="openEditForm(\'/Admin/Category\',' + options.rowId + ')">Edit</button>&nbsp;&nbsp;&nbsp;' +
+                        '<button style="padding:5px;" class="btn btn-sm btn-error" onclick="deleteRow(\'/Admin/Category\',' + options.rowId + ')">Delete</button>';
                 }
             }
         ],
@@ -76,89 +76,30 @@ blog single -->
         sortable: true,
         viewrecords: true,
         search: true,
-        //width: "auto",
-        height: "auto",
+        width: "auto",
+        height: "400",
         rowNum: 15,
         pager: "#jqGridPager",
 
     });
 
-
-    function setGridWidth() {
-        var containerWidth = $('.container').width(); // Container'ın genişliğini alın
-
-        // jqGrid'in genişliğini hesaplayın
-        var gridWidth = containerWidth - 50;
-
-        // jqGrid'in genişliğini ayarlayın
-        grid.jqGrid('setGridWidth', gridWidth);
-    }
-
     $(document).ready(function () {
 
-        setGridWidth();
+        setGridWidth(grid);
 
     });
 
     $(window).on('resize', function () {
-        setGridWidth();
+        setGridWidth(grid);
     });
 
-    function editRow(rowId) {
-        // $("#partialZoneContent").load("/User/Login");
-        $.ajax({
-            url: 'Admin/Category/AddOrUpdate/' + rowId,
-            type: 'GET',
-            // data: { id: item.Id },
-            success: function (result) {
-                $('#partialEditContent').html(result);
-                $('#editModal').modal('show');
+    setGridWidth(grid);
 
-            },
-            error: function () {
-                console.error('Error loading partial view');
-            }
-        });
+    function reloadGrid() {
+        grid.jqGrid('setGridParam', { datatype: 'json' }).trigger('reloadGrid');
     }
 
-    // Function to handle the "Delete" button click
-    function deleteRow(rowId) {
-        // $("#partialZoneContent").load("/User/Login");
-        $.ajax({
-            url: '/User/Delete/' + rowId,
-            type: 'GET',
-            // data: { id: item.Id },
-            success: function (result) {
-                $('#partialZoneContent').html(result);
-                $('#loginModal').modal('show');
-
-            },
-            error: function () {
-                console.error('Error loading partial view');
-            }
-        });
+    function closeModal() {
+        $('#editModal').modal('hide');
     }
-    function setGridWidth() {
-        var containerWidth = $('#gridContainer').width(); // Container'ın genişliğini alın
-
-        // jqGrid'in genişliğini hesaplayın
-        var gridWidth = containerWidth;
-
-        // jqGrid'in genişliğini ayarlayın
-        grid.jqGrid('setGridWidth', gridWidth);
-    }
-
-    $(document).ready(function () {
-
-        setGridWidth();
-
-    });
-
-    $(window).on('resize', function () {
-        setGridWidth();
-    });
-
-    $(document).on('click', '#addButton', function () {
-        editRow(0);
-    });
 </script>

@@ -11,38 +11,38 @@ namespace turtlearnMVP.Domain.Enums
     {
         [EnumTitle("Birinci Sınıf")]
         BirinciSinif = 1,
+
         [EnumTitle("İkinci Sınıf")]
+        İkinciSinif = 2,
 
-        İkinciSinif,
         [EnumTitle("Üçüncü Sınıf")]
+        UcuncuSinif = 3,
 
-        UcuncuSinif,
         [EnumTitle("Dördüncü Sınıf")]
+        DorduncuSinif = 4,
 
-        DorduncuSinif,
         [EnumTitle("Beşinci Sınıf")]
+        BesinciSinif = 5,
 
-        BesinciSinif,
         [EnumTitle("Altıncı Sınıf")]
+        AltinciSinif = 6,
 
-        AltinciSinif,
         [EnumTitle("Yedinci Sınıf")]
+        YedinciSinif = 7,
 
-        YedinciSinif,
         [EnumTitle("Sekizinci Sınıf")]
+        SekizinciSinif = 8,
 
-        SekizinciSinif,
         [EnumTitle("Dokuzuncu Sınıf")]
+        DokuzuncuSinif = 9,
 
-        DokuzuncuSinif,
         [EnumTitle("Onuncu Sınıf")]
+        OnuncuSinif = 10,
 
-        OnuncuSinif,
         [EnumTitle("On Birinci Sınıf")]
+        OnbirinciSinif = 11,
 
-        OnbirinciSinif,
         [EnumTitle("On İkinci Sınıf")]
-
-        OnikinciSinif,
+        OnikinciSinif = 12,
     }
 }

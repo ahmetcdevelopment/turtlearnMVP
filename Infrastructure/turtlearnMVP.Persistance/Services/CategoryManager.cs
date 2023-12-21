@@ -17,6 +17,7 @@ using turtlearnMVP.Domain.DTOs.QueryDTOs;
 using turtlearnMVP.Domain.Entities;
 using turtlearnMVP.Domain.Enums;
 using turtlearnMVP.Persistance.Repositories;
+//using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace turtlearnMVP.Persistance.Services
 {
@@ -81,16 +82,5 @@ namespace turtlearnMVP.Persistance.Services
             }
             return new Result(ResultStatus.Error, message);
         }
-
-        //public async Task<System.Web.Mvc.Rendering.SelectList> getSelectList(CategoryDTO? categoryDTO)
-        //{
-        //    var categoryList = categoryDTO == null ? _QueryableCategories
-        //        : new CategoryQueryDTO(_Search).GetFilteredData(_QueryableCategories, categoryDTO);
-        //    return new System.Web.Mvc.Rendering.SelectList(await categoryList.Select((CategoryDTO item) => new SelectListItem
-        //    {
-        //        Text = string.Concat(item.Name),
-        //        Value = item.Id.ToString()
-        //    }).ToListAsync(), "Value", "Text");
-        //}
     }
 }

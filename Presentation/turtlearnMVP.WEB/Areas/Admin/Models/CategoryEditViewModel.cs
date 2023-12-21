@@ -23,7 +23,7 @@ namespace turtlearnMVP.WEB.Areas.Admin.Models
         [StringLength(250, ErrorMessage = "Description alanı en fazla {1} karakter olmalıdır.")]
         public string Description { get; set; }
 
-        [RegularExpression(@"\.(jpg|jpeg|png|gif)$", ErrorMessage = "Geçersiz resim dosya formatı.")]
-        public string Picture { get; set; } = Path.Combine("~/images/avatar/", "default.jpg");
+        //[RegularExpression(@"\.(jpg|jpeg|png|gif)$", ErrorMessage = "Geçersiz resim dosya formatı.")]
+        //public string? Picture { get; set; } = Path.Combine("~/images/avatar/", "default.jpg");
     }
 }
