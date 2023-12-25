@@ -5,7 +5,7 @@
     if (User.Identity.IsAuthenticated)
     {
         // HttpContext nesnesi oluşturmak için
-        
+
         // Çerezi okumak için
         photo = HttpContextAccessor.HttpContext.Request.Cookies["UserProfilePhoto"];
 
@@ -82,6 +82,7 @@
     <!-- Gritter.js script -->
     <script src="https://cdn.jsdelivr.net/npm/gritter@1.7.4/js/jquery.gritter.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/gritter@1.7.4/css/jquery.gritter.min.css" rel="stylesheet">
+
 </head>
 <body>
     <div id="loginOrRegisterPartialZone"></div>
@@ -338,12 +339,38 @@
     </div>
     </nav>
     </header> *@
-    <div style="max-width:90vw !important;"  class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
+    @if (true)
+    {
+        <div style="max-width:100vw !important;" class="container">
+            <main role="main" class="pb-3">
+                <div class="row sidebar-icon-rounded">
+                    <div class="col-md-1 sidebar">
+                        <ul>
+                            <li><a href="#"><i class="fas fa-graduation-cap"></i><span>Kurslar</span></a></li>
+                            <li><a href="#"><i class="fas fa-user-plus"></i><span>Kurs Başvuruları</span></a></li>
+                            <li><a href="#"><i class="fas fa-user-check"></i><span>Kurs Öğrencileri</span></a></li>
+                            <li><a href="#"><i class="fas fa-comments"></i><span>Yorumlar</span></a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-10">
+                        @RenderBody()
+                    </div>
+                </div>
+                <div class="col-md-1">
+                </div>
+            </main>
+        </div>
+    }
+    else
+    {
+        <div style="max-width:90vw !important;" class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+
+    }
     @* <footer class="border-top footer text-muted">
     <div class="container">
     &copy; 2023 - turtlearnMVP.WEB - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
