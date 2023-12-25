@@ -5982,12 +5982,25 @@ textarea.form-control {
 
 /* Sidebar için*/
 .sidebar {
-    background-color: var(--theme-dark-color);
-    min-width:90px;
+    /*background-color: var(--theme-dark-color);*/
+    background-color: #ffffff;
+    width:90px;
     margin: unset;
     border-end-end-radius: 150px;
-    z-index:9999;
+    z-index:1000;
+    border-color:var(--theme-color);
 }
+
+.sidebar-mobile {
+    background-color: var(--theme-dark-color);
+    /*width: 90px;
+    margin: unset;
+    border-end-end-radius: 150px;*/
+    z-index: 9999;
+    align-items: center;
+    padding:30px;
+}
+
 
 /*Sidebar Ýcon*/
 /* Sidebar-icon-rounded */
@@ -6002,6 +6015,8 @@ textarea.form-control {
         margin: 8px 0; 
     }
 
+        
+
         .sidebar-icon-rounded ul li a {
             display: block;
             color: var(--theme-color);
@@ -6013,6 +6028,11 @@ textarea.form-control {
             border-radius: 50px;
             position: relative;
             overflow: hidden;
+        }
+
+        .sidebar-icon-rounded ul li a.active {
+            background-color: var(--theme-color);
+            color: white;
         }
 
             .sidebar-icon-rounded ul li a span {
@@ -6033,7 +6053,8 @@ textarea.form-control {
 
             .sidebar-icon-rounded ul li a:hover {
                 color: #ffffff;
-                background: var(--theme-dark-color);
+                /*background: var(--theme-dark-color);*/
+                background: var(--theme-color);
                 width: 300px; 
             }
 
@@ -6046,4 +6067,15 @@ textarea.form-control {
     .sidebar-icon-rounded ul li {
         margin: 0px 5px;
     }
+}
+
+.social-icon-round ul li a.active {
+    background-color: var(--theme-color);
+    color: white;
+}
+
+.social-icon-round ul li a span {
+    text-align: start;
+    white-space: nowrap;
+    margin-left:-20px;
 }

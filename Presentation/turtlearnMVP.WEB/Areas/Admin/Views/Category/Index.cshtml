@@ -25,7 +25,7 @@
                             <div class="col-md-4">
                             </div>
                             <div class="col-md-4 widget-title-right">
-                                <button onclick="openEditForm('/Admin/Category',0)" id="addButton" class="btn btn-primary">
+                                <button onclick="openEditForm('/Admin/Category',0,'#jqGrid')" id="addButton" class="btn btn-primary">
                                     <i class="fa fa-plus"></i>   <span style="font-weight:bold">Ekle</span>
                                 </button>
                             </div>
@@ -64,8 +64,8 @@ blog single -->
                 align: 'center',
                 sortable: false,
                 formatter: function (cellvalue, options, rowObject) {
-                    return '<button style="padding:5px;" class="btn btn-sm btn-primary" onclick="openEditForm(\'/Admin/Category\',' + options.rowId + ')">Edit</button>&nbsp;&nbsp;&nbsp;' +
-                        '<button style="padding:5px;" class="btn btn-sm btn-error" onclick="deleteRow(\'/Admin/Category\',' + options.rowId + ')">Delete</button>';
+                    return '<button style="padding:5px;" class="btn btn-sm btn-primary" onclick="openEditForm(\'/Admin/Category\',' + options.rowId + ',' + "\'#jqGrid\'" + ')">Edit</button>&nbsp;&nbsp;&nbsp;' +
+                        '<button style="padding:5px;" class="btn btn-sm btn-error" onclick="deleteRow(\'/Admin/Category\',' + options.rowId + ',' + "\'#jqGrid\'" + ')">Delete</button>';
                 }
             }
         ],
@@ -93,13 +93,15 @@ blog single -->
         setGridWidth(grid);
     });
 
-    setGridWidth(grid);
-
-    function reloadGrid() {
-        grid.jqGrid('setGridParam', { datatype: 'json' }).trigger('reloadGrid');
+    
+    function reloadGrid(targetGrid) {
+        var gridElement = $(targetGrid);
+        debugger;
+        gridElement.jqGrid('setGridParam', { datatype: 'json' }).trigger('reloadGrid');
     }
 
     function closeModal() {
         $('#editModal').modal('hide');
     }
+
 </script>

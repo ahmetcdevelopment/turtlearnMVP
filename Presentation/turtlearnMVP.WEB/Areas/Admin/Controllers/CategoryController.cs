@@ -37,12 +37,12 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
             model.SelSinifDuzeyi = EnumHelper.GetEnumSelectList<SinifDuzeyi>();
             if (id.HasValue && id.Value > 0)
             {
-                var category = (await _mainService.GetById(id.Value)).Data ?? new Category();
-                model.Id = category.Id;
-                model.SinifDuzeyiId = category.SinifDuzeyiId;
-                model.Content = category.Content;
-                model.Name = category.Name;
-                model.Description = category.Description;
+                var main = (await _mainService.GetById(id.Value)).Data ?? new Category();
+                model.Id = main.Id;
+                model.SinifDuzeyiId = main.SinifDuzeyiId;
+                model.Content = main.Content;
+                model.Name = main.Name;
+                model.Description = main.Description;
             }
             return View(model);
         }
