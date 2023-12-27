@@ -5,7 +5,7 @@
     if (User.Identity.IsAuthenticated)
     {
         // HttpContext nesnesi oluşturmak için
-        
+
         // Çerezi okumak için
         photo = HttpContextAccessor.HttpContext.Request.Cookies["UserProfilePhoto"];
 
@@ -82,6 +82,7 @@
     <!-- Gritter.js script -->
     <script src="https://cdn.jsdelivr.net/npm/gritter@1.7.4/js/jquery.gritter.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/gritter@1.7.4/css/jquery.gritter.min.css" rel="stylesheet">
+
 </head>
 <body>
     <div id="loginOrRegisterPartialZone"></div>
@@ -338,12 +339,78 @@
     </div>
     </nav>
     </header> *@
-    <div style="max-width:90vw !important;"  class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
+    @if (ViewBag.Sidebar != null)
+    {
+        <div style="max-width:100vw !important;" class="container">
+            <main role="main" class="pb-3" id="myTab">
+                <div id="sidebarMobile" class="row sidebar-mobile">
+                    <div class="social-icon-round " role="tablist">
+                        <ul>
+                            @if (ViewBag.SidebarCourse != null)
+                            {
+                                <li style="margin-left:50px;">
+                                    <a id="course-tab-mobile" data-bs-toggle="tab" href="#courseSection" role="tab" class="active"><i class="fas fa-graduation-cap"></i><span>Kurslar</span></a>
+                                </li>
+                                <li style="margin-left:50px;">
+                                    <a id="enrollment-tab-mobile" data-bs-toggle="tab" href="#enrollmentSection" role="tab"><i class="fas fa-user-plus"></i><span>Başvurular</span></a>
+                                </li>
+                                <li style="margin-left:50px;">
+                                    <a id="student-tab-mobile" data-bs-toggle="tab" href="#studentSection" role="tab"><i class="fas fa-user-check"></i><span>Öğrenciler</span></a>
+                                </li>
+                                <li style="margin-left:50px;">
+                                    <a id="comment-tab-mobile" data-bs-toggle="tab" href="#commentSection" role="tab"><i class="fas fa-comments"></i><span>Yorumlar</span></a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <div class="row sidebar-icon-rounded" role="tablist">
+                    <div id="sidebarWeb" class="col-md-1 sidebar">
+                        <ul style="margin-top:20px;">
+                            @if (ViewBag.SidebarCourse != null)
+                            {
+                                <li>
+                                    <a id="course-tab" data-bs-toggle="tab" href="#courseSection" role="tab" class="active">
+                                        <i class="fas fa-graduation-cap"></i><span>Kurslar</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="enrollment-tab" data-bs-toggle="tab" href="#enrollmentSection" role="tab">
+                                        <i class="fas fa-user-plus"></i><span>Başvurular</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="student-tab" data-bs-toggle="tab" href="#studentSection" role="tab">
+                                        <i class="fas fa-user-check"></i><span>Öğrenciler</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="comment-tab" data-bs-toggle="tab" href="#commentSection" role="tab">
+                                        <i class="fas fa-comments"></i><span>Yorumlar</span>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="col-md-10">
+                        @RenderBody()
+                    </div>
+                </div>
+                <div class="col-md-1">
+                </div>
+            </main>
+        </div>
+    }
+    else
+    {
+        <div style="max-width:90vw !important;" class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+
+    }
     @* <footer class="border-top footer text-muted">
     <div class="container">
     &copy; 2023 - turtlearnMVP.WEB - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
@@ -375,8 +442,17 @@
     <script src="~/js/custom.js"></script>
     <script type="text/javascript">
 
+        var operationGrid = "#jqGrid";
 
+        function setOperationGrid(targetGridId) {
+            debugger;
+            operationGrid = targetGridId;
+        }
 
+        function getOperationGrid() {
+            debugger;
+            return operationGrid;
+        }
 
         function setGridWidth(targetGrid) {
             var widgetContainer = targetGrid.closest('.widget-content');
@@ -425,8 +501,11 @@
 
         });
         $(document).ready(function () {
-
-            openEditForm = function (controllerUrl, id) {
+            // Initial toggle on page load
+            toggleSidebarVisibility();
+            openEditForm = function (controllerUrl, id, targetGrid) {
+                debugger;
+                setOperationGrid(targetGrid);
                 debugger;
                 $.ajax({
                     url: controllerUrl + '/AddOrUpdate',
@@ -435,13 +514,6 @@
                     success: function (result) {
                         $('#partialEditContent').html(result);
                         $('#editModal').modal('show');
-                        $.gritter.add({
-                            title: 'Başarılı',
-                            text: result.message,
-                            class_name: 'gritter-success',
-                            sticky: false,
-                            time: 5000
-                        });
                     },
                     error: function () {
                         $.gritter.add({
@@ -455,13 +527,16 @@
                 });
             };
 
-            deleteRow = function (controllerUrl, id) {
+            deleteRow = function (controllerUrl, id, targetGrid) {
+                setOperationGrid(targetGrid);
                 debugger;
                 $.ajax({
                     url: controllerUrl + '/Delete',
                     type: 'GET',
                     data: { id: id },
                     success: function (result) {
+                        var grid = getOperationGrid();
+                        reloadGrid(grid);
                         $.gritter.add({
                             title: 'Başarılı',
                             text: result.message,
@@ -469,7 +544,6 @@
                             sticky: false,
                             time: 5000
                         });
-                        reloadGrid();
                     },
                     error: function () {
                         $.gritter.add({
@@ -484,7 +558,46 @@
             };
 
 
+            function toggleSidebarVisibility() {
+                var windowWidth = $(window).width();
+                if (windowWidth < 760) {
+                    $("#sidebarWeb").hide();
+                    $("#sidebarMobile").show();
+                } else {
+                    $("#sidebarWeb").show();
+                    $("#sidebarMobile").hide();
+                }
+            }
+
+            $(window).on("resize", function () {
+                toggleSidebarVisibility();
+            });
+
+            $(document).ready(function () {
+                function switchTab(tabId, buttonId) {
+                    $('.tab-pane').hide();
+
+                    $('[data-bs-toggle="tab"]').removeClass('active');
+
+                    $(tabId).show();
+
+                    $(buttonId).addClass('active');
+                }
+
+                switchTab($('.tab-pane.show.active'));
+
+                $('[data-bs-toggle="tab"]').on('click', function (e) {
+                    e.preventDefault();
+
+                    var tabId = $(this).attr('href');
+                    var buttonId = $(this).attr('id');
+
+                    switchTab(tabId, '#' + buttonId);
+                });
+            });
         });
+
+
     </script>
     @* <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

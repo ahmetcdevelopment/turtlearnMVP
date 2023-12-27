@@ -94,7 +94,7 @@ Modal login -->
             // Serialize the form data
             var formData = $('#editForm').serialize();
 
-            // Make an AJAX request to submit the form
+            var grid = getOperationGrid();
             $.ajax({
                 url: "/Admin" + $('#editForm').attr('action'),
                 type: 'POST',
@@ -107,7 +107,7 @@ Modal login -->
                         sticky: false,
                         time: 5000
                     });
-                    reloadGrid();
+                    reloadGrid(grid);
                     closeModal();
                 },
                 error: function (result) {

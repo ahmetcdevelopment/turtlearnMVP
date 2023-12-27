@@ -16,13 +16,13 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
     [Area("Admin")]
     public class CourseEnrollmentController : Controller
     {
-        private readonly ICourseEnrollmentService _courseEnrollmentService;
+        private readonly ICourseEnrollmentService _mainService;
         private readonly ICourseService _courseService;
         private readonly UserManager<User> _userService;
 
         public CourseEnrollmentController(ICourseEnrollmentService courseEnrollmentService, ICourseService courseService, UserManager<User> userService)
         {
-            _courseEnrollmentService = courseEnrollmentService;
+            _mainService = mainService;
             _courseService = courseService;
             _userService = userService;
         }

@@ -30,6 +30,8 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
+            ViewBag.Sidebar = true;
+            ViewBag.SidebarCourse = true;
             //var model = new CourseListViewModel();
             return View();
         }
@@ -42,19 +44,19 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
             model.SelCategories = GetCategoriesAsSelectList();
             if (id.HasValue && id.Value > 0)
             {
-                var course = (await _mainService.GetById(id.Value)).Data ?? new Course(); // Assuming there is a GetCourseById method in _mainService
-                model.Id = course.Id;
-                model.TeacherId = course.TeacherId;
-                model.CategoryId = course.CategoryId;
-                model.StartDate = course.StartDate;
-                model.EndDate = course.EndDate;
-                model.Quota = course.Quota;
-                model.Name = course.Name;
-                model.PricePerHour = course.PricePerHour;
-                model.TotalHour = course.TotalHour;
-                model.TotalPrice = course.TotalPrice;
-                model.Description = course.Description;
-                model.Status = course.Status;
+                var main = (await _mainService.GetById(id.Value)).Data ?? new Course(); // Assuming there is a GetCourseById method in _mainService
+                model.Id = main.Id;
+                model.TeacherId = main.TeacherId;
+                model.CategoryId = main.CategoryId;
+                model.StartDate = main.StartDate;
+                model.EndDate = main.EndDate;
+                model.Quota = main.Quota;
+                model.Name = main.Name;
+                model.PricePerHour = main.PricePerHour;
+                model.TotalHour = main.TotalHour;
+                model.TotalPrice = main.TotalPrice;
+                model.Description = main.Description;
+                model.Status = main.Status;
             }
             return View(model);
         }
