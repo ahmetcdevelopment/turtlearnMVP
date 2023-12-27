@@ -19,6 +19,7 @@ namespace TurtLearn.Shared.DataAccess.Repositories
         void AddRange(IEnumerable<T> entities); //çoklu entity ekler
         void Update(T Entity);
         void Delete(T Entity);
+        Task BulkInsert(IList<T> entities);
         #region dynamic Repository
         /// <summary>
         /// Asenkron olarak ilgili kaydı verilen predicateye göre getirir.

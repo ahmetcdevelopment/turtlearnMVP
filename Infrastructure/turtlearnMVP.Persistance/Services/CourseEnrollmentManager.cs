@@ -70,5 +70,17 @@ namespace turtlearnMVP.Persistance.Services
             }
             return new Result(ResultStatus.Error, message); ;
         }
+
+        public async Task<IResult> BulkInsert(List<CourseEnrollment> _entityList)
+        {
+            var message = Messages.FailedAdd(_tableNameTR);
+            if (_entityList != null || _entityList?.Count() < 0)
+            {
+                await _UnitOfWork.CoursesEnrollments.BulkInsert(_entityList);
+                message = Messages.SuccessAdd(_tableNameTR);
+                return new Result(ResultStatus.Success, message);
+            }
+            return new Result(ResultStatus.Error, message);
+        }
     }
 }

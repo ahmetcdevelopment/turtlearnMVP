@@ -48,7 +48,7 @@ namespace turtlearnMVP.Persistance.Services
         public async Task<IResult> InsertAsync(Comment entity)
         {
             var message = Messages.FailedAdd(_tableNameTR);
-            if (entity != null || entity.Id < 0)
+            if (entity != null || entity?.Id < 0)
             {
                 await _UnitOfWork.Comments.AddAsync(entity);
                 message = Messages.SuccessAdd(_tableNameTR);

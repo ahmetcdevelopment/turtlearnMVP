@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EFCore.BulkExtensions;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -133,6 +134,26 @@ namespace TurtLearn.Shared.DataAccess.Repositories
         public IQueryable<TEntity> Where(Expression<Func<TEntity, bool>> predicate)
         {
             return _context.Set<TEntity>().Where(predicate);
+        }
+
+        public async Task BulkInsert(IList<TEntity> entities)
+        {
+            using var transaction = _context.Database.BeginTransaction();
+            try
+            {
+                var bulkConfig = new BulkConfig
+                {
+                    PreserveInsertOrder = true,
+                    UseTempDB = true,
+                };
+                await _context.BulkInsertAsync(entities, bulkConfig);
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception($"Bir Hata oluştu: {ex.Message}");
+            }
         }
     }
 }

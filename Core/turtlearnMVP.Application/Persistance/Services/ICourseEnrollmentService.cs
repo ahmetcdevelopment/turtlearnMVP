@@ -16,5 +16,6 @@ namespace turtlearnMVP.Application.Persistance.Services
         Task<IResult> UpdateOrDelete(CourseEnrollment entity);
         IDataResult<IList<CourseEnrollmentDTO>> FetchAllDtos();
         Task<IDataResult<CourseEnrollment>> GetById(int id);
+        Task<IResult> BulkInsert(List<CourseEnrollment> _entityList);
     }
 }
