@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TurtLearn.Shared.Entities.Concrete;
 using turtlearnMVP.Persistance;
 using turtlearnMVP.Persistance.Context;
+using turtlearnMVP.WEB.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,9 @@ builder.Services.AddDbContext<turtlearnMVPContext>(opt => opt.UseSqlServer(build
 
 // Add services to the container.
 //builder.Services.AddControllersWithViews();
+
+
+builder.Services.AddSignalR(); //signalr modülünü devreye sok.
 
 builder.Services.LoadMyPersistanceServices();
 
@@ -69,5 +73,7 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "areas",
     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+app.MapHub<LiveMeetingHub>("/liveMeetingHub"); // endpoint ekliyorum.
 
 app.Run();
