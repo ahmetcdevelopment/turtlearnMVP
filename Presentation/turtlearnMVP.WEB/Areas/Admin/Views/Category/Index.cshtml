@@ -25,7 +25,7 @@
                             <div class="col-md-4">
                             </div>
                             <div class="col-md-4 widget-title-right">
-                                <button onclick="openEditForm('/Admin/Category',0,'#jqGrid')" id="addButton" class="btn btn-primary">
+                                <button onclick="openEditForm('/Admin/Category',0,'jqGrid')" id="addButton" class="btn btn-primary">
                                     <i class="fa fa-plus"></i>   <span style="font-weight:bold">Ekle</span>
                                 </button>
                             </div>
@@ -45,44 +45,48 @@
 blog single -->
 <script type="text/javascript">
     var grid = $("#jqGrid");
+    $(document).ready(function () {
 
-    grid.jqGrid({
-        url: '/Admin/Category/GetAllToGrid',
-        mtype: "GET",
-        datatype: "json",
-        colNames: ["Id", "İsim", "İçerik", "Sınıf Düzeyi", "Fotoğraf", "Açıklama", "Actions"],
-        colModel: [
-            { name: 'Id', key: true, width: 15, hidden: true },
-            { name: 'Name', width: 100 },
-            { name: 'Content', width: 100 },
-            { name: 'SinifDuzeyiTitle', width: 100 },
-            { name: 'Photo', width: 100 },
-            { name: 'Description', width: 100 },
-            {
-                name: 'actions',
-                width: 100,
-                align: 'center',
-                sortable: false,
-                formatter: function (cellvalue, options, rowObject) {
-                    return '<button style="padding:5px;" class="btn btn-sm btn-primary" onclick="openEditForm(\'/Admin/Category\',' + options.rowId + ',' + "\'#jqGrid\'" + ')">Edit</button>&nbsp;&nbsp;&nbsp;' +
-                        '<button style="padding:5px;" class="btn btn-sm btn-error" onclick="deleteRow(\'/Admin/Category\',' + options.rowId + ',' + "\'#jqGrid\'" + ')">Delete</button>';
+
+
+        grid.jqGrid({
+            url: '/Admin/Category/GetAllToGrid',
+            mtype: "GET",
+            datatype: "json",
+            colNames: ["Id", "İsim", "İçerik", "Sınıf Düzeyi", "Fotoğraf", "Açıklama", "Actions"],
+            colModel: [
+                { name: 'Id', key: true, width: 15, hidden: true },
+                { name: 'Name', width: 100 },
+                { name: 'Content', width: 100 },
+                { name: 'SinifDuzeyiTitle', width: 100 },
+                { name: 'Photo', width: 100 },
+                { name: 'Description', width: 100 },
+                {
+                    name: 'actions',
+                    width: 100,
+                    align: 'center',
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return '<button style="padding:5px;" class="btn btn-sm btn-primary" onclick="openEditForm(\'/Admin/Category\',' + options.rowId + ',' + "grid" + ')">Edit</button>&nbsp;&nbsp;&nbsp;' +
+                            '<button style="padding:5px;" class="btn btn-sm btn-error" onclick="deleteRow(\'/Admin/Category\',' + options.rowId + ',' + "grid" + ')">Delete</button>';
+                    }
                 }
-            }
-        ],
-        loadonce: true,
-        navOptions: { reloadGridOptions: { fromServer: true } },
-        multiSort: true,
-        multiSelect: true,
-        sortable: true,
-        viewrecords: true,
-        search: true,
-        width: "auto",
-        height: "400",
-        rowNum: 15,
-        pager: "#jqGridPager",
+            ],
+            // loadonce: true,
+            navOptions: { reloadGridOptions: { fromServer: true } },
+            multiSort: true,
+            multiSelect: true,
+            sortable: true,
+            viewrecords: true,
+            search: true,
+            width: "auto",
+            height: "400",
+            rowNum: 15,
+            pager: "#jqGridPager",
+
+        });
 
     });
-
     $(document).ready(function () {
 
         setGridWidth(grid);
@@ -93,13 +97,13 @@ blog single -->
         setGridWidth(grid);
     });
 
-    
-    function reloadGrid(targetGrid) {
-        var gridElement = $(targetGrid);
-        debugger;
-        gridElement.jqGrid('setGridParam', { datatype: 'json' }).trigger('reloadGrid');
-    }
-
+    // function reloadGrid(targetGrid) {
+    //     var gridElement = $(targetGrid);
+    //     console.log(gridElement); // Check if gridElement is correctly selected
+    //     console.log(typeof gridElement); // Check if jqGrid function is available
+    //     // gridElement.jqGrid('setGridParam', { datatype: 'json' }).trigger('reloadGrid');
+    //     gridElement.trigger("reloadGrid");
+    // }
     function closeModal() {
         $('#editModal').modal('hide');
     }
