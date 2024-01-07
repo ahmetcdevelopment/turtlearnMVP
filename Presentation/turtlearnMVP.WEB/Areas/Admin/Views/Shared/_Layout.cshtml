@@ -82,7 +82,11 @@
     <!-- Gritter.js script -->
     <script src="https://cdn.jsdelivr.net/npm/gritter@1.7.4/js/jquery.gritter.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/gritter@1.7.4/css/jquery.gritter.min.css" rel="stylesheet">
-
+    <script type="text/javascript">
+        function reloadGrid(targetGrid) {
+            targetGrid.trigger("reloadGrid");
+        }
+    </script>
 </head>
 <body>
     <div id="loginOrRegisterPartialZone"></div>
@@ -442,23 +446,15 @@
     <script src="~/js/custom.js"></script>
     <script type="text/javascript">
 
-        var operationGrid = "#jqGrid";
-
-        function setOperationGrid(targetGridId) {
-            debugger;
-            operationGrid = targetGridId;
-        }
-
-        function getOperationGrid() {
-            debugger;
-            return operationGrid;
-        }
-
+        
         function setGridWidth(targetGrid) {
             var widgetContainer = targetGrid.closest('.widget-content');
             var containerWidth = widgetContainer.width();
             targetGrid.jqGrid('setGridWidth', containerWidth);
         }
+
+       
+
         $(document).on('click', '#loginbtn', function () {
 
             $.ajax({
@@ -504,9 +500,7 @@
             // Initial toggle on page load
             toggleSidebarVisibility();
             openEditForm = function (controllerUrl, id, targetGrid) {
-                debugger;
-                setOperationGrid(targetGrid);
-                debugger;
+;
                 $.ajax({
                     url: controllerUrl + '/AddOrUpdate',
                     type: 'GET',
@@ -528,15 +522,14 @@
             };
 
             deleteRow = function (controllerUrl, id, targetGrid) {
-                setOperationGrid(targetGrid);
-                debugger;
+
                 $.ajax({
                     url: controllerUrl + '/Delete',
                     type: 'GET',
                     data: { id: id },
                     success: function (result) {
-                        var grid = getOperationGrid();
-                        reloadGrid(grid);
+                        // var grid = getOperationGrid();
+                        reloadGrid(targetGrid);
                         $.gritter.add({
                             title: 'Başarılı',
                             text: result.message,
@@ -574,6 +567,7 @@
             });
 
             $(document).ready(function () {
+
                 function switchTab(tabId, buttonId) {
                     $('.tab-pane').hide();
 
@@ -594,7 +588,12 @@
 
                     switchTab(tabId, '#' + buttonId);
                 });
+
+               
+
             });
+
+           
         });
 
 

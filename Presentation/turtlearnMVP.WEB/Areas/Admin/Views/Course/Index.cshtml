@@ -188,6 +188,7 @@
 <!--=================================
 blog single -->
 <script type="text/javascript">
+    var grid;
     var grid1 = $("#jqGridCourse");
     var grid2 = $("#jqGridEnrollment");
     var grid3 = $("#jqGridStudent");
@@ -218,8 +219,8 @@ blog single -->
                 align: 'center',
                 sortable: false,
                 formatter: function (cellvalue, options, rowObject) {
-                    return '<button style="padding:5px;" class="btn btn-sm btn-primary" onclick="openEditForm(\'/Admin/Course\',' + options.rowId + ','+ grid1 +')">Edit</button>&nbsp;&nbsp;&nbsp;' +
-                        '<button style="padding:5px;" class="btn btn-sm btn-error" onclick="deleteRow(\'/Admin/Course\',' + options.rowId + ')">Delete</button>';
+                    return '<button style="padding:5px;" class="btn btn-sm btn-primary" onclick="openEditForm(\'/Admin/Course\',' + options.rowId + ','+ "grid1" +')">Edit</button>&nbsp;&nbsp;&nbsp;' +
+                        '<button style="padding:5px;" class="btn btn-sm btn-error" onclick="deleteRow(\'/Admin/Course\',' + options.rowId + "grid1" + ')">Delete</button>';
                 }
             }
         ],
@@ -261,8 +262,8 @@ blog single -->
                 align: 'center',
                 sortable: false,
                 formatter: function (cellvalue, options, rowObject) {
-                    return '<button style="padding:5px;" class="btn btn-sm btn-primary" onclick="openEditForm(\'/Admin/CourseEnrollment\',' + options.rowId + ',' + grid2 + ')">Edit</button>&nbsp;&nbsp;&nbsp;' +
-                        '<button style="padding:5px;" class="btn btn-sm btn-error" onclick="deleteRow(\'/Admin/CourseEnrollment\',' + options.rowId + ')">Delete</button>';
+                    return '<button style="padding:5px;" class="btn btn-sm btn-primary" onclick="openEditForm(\'/Admin/CourseEnrollment\',' + options.rowId + ',' + "grid2" + ')">Edit</button>&nbsp;&nbsp;&nbsp;' +
+                        '<button style="padding:5px;" class="btn btn-sm btn-error" onclick="deleteRow(\'/Admin/CourseEnrollment\',' + options.rowId + "grid2" + ')">Delete</button>';
                 }
             }
         ],
@@ -304,8 +305,8 @@ blog single -->
                 align: 'center',
                 sortable: false,
                 formatter: function (cellvalue, options, rowObject) {
-                    return '<button style="padding:5px;" class="btn btn-sm btn-primary" onclick="openEditForm(\'/Admin/CourseStudent\',' + options.rowId + ',' + grid3 + ')">Edit</button>&nbsp;&nbsp;&nbsp;' +
-                        '<button style="padding:5px;" class="btn btn-sm btn-error" onclick="deleteRow(\'/Admin/CourseStudent\',' + options.rowId + ')">Delete</button>';
+                    return '<button style="padding:5px;" class="btn btn-sm btn-primary" onclick="openEditForm(\'/Admin/CourseStudent\',' + options.rowId + ',' + "grid3" + ')">Edit</button>&nbsp;&nbsp;&nbsp;' +
+                        '<button style="padding:5px;" class="btn btn-sm btn-error" onclick="deleteRow(\'/Admin/CourseStudent\',' + options.rowId + "grid3" + ')">Delete</button>';
                 }
             }
         ],
@@ -347,8 +348,8 @@ blog single -->
                 align: 'center',
                 sortable: false,
                 formatter: function (cellvalue, options, rowObject) {
-                    return '<button style="padding:5px;" class="btn btn-sm btn-primary" onclick="openEditForm(\'/Admin/Comment\',' + options.rowId + ',' + grid4 + ')">Edit</button>&nbsp;&nbsp;&nbsp;' +
-                        '<button style="padding:5px;" class="btn btn-sm btn-error" onclick="deleteRow(\'/Admin/Comment\',' + options.rowId + ')">Delete</button>';
+                    return '<button style="padding:5px;" class="btn btn-sm btn-primary" onclick="openEditForm(\'/Admin/Comment\',' + options.rowId + ',' + "grid4" + ')">Edit</button>&nbsp;&nbsp;&nbsp;' +
+                        '<button style="padding:5px;" class="btn btn-sm btn-error" onclick="deleteRow(\'/Admin/Comment\',' + options.rowId +"grid4" +')">Delete</button>';
                 }
             }
         ],
