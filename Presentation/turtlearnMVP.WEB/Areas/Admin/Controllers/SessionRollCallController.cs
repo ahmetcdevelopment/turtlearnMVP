@@ -9,59 +9,56 @@ using turtlearnMVP.WEB.Areas.Admin.Models;
 
 namespace turtlearnMVP.WEB.Areas.Admin.Controllers
 {
-    public class HomeworkController : Controller
+    public class SessionRollCallController : Controller
     {
-        private readonly IHomeworkService _homeworkService;
+        private readonly ISessionRollCallService _sessionRollCallService;
 
-        public HomeworkController(IHomeworkService homeworkService)
+        public SessionRollCallController(ISessionRollCallService sessionRollCallService)
         {
-            _homeworkService = homeworkService;
+            _sessionRollCallService = sessionRollCallService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var model = new HomeworkListViewModel();
+            //model şimdilik boş olsa da ileride doldurmak istersek diye hazır duruyor.
+            var model = new SessionRollCallListViewModel();
             return View();
         }
-        public async Task<JsonResult> GetAllToGrid()
+        public async Task<IActionResult> GetAllToGrid()
         {
-            var data = _homeworkService.FetchAllDtos().Data;
+            var data = _sessionRollCallService.FetchAllDtos()?.Data;
             return Json(data, new Newtonsoft.Json.JsonSerializerSettings());
         }
         [HttpGet]
         public async Task<IActionResult> AddOrUpdate(int? id)
         {
-            var model = new HomeworkEditViewModel();
+            var model = new SessionRollCallEditViewModel();
             if (id.HasValue && id.Value > 0)
             {
-                var resultData = (await _homeworkService.GetById(id.Value)).Data ?? new Homework();
+                var resultData = (await _sessionRollCallService.GetById(id.Value)).Data ?? new SessionRollCall();
                 // Assuming there is a GetCourseById method in _mainService
                 model.Id = resultData.Id;
+                model.CourseId = resultData.CourseId;
                 model.SessionId = resultData.SessionId;
-                model.StartDate = resultData.StartDate;
-                model.EndDate = resultData.EndDate;
-                model.Title = resultData.Title;
-                model.UploadFile = resultData.UploadFile;
-                model.Description = resultData.Description;
+                model.UserId = resultData.UserId;
+                model.TimeToJoin = resultData.TimeToJoin;
             }
             return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> AddOrUpdate(HomeworkEditViewModel model)
+        public async Task<IActionResult> AddOrUpdate(SessionRollCallEditViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var result = await _homeworkService.GetById(model.Id.HasValue ? model.Id.Value : 0);
+                var result = await _sessionRollCallService.GetById(model.Id.HasValue ? model.Id.Value : 0);
                 if (result.ResultStatus == ResultStatus.Success && result.Data.Id < 0)
                 {
                     return Json(new { Result = result });
                 }
-                result.Data.SessionId = model.SessionId;
-                result.Data.Title = model.Title;
-                result.Data.StartDate = model.StartDate;
-                result.Data.EndDate = model.EndDate;
-                result.Data.Description = model.Description;
-                result.Data.UploadFile = model.UploadFile;
+                result.Data.CourseId = model.CourseId;
+                model.SessionId = model.SessionId;
+                model.UserId = model.SessionId;
+                model.TimeToJoin = model.TimeToJoin;
                 if (result.Data.Id == 0)
                 {
                     result.Data.IsDeleted = false;
@@ -70,23 +67,23 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
                     result.Data.UpdateUserId = userId != null && int.TryParse(userId, out int _userId) ? _userId : 0;
                 }
                 var addOrUpdateResult = result.Data.Id > 0 ?
-                    await _homeworkService.UpdateOrDelete(result.Data) :
-                    await _homeworkService.InsertAsync(result.Data);
+                    await _sessionRollCallService.UpdateOrDelete(result.Data) :
+                    await _sessionRollCallService.InsertAsync(result.Data);
                 return Json(new { Result = addOrUpdateResult });
             }
             return Json(new { Result = new Result(ResultStatus.Error, Messages.PageIsNotFound) });
         }
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<JsonResult> Delete(int? id)
         {
             if (id.HasValue)
             {
-                var result = await _homeworkService.GetById(id.Value);
+                var result = await _sessionRollCallService.GetById(id.Value);
                 if (result.ResultStatus == ResultStatus.Error)
                 {
                     return Json(new { Result = result });
                 }
                 result.Data.IsDeleted = true;
-                var updateResut = await _homeworkService.UpdateOrDelete(result.Data);
+                var updateResut = await _sessionRollCallService.UpdateOrDelete(result.Data);
                 return Json(new { Result = updateResut });
             }
             return Json(new { Result = new Result(ResultStatus.Error, Messages.ResultIsNotFound) });
