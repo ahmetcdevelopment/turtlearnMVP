@@ -19,6 +19,7 @@ namespace turtlearnMVP.Application.Persistance
         IHomeworkTransferRepository HomeworkTransfers { get; }
         ISessionRepository Sessions { get; }
         ISessionRollCallRepository SessionRollCalls { get; }
+        IUserSettingRepository UserSettings { get; }
         Task<int> SaveChanges();
     }
 }

@@ -23,6 +23,7 @@ namespace turtlearnMVP.Persistance.Context
         public DbSet<HomeworkTransfer> HomeworkTransfers { get; set; }
         public DbSet<Session> Sessions { get; set; }
         public DbSet<SessionRollCall> SessionRollCalls { get; set; }
+        public DbSet<UserSetting> UserSettings { get; set; }
         public turtlearnMVPContext(DbContextOptions options) : base(options)
         {
         }
@@ -44,6 +45,7 @@ namespace turtlearnMVP.Persistance.Context
             builder.ApplyConfiguration(new HomeworkTransferMap());
             builder.ApplyConfiguration(new SessionMap());
             builder.ApplyConfiguration(new SessionRollCallMap());
+            builder.ApplyConfiguration(new UserSettingMap());
         }
     }
 }

@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <Folder Include="AutoMapper\" />
+    <Folder Include="Configurations\" />
   </ItemGroup>
 
   <ItemGroup>
