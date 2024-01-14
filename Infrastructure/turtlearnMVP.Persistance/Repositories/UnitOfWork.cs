@@ -29,6 +29,7 @@ namespace turtlearnMVP.Persistance.Repositories
         private EfHomeworkTransferRepository _EfHomeworkTransferRepository;
         private EfSessionRepository _EfSessionRepository;
         private EfSessionRollCallRepository _EfSessionRollCallRepository;
+        private EfUserSettingRepository _EfUserSettingRepository;
         public ICategoyRepository Categories => _EfCategoryRepository ?? new EfCategoryRepository(_Context);
 
         public ICourseRepository Courses => _EfCourseRepository ?? new EfCourseRepository(_Context);
@@ -46,6 +47,8 @@ namespace turtlearnMVP.Persistance.Repositories
         public ISessionRepository Sessions => _EfSessionRepository ?? new EfSessionRepository(_Context);
 
         public ISessionRollCallRepository SessionRollCalls => _EfSessionRollCallRepository ?? new EfSessionRollCallRepository(_Context);
+
+        public IUserSettingRepository UserSettings => _EfUserSettingRepository ?? new EfUserSettingRepository(_Context);
 
         public async ValueTask DisposeAsync()
         {

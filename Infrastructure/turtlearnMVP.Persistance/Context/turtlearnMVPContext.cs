@@ -23,6 +23,7 @@ namespace turtlearnMVP.Persistance.Context
         public DbSet<HomeworkTransfer> HomeworkTransfers { get; set; }
         public DbSet<Session> Sessions { get; set; }
         public DbSet<SessionRollCall> SessionRollCalls { get; set; }
+        public DbSet<UserSetting> UserSettings { get; set; }
         #region SignalR
         public DbSet<Chat> Chats { get; set; }
         public DbSet<ChatUser> ChatUsers { get; set; }
@@ -49,6 +50,7 @@ namespace turtlearnMVP.Persistance.Context
             builder.ApplyConfiguration(new HomeworkTransferMap());
             builder.ApplyConfiguration(new SessionMap());
             builder.ApplyConfiguration(new SessionRollCallMap());
+            builder.ApplyConfiguration(new UserSettingMap());
         }
     }
 }
