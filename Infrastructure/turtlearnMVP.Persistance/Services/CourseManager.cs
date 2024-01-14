@@ -31,6 +31,7 @@ namespace turtlearnMVP.Persistance.Services
 
         public IDataResult<IList<CourseDTO>> FetchAllDtos()
         {
+            
             var allQueryableRecords = _UnitOfWork.Courses.GetAllQueryableRecords();
             var CourseList = allQueryableRecords.ToList();
             CourseList.ForEach(course =>

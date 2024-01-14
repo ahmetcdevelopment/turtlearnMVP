@@ -23,6 +23,11 @@ namespace turtlearnMVP.Persistance.Context
         public DbSet<HomeworkTransfer> HomeworkTransfers { get; set; }
         public DbSet<Session> Sessions { get; set; }
         public DbSet<SessionRollCall> SessionRollCalls { get; set; }
+        #region SignalR
+        public DbSet<Chat> Chats { get; set; }
+        public DbSet<ChatUser> ChatUsers { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        #endregion
         public turtlearnMVPContext(DbContextOptions options) : base(options)
         {
         }

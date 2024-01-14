@@ -25,7 +25,7 @@ namespace turtlearnMVP.Persistance.Repositories.EntityFramework
                         on C.CategoryId equals _Category.Id
                         join U in _Context.Users.DefaultIfEmpty()
                         on C.TeacherId equals U.Id
-                        where C.IsDeleted == true
+                        where C.IsDeleted == false
                         select new CourseDTO
                         {
                             Id = C.Id,
