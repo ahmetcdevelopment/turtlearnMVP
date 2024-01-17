@@ -7,8 +7,8 @@
     Layout = null;
 }
 <!-- Gritter.js script -->
- <script src="https://cdn.jsdelivr.net/npm/gritter@1.7.4/js/jquery.gritter.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/gritter@1.7.4/css/jquery.gritter.min.css" rel="stylesheet"> 
+<script src="https://cdn.jsdelivr.net/npm/gritter@1.7.4/js/jquery.gritter.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/gritter@1.7.4/css/jquery.gritter.min.css" rel="stylesheet">
 <!--=================================
   Modal login -->
 <div class="modal login fade show" id="editModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
@@ -23,33 +23,37 @@
                     @Html.HiddenFor(m => m.Id)
                     <div class="row my-4 align-items-center">
                         <div class="row">
-                            <div class="mb-12 col-sm-12">
-                                    @Html.TextBoxFor(m => m.Name, new {  @class = "form-control form-setting",  @placeholder = "Kategori Adı" })
+                            <div class="mb-12 col-sm-12 form-floating">
+                               
+                                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control form-setting", @placeholder = "Kategori Adı"})
                                     @Html.ValidationMessageFor(m => m.Name)
+                                <label class="float-setting text-dark fw-bold" for="floatingInput">Kategori Adı</label>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="mb-12 col-sm-12">
-                                    @Html.DropDownListFor(
-                                             m => m.SinifDuzeyiId,
-                                             new SelectList(Model.SelSinifDuzeyi, "Value", "Text", Model.SinifDuzeyiId),
-                                             "Sınıf Düzeyi Seç" , 
-                                              new { @class = "form-control form-setting" }
-                                             )
-                                @* <i class="fas fa-arrow-down" style="float: right;"></i> *@
-                                    @Html.ValidationMessageFor(m => m.SinifDuzeyiId)
+                            <div class="mb-12 col-sm-12 form-floating">
+                                @Html.DropDownListFor(
+                                         m => m.SinifDuzeyiId,
+                                         new SelectList(Model.SelSinifDuzeyi, "Value", "Text", Model.SinifDuzeyiId),
+                                         "Sınıf Düzeyi Seç",
+                                         new { @class = "form-control form-setting" }
+                                         )
+                                @Html.ValidationMessageFor(m => m.SinifDuzeyiId)
+                                <label class="float-setting text-dark fw-bold" for="floatingInput">Sınıf Düzeyi</label>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="mb-12 col-sm-12">
-                                    @Html.TextAreaFor(m => m.Content, new { @class = "form-control form-setting", @placeholder = "İçerik" })
-                                    @Html.ValidationMessageFor(m => m.Content)
+                            <div class="mb-12 col-sm-12 form-floating">
+                                @Html.TextAreaFor(m => m.Content, new { @class = "form-control form-setting", @placeholder = "İçerik" })
+                                @Html.ValidationMessageFor(m => m.Content)
+                                <label class="float-setting text-dark fw-bold" for="floatingInput">İçerik</label>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="mb-12 col-sm-12">
-                                    @Html.TextAreaFor(m => m.Description, new { @class = "form-control form-setting", @placeholder = "Açıklama" })
-                                    @Html.ValidationMessageFor(m => m.Description)
+                            <div class="mb-12 col-sm-12 form-floating">
+                                @Html.TextAreaFor(m => m.Description, new { @class = "form-control form-setting", @placeholder = "Açıklama" })
+                                @Html.ValidationMessageFor(m => m.Description)
+                                <label class="float-setting text-dark fw-bold" for="floatingInput">Açıklama</label>
                             </div>
                         </div>
                         <div class="row form-setting">

@@ -16,13 +16,13 @@ namespace turtlearnMVP.WEB.Areas.Admin.Models
         /// 17 haziran 2023 de başlıyor.
         /// course'un içinde section section olarak açılacak.
         /// </summary>
-        public DateTime StartDate { get; set; }
+        public DateTime StartDate { get; set; } = DateTime.Now;
 
         /// <summary>
         /// kursun biteceği tarih
         /// 17 ağustos 2023 de bitiyor.
         /// </summary>
-        public DateTime EndDate { get; set; }
+        public DateTime EndDate { get; set; } = DateTime.Now;
 
         /// <summary>
         /// Kursun kotası

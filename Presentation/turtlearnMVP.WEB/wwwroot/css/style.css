@@ -6079,3 +6079,16 @@ textarea.form-control {
     white-space: nowrap;
     margin-left:-20px;
 }
+
+.custom-theme-button{
+    background-color: var(--theme-color) !important;
+    color: white !important
+}
+
+.form-label{
+    margin-left:20px;
+}
+
+.float-setting {
+    margin-left: 20px;
+}

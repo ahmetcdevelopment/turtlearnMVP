@@ -10,8 +10,16 @@
 <script src="https://cdn.jsdelivr.net/npm/gritter@1.7.4/js/jquery.gritter.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/gritter@1.7.4/css/jquery.gritter.min.css" rel="stylesheet">
 <!-- Bootstrap Datepicker script and styles -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
+
+<script src="~/js/bootstrap/bootstrap.min.js"></script>
+<script src="~/js/datetimepicker/moment-with-locales.js"></script>
+<script src="~/js/datetimepicker/datetimepicker.min.js"></script>
+ <script src="~/js/datetimepicker/moment.min.js"></script>
+
+<script>
+    
+</script>
+
 <!--=================================
   Modal login -->
 <div class="modal login fade show" id="editModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
@@ -26,16 +34,17 @@
                 <form id="editForm" method="post" onsubmit="return false" asp-controller="Course" asp-action="AddOrUpdate">
                     @Html.HiddenFor(m => m.Id)
 
-                    <div class="row my-4 align-items-center">
+                    <div class="row my-4 ">
                         <div class="col-md-6">
                             <div class="row">
-                                <div class="mb-12 col-sm-12">
+                                <div class="mb-12 col-sm-12 form-floating">
                                     @Html.TextBoxFor(m => m.Name, new { @class = "form-control form-setting", @placeholder = "Kurs Adı" })
                                     @Html.ValidationMessageFor(m => m.Name)
+                                    <label class="float-setting text-dark fw-bold" for="floatingInput">Kurs Adı</label>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="mb-12 col-sm-12">
+                                <div class="mb-12 col-sm-12 form-floating">
                                     @Html.DropDownListFor(
                                              m => m.CategoryId,
                                              new SelectList(Model.SelCategories, "Value", "Text", Model.CategoryId),
@@ -43,59 +52,82 @@
                                              new { @class = "form-control form-setting" }
                                              )
                                     @Html.ValidationMessageFor(m => m.CategoryId)
+                                    <label class="float-setting text-dark fw-bold" for="floatingInput">Kategori</label>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="mb-12 col-sm-12">
-                                    @Html.TextBoxFor(m => m.TeacherId, new { @class = "form-control form-setting", @placeholder = "Öğretmen burada seçielcek" })
+                                <div class="mb-12 col-sm-12 form-floating">
+                                    @Html.TextBoxFor(m => m.TeacherId, new { @class = "form-control form-setting", @placeholder = "Öğretmen Seçiniz" })
                                     @Html.ValidationMessageFor(m => m.TeacherId)
+                                    <label class="float-setting text-dark fw-bold" for="floatingInput">Öğretmen</label>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="mb-12 col-sm-12">
-                                    @Html.TextBoxFor(m => m.StartDate, new { @class = "form-control form-setting", @type = "date", @placeholder = "Start Date" })
+                                <div class="mb-12 col-sm-12 input-group form-floating">
+                                    @* @Html.TextBoxFor(m => m.StartDate, "{0:yyyy-MM-dd}", new { @id = "StartDate",@type="text", @class = "form-control form-setting",/*  @type = "date" */ @data_operation = "datetimepicker", @placeholder = "Start Date" })
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span> *@
+                                    <div class="input-group date"  id="startDate"  data-target-input="nearest">
+                                        @Html.TextBoxFor(m => m.StartDate, new {@id="startDateTbx", @class = "form-control form-setting datetimepicker-input", @placeholder = "Başlama Tarihi", @data_toggle = "datetimepicker", @data_target = "#startDate"/* , @Value = Model.StartDate.ToString("dd MM yyyy")  */})
+                                        <div class="input-group-append form-setting" data-target="#startDate" data-toggle="datetimepicker">
+                                            <div style="border-radius: 0px 100px 100px 0px;background-color: var(--theme-color) !important; color:whitesmoke !important;" class="input-group-text">&nbsp;Başlama&nbsp;<i class="far fa-calendar-alt"></i>&nbsp;&nbsp;</div>
+                                        </div>
+                                    </div>
+
                                     @Html.ValidationMessageFor(m => m.StartDate)
+                                    @* <label class="float-setting text-dark fw-bold" for="floatingInput">Başlangıç Tarihi</label> *@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="mb-12 col-sm-12">
-                                    @Html.TextBoxFor(m => m.EndDate, new { @class = "form-control form-setting", @type = "date", @placeholder = "End Date" })
+                                <div class="mb-12 col-sm-12 form-floating">
+                                    <div class="input-group date" id="endDate" data-target-input="nearest">
+                                        @Html.TextBoxFor(m => m.StartDate, new { @id = "endDateTbx", @class = "form-control form-setting datetimepicker-input", @placeholder = "Bitiş Tarihi", @data_toggle = "datetimepicker", @data_target = "#endDate"/* , @Value = Model.StartDate.ToString("dd MM yyyy")  */})
+                                        <div class="input-group-append form-setting" data-target="#endDate" data-toggle="datetimepicker">
+                                            <div style="border-radius: 0px 100px 100px 0px;background-color: var(--theme-color) !important; color:whitesmoke !important;" class="input-group-text">&nbsp;Bitiş&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="far fa-calendar-alt"></i>&nbsp;&nbsp;</div>
+                                        </div>
+                                    </div>
                                     @Html.ValidationMessageFor(m => m.EndDate)
+                                    @* <label class="float-setting text-dark fw-bold" for="floatingInput">Bitiş Tarihi</label> *@
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="row">
-                                <div class="mb-12 col-sm-12">
+                                <div class="mb-12 col-sm-12 form-floating">
                                     @Html.TextBoxFor(m => m.Quota, new { @class = "form-control form-setting quota-input", @placeholder = "Kota" })
                                     @Html.ValidationMessageFor(m => m.Quota)
+                                    <label class="float-setting text-dark fw-bold" for="floatingInput">Kota</label>
                                 </div>
                             </div>
 
                             <div class="row">
-                                <div class="mb-12 col-sm-12">
-                                    @Html.TextBoxFor(m => m.PricePerHour, new { @class = "form-control form-setting price-input", @placeholder = "Saatlik Ücret" })
+                                <div class="mb-12 col-sm-12 form-floating">
+                                    @Html.TextBoxFor(m => m.PricePerHour, new { @class = "form-control form-setting price-input", @placeholder = "Saat Başına Ücret" })
                                     @Html.ValidationMessageFor(m => m.PricePerHour)
+                                    <label class="float-setting text-dark fw-bold" for="floatingInput">Saat Başına Ücret</label>
                                 </div>
                             </div>
 
                             <div class="row">
-                                <div class="mb-12 col-sm-12">
+                                <div class="mb-12 col-sm-12 form-floating">
                                     @Html.TextBoxFor(m => m.TotalHour, new { @class = "form-control form-setting total-hour-input", @placeholder = "Toplam Saat" })
                                     @Html.ValidationMessageFor(m => m.TotalHour)
+                                    <label class="float-setting text-dark fw-bold" for="floatingInput">Toplam Saat</label>
                                 </div>
                             </div>
 
                             <div class="row">
-                                <div class="mb-12 col-sm-12">
+                                <div class="mb-12 col-sm-12 form-floating">
                                     @Html.TextBoxFor(m => m.TotalPrice, new { @class = "form-control form-setting total-price-input", @placeholder = "Toplam Fiyat" })
                                     @Html.ValidationMessageFor(m => m.TotalPrice)
+                                    <label class="float-setting text-dark fw-bold" for="floatingInput">Toplam Fiyat</label>
                                 </div>
                             </div>
 
 
                             <div class="row">
-                                <div class="mb-12 col-sm-12">
+                                <div class="mb-12 col-sm-12 form-floating">
                                     @Html.DropDownListFor(
                                              m => m.Status,
                                              new SelectList(Model.SelStatus, "Value", "Text", Model.Status),
@@ -103,15 +135,17 @@
                                              new { @class = "form-control form-setting" }
                                              )
                                     @Html.ValidationMessageFor(m => m.Status)
+                                    <label class="float-setting text-dark fw-bold" for="floatingInput">Kurs Durumu</label>
                                 </div>
                             </div>
 
 
                         </div>
                         <div class="row">
-                            <div class="mb-12 col-sm-12">
+                            <div class="mb-12 col-sm-12 form-floating">
                                 @Html.TextAreaFor(m => m.Description, new { @class = "form-control form-setting", @placeholder = "Açıklama" })
                                 @Html.ValidationMessageFor(m => m.Description)
+                                <label class="float-setting text-dark fw-bold" for="floatingInput">Açıklama</label>
                             </div>
                         </div>
                         <div class="row form-setting">
@@ -130,8 +164,12 @@
 </div>
 <!--=================================
 Modal login -->
-<script>
+<script type="text/javascript">
     $(document).ready(function () {
+        // import trLocale from 'moment/locale/tr';
+        // import moment from 'moment';
+
+        moment.locale('tr');
         // // Handle click event on the login tab
         // $('#login-tab').on('click', function () {
         //     // Set the value of RegUserTypeId to -1
@@ -183,24 +221,71 @@ Modal login -->
                 }
             });
         }
-        $(".quota-input, .price-input, .total-hour-input, .total-price-input").inputmask('numeric', {
-            radixPoint: '.',
-            groupSeparator: ',',
-            autoGroup: true,
-            prefix: '', // Or any other prefix
-            rightAlign: true
-        });
 
-        $('#StartDate').datepicker({
-            format: 'yyyy-mm-dd',
-            autoclose: true
-        });
+        // debugger;
+        // $('#startdate').datetimepicker({
+        //     // // format: 'DD/MM/YYYY',  // İhtiyaca uygun bir format seçin.
+        //     // // format: 'DD/MM/YYYY',  // İhtiyaca uygun bir format seçin.
+        //     // showTodayButton: true,
+        //     // // format: 'YYYY-MM-DD HH:mm',
+        //     // showClose: true,
+        //     // showClear: true,
+        //     // toolbarPlacement: 'top',
+        //     // stepping: 15,
+        //     // locale: 'tr'  // Türkçe dilini kullanmak istiyorsanız.
+        //     format: 'DD MM YYYY',
+        //     showTimepicker: false
+        // });
+        
+        // $('#datetimepicker-05').datetimepicker({
+        //     format: 'DD MM YYYY',
+        //     showTimepicker: false
+        // });
+        // $('#StartDate').datepicker({
+        //     changeMonth: true,
+        //     changeYear: true,
+        //     format: "dd/mm/yyyy",
+        //     language: "tr"
+        // });
 
-        $('#EndDate').datepicker({
-            format: 'yyyy-mm-dd',
-            autoclose: true
-        });
+        // $('#EndDate').datepicker({
+        //     changeMonth: true,
+        //     changeYear: true,
+        //     format: "dd/mm/yyyy",
+        //     language: "tr"
+        // });
+
+        // $('#StartDate').datepicker({ autoclose: true });
+
+        // try {
+        //     $('#datetimepicker-05').datetimepicker({
+        //         format: 'DD MM YYYY',
+        //         showTimepicker: false
+        //     });
+        // } catch (error) {
+        //     console.error('Datetimepicker initialization error:', error);
+        // }
+
+        // try {
+        //     $('#enddate').datetimepicker({
+        //         format: 'DD/MM/YYYY',
+        //         showTimepicker: false
+        //     });
+        // } catch (error) {
+        //     console.error('Datetimepicker initialization error:', error);
+        // }
+
+        setDatePicker($('#startDate'));
+        setDatePicker($('#endDate'));
+    });
+</script>
+@* <script type="text/javascript">
+    $(window).on('load', function () {
+        // Your existing code here...
+
+        // Call your reloadDatetimepickers function here
+        reloadDatetimepickers($);
 
         
     });
-</script>
+</script> *@
