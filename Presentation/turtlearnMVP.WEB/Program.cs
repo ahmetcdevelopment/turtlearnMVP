@@ -38,6 +38,13 @@ builder.Services.AddIdentity<User, Role>(options =>
 
 }).AddEntityFrameworkStores<turtlearnMVPContext>().AddDefaultTokenProviders();
 
+// Oturum Durumu Eklemek
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Oturum süresi
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -69,6 +76,8 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

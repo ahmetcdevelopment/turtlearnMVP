@@ -27,6 +27,7 @@ namespace turtlearnMVP.Persistance
             services.AddScoped<ISessionService, SessionManager>();
             services.AddScoped<ISessionRollCallService, SessionRollCallManager>();
             services.AddScoped<IMailService, MailManager>();
+            services.AddScoped<IUserSettingService, UserSettingManager>();
 
             services.AddScoped<ISearch<CategoryDTO>, Search<CategoryDTO>>();
 

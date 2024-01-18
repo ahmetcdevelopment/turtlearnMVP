@@ -480,7 +480,10 @@
                 // data: { id: item.Id },
                 success: function (result) {
                     $('#loginOrRegisterPartialZone').html(result);
-                    $('#loginModal').modal('show');
+                    $('#loginModal').modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    }).modal('show');;
 
                 },
                 error: function () {
@@ -524,7 +527,10 @@
                     data: { id: id },
                     success: function (result) {
                         $('#partialEditContent').html(result);
-                        $('#editModal').modal('show');
+                        $('#editModal').modal({
+                            backdrop: 'static',
+                            keyboard: false
+                        }).modal('show');;
                     },
                     error: function () {
                         $.gritter.add({

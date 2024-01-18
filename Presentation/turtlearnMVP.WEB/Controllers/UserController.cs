@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using TurtLearn.Shared.Entities.Abstract;
 using TurtLearn.Shared.Entities.Concrete;
 using TurtLearn.Shared.Entities.Dtos;
+using TurtLearn.Shared.Utilities.Results.ComplexTypes;
+using turtlearnMVP.Application.Persistance.Services;
 using turtlearnMVP.WEB.Models.User;
 
 namespace turtlearnMVP.WEB.Controllers
@@ -12,20 +14,27 @@ namespace turtlearnMVP.WEB.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly IMailService _mailService;
+        private readonly IUserSettingService _userSettingService;
         public UserController
             (
                 UserManager<User> userManager, 
-                SignInManager<User> signInManager
+                SignInManager<User> signInManager,
+                IMailService mailService,
+                IUserSettingService userSettingService
             )
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _mailService = mailService;
+            _userSettingService = userSettingService;
         }
         public IActionResult Index()
         {
             return View();
         }
 
+        [HttpGet]
         public async Task<IActionResult> LoginOrRegisterPartial()
         {
             return PartialView();
@@ -64,7 +73,11 @@ namespace turtlearnMVP.WEB.Controllers
             }
             else
             {
-                return Json(new { success = false, message = "Formu eksiksiz doldurunuz." });
+                var validationErrors = ModelState.Values.SelectMany(v => v.Errors)
+                                            .Select(e => e.ErrorMessage);
+
+                return Json(new { success = false, message = "Validation failed", errors = validationErrors });
+                //return Json(new { success = false, message = "Formu eksiksiz doldurunuz." });
             }
         }
 
@@ -78,16 +91,30 @@ namespace turtlearnMVP.WEB.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(UserRegisterViewModel model)
         {
+            //model.Email = HttpContext.Session.GetString("VerifiedMail").Length > 0 ? HttpContext.Session.GetString("VerifiedMail") : null;
+
             if (ModelState.IsValid)
             {
+                var verifiedMail = HttpContext.Session.GetString("VerifiedMail");
+
+                if (model.Email != verifiedMail)
+                {
+                    return Json(new { success = false, message = "Doğrulama Başarısız! Mail Doğrulamasının ardından tekrar deneyiniz!" });
+                }
+
                 if (model.Password != model.PasswordCheck)
                 {
                     return Json(new { success = false, message = "Şifreleriniz Uyuşmuyor! Kontrol edip tekrar deneyiniz!"});
                 }
                 var user = new User
                 {
-                    UserName = model.UserName,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Photo = "default.jpg",
                     Email = model.Email,
+                    PhoneNumber = model.PhoneNumber,
+                    //PasswordHash = hasleme
+                    UserName = model.UserName,
                     
                 };
 
@@ -119,6 +146,31 @@ namespace turtlearnMVP.WEB.Controllers
             await _signInManager.SignOutAsync();
             Response.Cookies.Delete("UserProfilePhoto");
             return Json(new { success = true, message = "Çıkış Başarılı!", redirectUrl = Url.Action("Index", "Home") });
+        }
+
+        public async Task<IActionResult> Verify(string targetMail)
+        {
+            var code = _userSettingService.GenerateRandomVerificationCode().GetAwaiter().GetResult();
+            var result = _mailService.SendVerificationCodeAsync(targetMail, code).GetAwaiter().GetResult();
+            if(result.ResultStatus == ResultStatus.Success)
+            {
+                HttpContext.Session.SetInt32("VerifyCode", code);
+                HttpContext.Session.SetString("VerifyTargetMail", targetMail);
+                return Json(new { success = true});
+            }
+            return Json(new { success = false });
+        }
+
+        public async Task<IActionResult> VerifyCode(int code)
+        {
+            var verifyCode = HttpContext.Session.GetInt32("VerifyCode");
+            if (verifyCode == code)
+            {
+                var verifiedMail = HttpContext.Session.GetString("VerifyTargetMail");
+                HttpContext.Session.SetString("VerifiedMail", verifiedMail);
+                return Json(new { success = true });
+            }
+            return Json(new { success = false });
         }
     }
 }

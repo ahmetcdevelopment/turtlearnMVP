@@ -61,5 +61,11 @@ namespace turtlearnMVP.Persistance.Services
             }
             return new Result(ResultStatus.Error, message);
         }
+
+        public Task<int> GenerateRandomVerificationCode()
+        {
+            Random random = new Random();
+            return Task.FromResult(random.Next(100000, 999999));
+        }
     }
 }

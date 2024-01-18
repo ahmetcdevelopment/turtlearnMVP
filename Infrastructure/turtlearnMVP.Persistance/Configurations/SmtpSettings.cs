@@ -13,5 +13,7 @@ namespace turtlearnMVP.Persistance.Configurations
         public string SmtpSenderName { get; set; }
         public string SmtpSenderEmail { get; set; }
         public string SmtpPassword { get; set; }
+        public string SmtpVerifyBodyPart1 { get; set; }
+        public string SmtpVerifyBodyPart2 { get; set; }
     }
 }

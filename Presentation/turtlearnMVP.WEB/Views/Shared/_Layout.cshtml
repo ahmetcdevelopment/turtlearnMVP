@@ -20,9 +20,18 @@
     @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/turtlearnMVP.WEB.styles.css" asp-append-version="true" /> *@
-
     <!-- Favicon -->
     <link rel="shortcut icon" href="images/favicon.ico" />
+
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Include jQuery Validation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+
+    <!-- Include jQuery Unobtrusive Validation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
+
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -338,7 +347,10 @@
                 // data: { id: item.Id },
                 success: function (result) {
                     $('#loginOrRegisterPartialZone').html(result);
-                    $('#loginModal').modal('show');
+                    $('#loginModal').modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    }).modal('show');
 
                 },
                 error: function () {
@@ -371,6 +383,24 @@
 
 
         });
+
+        function displayValidationErrors(data) {
+            debugger;
+            // Clear previous validation errors
+            $('.validation-summary-errors').empty();
+
+            // Display server-side validation errors
+            if (data.message && data.message.toLowerCase() === "formu eksiksiz doldurunuz.") {
+                // Display general form error
+                $('.validation-summary-errors').append('<ul><li>' + data.message + '</li></ul>');
+            } else if (data.errors) {
+                // Display field-specific errors
+                $.each(data.errors, function (key, value) {
+                    var errorMessages = value.join('<br>');
+                    $('#' + key).after('<span class="text-danger">' + errorMessages + '</span>');
+                });
+            }
+        }
     </script>
     @* <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
