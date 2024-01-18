@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Configuration;
 using TurtLearn.Shared.Entities.Concrete;
 using turtlearnMVP.Persistance;
+using turtlearnMVP.Persistance.Configurations;
 using turtlearnMVP.Persistance.Context;
 using turtlearnMVP.WEB.Hubs;
 
@@ -13,13 +15,15 @@ builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
 //Database
 builder.Services.AddDbContext<turtlearnMVPContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("DevelopmentDB")));
 
+// SmtpSettings
+builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));
+
 // Add services to the container.
 //builder.Services.AddControllersWithViews();
 
-
 builder.Services.AddSignalR(); //signalr modülünü devreye sok.
 
-builder.Services.LoadMyPersistanceServices();
+builder.Services.LoadMyPersistanceServices(builder.Configuration);
 
 builder.Services.AddIdentity<User, Role>(options =>
 {
@@ -34,6 +38,13 @@ builder.Services.AddIdentity<User, Role>(options =>
 
 }).AddEntityFrameworkStores<turtlearnMVPContext>().AddDefaultTokenProviders();
 
+// Oturum Durumu Eklemek
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Oturum süresi
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -65,6 +76,8 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

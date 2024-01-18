@@ -16,5 +16,6 @@ namespace turtlearnMVP.Application.Persistance.Services
         Task<IResult> UpdateOrDelete(UserSetting entity);
         //IDataResult<IList<UserSettingDTO>> FetchAllDtos();
         Task<IDataResult<UserSetting>> GetById(int id);
+        Task<int> GenerateRandomVerificationCode();
     }
 }

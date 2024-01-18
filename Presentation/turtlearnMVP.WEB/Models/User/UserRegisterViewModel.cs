@@ -44,9 +44,9 @@ namespace turtlearnMVP.WEB.Models.User
 
         [DisplayName("Şifre")]
         [Required(ErrorMessage = "{0} Boş Geçilmemelidir.")]
-        [MaxLength(50, ErrorMessage = "{0} {1} karakterden büyük olmamalıdır.")]
-        [MinLength(3, ErrorMessage = "{0} {1} karakterden küçük olmamalıdır.")]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{3,50}$", ErrorMessage = "{0} şu koşulları sağlamalıdır: en az bir küçük harf, en az bir büyük harf, en az bir rakam, en az bir özel karakter. Uzunluk 3 ile 50 karakter arasında olmalıdır.")]
         public string Password { get; set; }
+
 
         [DisplayName("Şifre (Tekrar)")]
         [Required(ErrorMessage = "{0} Boş Geçilmemelidir.")]

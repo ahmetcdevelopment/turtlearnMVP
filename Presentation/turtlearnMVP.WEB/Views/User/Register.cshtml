@@ -1,4 +1,5 @@
 ﻿@model turtlearnMVP.WEB.Models.User.UserRegisterViewModel;
+@using Microsoft.AspNetCore.Mvc.TagHelpers;
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -8,42 +9,58 @@
     <form id="RegisterForm" method="post" onsubmit="return false" asp-controller="User" asp-action="Register">
         <div class="row">
             <div class="mb-3 col-sm-6">
-                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = "İsim" })
-                @Html.ValidationMessageFor(m => m.FirstName)
+                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = "İsim", @data_bs_toggle = "tooltip", @data_bs_placement = "right" })
+                @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "invalid-tooltip" })
             </div>
             <div class="mb-3 col-sm-6">
-                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "Soyisim" })
-                @Html.ValidationMessageFor(m => m.LastName)
+                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "Soyisim", @data_bs_toggle = "tooltip", @data_bs_placement = "right" })
+                @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "invalid-tooltip" })
             </div>
         </div>
         <div class="row">
             <div class="mb-3 col-sm-10">
-                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @placeholder = "Kullanıcı Adı" })
-                @Html.ValidationMessageFor(m => m.Email)
+                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @placeholder = "Kullanıcı Adı", @data_bs_toggle = "tooltip", @data_bs_placement = "right" })
+                @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "invalid-tooltip" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="mb-3 col-sm-12 form-floating">
+                <div class="input-group date">
+                    @Html.TextBoxFor(m => m.Email, new { @id = "emailTbx", @class = "form-control form-setting", @placeholder = "Email", @data_bs_toggle = "tooltip", @data_bs_placement = "right", @name = "e-posta" })
+                    <div class="input-group-append form-setting">
+                        <div id="sendCodeButton" style="border-radius: 0px 100px 100px 0px; !important;" class="input-group-text code">&nbsp; Doğrula &nbsp;<i id="sendCodeIcon" class="fa fa-exclamation"></i>&nbsp;&nbsp;</div>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.Email, "asdasdasd", new { @class = "invalid-tooltip" })
+                </div>
+            </div>
+        </div>
+        <div id="codeSection" class="row">
+            <div class="mb-3 col-sm-12 form-floating">
+                <div class="input-group date">
+                    @Html.TextBox("Code", null, new { @id = "codeTbx", @class = "form-control form-setting", @placeholder = "Code", @data_bs_toggle = "tooltip", @data_bs_placement = "right" })
+                    <div class="input-group-append form-setting">
+                        <div id="verifyCodeButton" style="border-radius: 0px 100px 100px 0px; !important;" class="input-group-text verify">&nbsp; Doğrula &nbsp;<i id="verifyCodeIcon" class="fa fa-exclamation"></i>&nbsp;&nbsp;</div>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.Email, "asdasdasd", new { @class = "invalid-tooltip" })
+                </div>
             </div>
         </div>
         <div class="row">
             <div class="mb-3 col-sm-12">
-                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Email" })
-                @Html.ValidationMessageFor(m => m.Email)
+                @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", @placeholder = "Telefon Numarası", @data_bs_toggle = "tooltip", @data_bs_placement = "right" })
+                @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "invalid-tooltip" })
             </div>
         </div>
         <div class="row">
             <div class="mb-3 col-sm-12">
-                @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", @placeholder = "Telefon Numarası" })
-                @Html.ValidationMessageFor(m => m.PhoneNumber)
+                @Html.TextBoxFor(m => m.Password, new { @class = "form-control", @placeholder = "Şifre", @data_bs_toggle = "tooltip", @data_bs_placement = "right" })
+                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "invalid-tooltip" })
             </div>
         </div>
         <div class="row">
             <div class="mb-3 col-sm-12">
-                @Html.TextBoxFor(m => m.Password, new { @class = "form-control", @placeholder = "Şifre" })
-                @Html.ValidationMessageFor(m => m.Password)
-            </div>
-        </div>
-        <div class="row">
-            <div class="mb-3 col-sm-12">
-                @Html.TextBoxFor(m => m.PasswordCheck, new { @class = "form-control", @placeholder = "Şifre (tekrar)" })
-                @Html.ValidationMessageFor(m => m.PasswordCheck)
+                @Html.TextBoxFor(m => m.PasswordCheck, new { @class = "form-control", @placeholder = "Şifre (tekrar)", @data_bs_toggle = "tooltip", @data_bs_placement = "right" })
+                @Html.ValidationMessageFor(m => m.PasswordCheck, "", new { @class = "invalid-tooltip" })
             </div>
         </div>
     </form>
@@ -59,31 +76,125 @@
 
 <script type="text/javascript">
 
+    $(document).ready(function () {
+        var codeSection = $("#codeSection");
+        codeSection.hide();
+       
+        $('#sendCodeButton').on('click', function () {
+            debugger;
+            if (!$('#sendCodeButton').hasClass('sended')) {
+                // Email'i al
+                var targetMail = $('#emailTbx').val(); // Email alanının ID'sini kontrol edin ve gerekirse değiştirin
+
+                // Ajax isteği
+                $.ajax({
+                    url: '/User/Verify', // Controller adınız User ise
+                    type: 'POST',
+                    data: { targetMail: targetMail },
+                    beforeSend: function () {
+                        // Burada istek gönderilmeden önce yapılacak işlemleri ekleyebilirsiniz
+                        // Örneğin, bir yükleniyor gösterimi
+                    },
+                    success: function (data) {
+                        // Ajax isteği başarıyla tamamlandığında
+                        if (data.success) {
+                            // Butonu düzenle
+                            $('#sendCodeButton').addClass('sended');
+                            $('#sendCodeButton').html('&nbsp; Kod Gönderildi! &nbsp;<i id="sendCodeIcon" class="fa fa-envelope"></i>&nbsp;&nbsp;');
+                            $('#emailTbx').prop('readonly', true);
+                            codeSection.show();
+
+                        } else {
+                            alert('Doğrulama kodu gönderilirken bir hata oluştu.');
+                        }
+                    },
+                    error: function () {
+                        // Hata durumu
+                        alert('İstek sırasında bir hata oluştu.');
+                    }
+                });
+            }
+        });
+
+        $('#verifyCodeButton').on('click', function () {
+            debugger;
+            if (!$('#verifyCodeButton').hasClass('verified')) {
+                // Email'i al
+                var code = $('#codeTbx').val(); // Email alanının ID'sini kontrol edin ve gerekirse değiştirin
+
+                // Ajax isteği
+                $.ajax({
+                    url: '/User/VerifyCode', // Controller adınız User ise
+                    type: 'POST',
+                    data: { code: code },
+                    beforeSend: function () {
+                        // Burada istek gönderilmeden önce yapılacak işlemleri ekleyebilirsiniz
+                        // Örneğin, bir yükleniyor gösterimi
+                    },
+                    success: function (data) {
+                        // Ajax isteği başarıyla tamamlandığında
+                        if (data.success) {
+                            // Butonu düzenle
+                            $('#verifyCodeButton').addClass('verified');
+                            $('#verifyCodeButton').html('&nbsp; Doğrulandı! &nbsp;<i id="verifyCodeIcon" class="fa fa-check"></i>&nbsp;&nbsp;');
+                            $('#codeTbx').prop('disabled', true);
+
+                        } else {
+                            alert('Doğrulama sırasında bir hata oluştu.');
+                        }
+                    },
+                    error: function () {
+                        // Hata durumu
+                        alert('İstek sırasında bir hata oluştu.');
+                    }
+                });
+            }
+        });
+    });
+
     $('#registerButton').on('click', function () {
         submitRegisterForm();
     });
 
     function submitRegisterForm() {
         var formData = $('#RegisterForm').serialize();
-
+        debugger;
         $.ajax({
             url: $('#RegisterForm').attr('action'),
             type: 'POST',
             data: formData,
             success: function (data) {
                 if (data != null) {
-
-                    window.alert(data.message);
-                    window.location.reload();
+                    // window.alert(data.message);
+                    if (data.success) {
+                        window.location.reload();
+                    }
+                    // else {
+                    //     displayValidationErrors(data.errors);
+                    // }
                 }
             },
-            error: function (error) {
-                if (error != null) {
-                    window.alert(error.message);
-                }
+            error: function (xhr, status, error) {
+                window.alert("AJAX Request Error: " + status + " - " + error);
             }
         });
     }
+
+    // // Hata mesajlarını görüntülemek için fonksiyon
+    // function displayValidationErrors(errors) {
+    //     $('.validation-error').remove();
+
+    //     errors.forEach(function (error) {
+    //         var inputSelector = '[name="' + error.split(" ")[0].toLowerCase() + '"]';
+    //         $(inputSelector).addClass('is-invalid');
+
+    //         $(inputSelector).attr('data-bs-toggle', 'tooltip');
+    //         $(inputSelector).attr('data-bs-placement', 'right');
+    //         $(inputSelector).attr('title', error);
+
+    //         $(inputSelector).tooltip('show');
+    //     });
+    // }
 
 </script>
 
