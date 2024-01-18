@@ -51,6 +51,11 @@ namespace turtlearnMVP.Persistance.Context
             builder.ApplyConfiguration(new SessionMap());
             builder.ApplyConfiguration(new SessionRollCallMap());
             builder.ApplyConfiguration(new UserSettingMap());
+            #region SignalR
+            builder.ApplyConfiguration(new ChatMap());
+            builder.ApplyConfiguration(new ChatUserMap());
+            builder.ApplyConfiguration(new MessageMap());
+            #endregion
         }
     }
 }
