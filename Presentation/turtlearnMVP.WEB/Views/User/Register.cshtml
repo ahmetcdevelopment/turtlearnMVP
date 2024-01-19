@@ -8,25 +8,30 @@
 <div class="row my-4 align-items-center">
     <form id="RegisterForm" method="post" onsubmit="return false" asp-controller="User" asp-action="Register">
         <div class="row">
-            <div class="mb-3 col-sm-6">
-                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = "İsim", @data_bs_toggle = "tooltip", @data_bs_placement = "right" })
+            <div class="mb-3 col-sm-6 form-floating">
+                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control form-setting", @placeholder = "İsim", @data_bs_toggle = "tooltip", @data_bs_placement = "right" })
                 @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "invalid-tooltip" })
+                <label class="float-setting text-dark fw-bold" for="floatingInput">İsim</label>
             </div>
-            <div class="mb-3 col-sm-6">
-                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "Soyisim", @data_bs_toggle = "tooltip", @data_bs_placement = "right" })
+            <div class="mb-3 col-sm-6 form-floating">
+                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control form-setting", @placeholder = "Soyisim", @data_bs_toggle = "tooltip", @data_bs_placement = "right" })
                 @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "invalid-tooltip" })
-            </div>
-        </div>
-        <div class="row">
-            <div class="mb-3 col-sm-10">
-                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @placeholder = "Kullanıcı Adı", @data_bs_toggle = "tooltip", @data_bs_placement = "right" })
-                @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "invalid-tooltip" })
+                <label class="float-setting text-dark fw-bold" for="floatingInput">Soyisim</label>
             </div>
         </div>
         <div class="row">
             <div class="mb-3 col-sm-12 form-floating">
-                <div class="input-group date">
+                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control form-setting", @placeholder = "Kullanıcı Adı", @data_bs_toggle = "tooltip", @data_bs_placement = "right" })
+                @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "invalid-tooltip" })
+                <label class="float-setting text-dark fw-bold" for="floatingInput">Kullanıcı Adı</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="mb-3 col-sm-12 ">
+                <div class="input-group date form-floating">
                     @Html.TextBoxFor(m => m.Email, new { @id = "emailTbx", @class = "form-control form-setting", @placeholder = "Email", @data_bs_toggle = "tooltip", @data_bs_placement = "right", @name = "e-posta" })
+
+                    <label class="float-setting-input-group text-dark fw-bold" for="floatingInput">Email</label>
                     <div class="input-group-append form-setting">
                         <div id="sendCodeButton" style="border-radius: 0px 100px 100px 0px; !important;" class="input-group-text code">&nbsp; Doğrula &nbsp;<i id="sendCodeIcon" class="fa fa-exclamation"></i>&nbsp;&nbsp;</div>
                     </div>
@@ -35,9 +40,10 @@
             </div>
         </div>
         <div id="codeSection" class="row">
-            <div class="mb-3 col-sm-12 form-floating">
-                <div class="input-group date">
+            <div class="mb-3 col-sm-12 ">
+                <div class="input-group date form-floating">
                     @Html.TextBox("Code", null, new { @id = "codeTbx", @class = "form-control form-setting", @placeholder = "Code", @data_bs_toggle = "tooltip", @data_bs_placement = "right" })
+                    <label class="float-setting-input-group text-dark fw-bold" for="floatingInput">Doğrulama Kodu</label>
                     <div class="input-group-append form-setting">
                         <div id="verifyCodeButton" style="border-radius: 0px 100px 100px 0px; !important;" class="input-group-text verify">&nbsp; Doğrula &nbsp;<i id="verifyCodeIcon" class="fa fa-exclamation"></i>&nbsp;&nbsp;</div>
                     </div>
@@ -46,21 +52,24 @@
             </div>
         </div>
         <div class="row">
-            <div class="mb-3 col-sm-12">
-                @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", @placeholder = "Telefon Numarası", @data_bs_toggle = "tooltip", @data_bs_placement = "right" })
+            <div class="mb-3 col-sm-12 form-floating">
+                @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control form-setting", @placeholder = "Telefon Numarası", @data_bs_toggle = "tooltip", @data_bs_placement = "right" })
                 @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "invalid-tooltip" })
+                <label class="float-setting text-dark fw-bold" for="floatingInput">Telefon Numarası</label>
             </div>
         </div>
         <div class="row">
-            <div class="mb-3 col-sm-12">
-                @Html.TextBoxFor(m => m.Password, new { @class = "form-control", @placeholder = "Şifre", @data_bs_toggle = "tooltip", @data_bs_placement = "right" })
+            <div class="mb-3 col-sm-12 form-floating">
+                @Html.TextBoxFor(m => m.Password, new { @class = "form-control form-setting", @placeholder = "Şifre", @data_bs_toggle = "tooltip", @data_bs_placement = "right" })
                 @Html.ValidationMessageFor(m => m.Password, "", new { @class = "invalid-tooltip" })
+                <label class="float-setting text-dark fw-bold" for="floatingInput">Şifre</label>
             </div>
         </div>
         <div class="row">
-            <div class="mb-3 col-sm-12">
-                @Html.TextBoxFor(m => m.PasswordCheck, new { @class = "form-control", @placeholder = "Şifre (tekrar)", @data_bs_toggle = "tooltip", @data_bs_placement = "right" })
+            <div class="mb-3 col-sm-12 form-floating">
+                @Html.TextBoxFor(m => m.PasswordCheck, new { @class = "form-control form-setting", @placeholder = "Şifre (tekrar)", @data_bs_toggle = "tooltip", @data_bs_placement = "right" })
                 @Html.ValidationMessageFor(m => m.PasswordCheck, "", new { @class = "invalid-tooltip" })
+                <label class="float-setting text-dark fw-bold" for="floatingInput">Şifre (Tekrar)</label>
             </div>
         </div>
     </form>
@@ -69,7 +78,7 @@
     <div class="col-sm-5">
     </div>
     <div class="col-sm-5">
-        <button id="registerButton" class="btn btn-primary">Sign up</button>
+        <button id="registerButton" class="btn btn-primary">Kaydol</button>
     </div>
 </div>
 

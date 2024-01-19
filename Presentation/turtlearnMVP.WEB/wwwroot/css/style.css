@@ -6093,7 +6093,13 @@ textarea.form-control {
     margin-left: 20px;
 }
 
+.float-setting-input-group {
+    margin-left: 10px !important;
+    z-index:999;
+}
+
 .code {
+    cursor: pointer;
     background-color: #f6904e !important;
     color: whitesmoke !important;
     padding: 10px;
@@ -6112,6 +6118,7 @@ textarea.form-control {
     }
 
 .verify {
+    cursor: pointer;
     background-color: #0083d0 !important;
     color: whitesmoke !important;
     padding: 10px;
@@ -6128,3 +6135,22 @@ textarea.form-control {
         background-color: #258969 !important;
         color: whitesmoke !important;
     }
+
+.decoration-wrap {
+    position: relative;
+}
+
+.decoration-code {
+    position: absolute;
+    right: 40px;
+    top: 30px;
+    font-size: x-large;
+}
+
+select:focus {
+    border-radius: 30px 30px 0px 0px !important;
+}
+
+option{
+    font-size:larger;
+}

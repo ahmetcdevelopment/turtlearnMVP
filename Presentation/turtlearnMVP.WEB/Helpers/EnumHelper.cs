@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using STM.Core.Utilities.Attributes;
 using System.Reflection;
+using turtlearnMVP.Domain.Enums;
 
 namespace turtlearnMVP.WEB.Helpers
 {
@@ -30,6 +31,21 @@ namespace turtlearnMVP.WEB.Helpers
             }
 
             return new SelectList(items, "Value", "Text");
+        }
+
+        public static Type GetEnumByTypeId(int typeId)
+        {
+            switch (typeId)
+            {
+                case 1:
+                    return typeof(UserSettingVerify);
+                case 2:
+                // return typeof(Notification);
+                case 3:
+                // return typeof(EnumForCase3);
+                default:
+                    throw new ArgumentException($"Belirtilen TypeId ({typeId}) için bir enum değeri tanımlanmamış.");
+            }
         }
     }
 }

@@ -517,6 +517,14 @@
 
         });
         $(document).ready(function () {
+            $(".form-select").focus(function () {
+                debugger;
+                $(this).addClass("dropdown-setting");
+            });
+
+            $(".form-select").blur(function () {
+                $(this).removeClass("dropdown-setting");
+            });
             // Initial toggle on page load
             toggleSidebarVisibility();
             openEditForm = function (controllerUrl, id, targetGrid) {

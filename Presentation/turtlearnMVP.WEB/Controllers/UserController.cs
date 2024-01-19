@@ -6,6 +6,8 @@ using TurtLearn.Shared.Entities.Concrete;
 using TurtLearn.Shared.Entities.Dtos;
 using TurtLearn.Shared.Utilities.Results.ComplexTypes;
 using turtlearnMVP.Application.Persistance.Services;
+using turtlearnMVP.Domain.Entities;
+using turtlearnMVP.Domain.Enums;
 using turtlearnMVP.WEB.Models.User;
 
 namespace turtlearnMVP.WEB.Controllers
@@ -113,7 +115,6 @@ namespace turtlearnMVP.WEB.Controllers
                     Photo = "default.jpg",
                     Email = model.Email,
                     PhoneNumber = model.PhoneNumber,
-                    //PasswordHash = hasleme
                     UserName = model.UserName,
                     
                 };
@@ -122,6 +123,14 @@ namespace turtlearnMVP.WEB.Controllers
 
                 if (result.Succeeded)
                 {
+                    var userSetting = new UserSetting
+                    {
+                        UserId = user.Id,
+                        TypeId = (int)UserSettingType.Verify,
+                        Key = (int)UserSettingVerify.Email,
+                        Value = model.Email
+                    };
+                    _userSettingService.InsertAsync(userSetting).GetAwaiter().GetResult();
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     HttpContext.Response.Cookies.Append("UserProfilePhoto", user.Photo);
                     return Json(new { success = true, redirectUrl = Url.Action("Index", "Home") });

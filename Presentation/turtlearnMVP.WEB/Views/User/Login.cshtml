@@ -11,15 +11,17 @@
     <form id="LoginForm" method="post" onsubmit="return false" asp-controller="User" asp-action="Login" asp-validation-summary="All">
 
         <div class="row">
-            <div class="mb-3 col-sm-12">
+            <div class="mb-3 col-sm-12 form-floating">
                 @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Email" })
                 @Html.ValidationMessageFor(m => m.Email)
+                <label class="float-setting text-dark fw-bold" for="floatingInput">Email</label>
             </div>
         </div>
         <div class="row">
-            <div class="mb-3 col-sm-12">
+            <div class="mb-3 col-sm-12 form-floating">
                 @Html.TextBoxFor(m => m.Password, new { @class = "form-control", @placeholder = "Şifre" })
                 @Html.ValidationMessageFor(m => m.Password)
+                <label class="float-setting text-dark fw-bold" for="floatingInput">Şifre</label>
             </div>
         </div>
         <div class="row">
@@ -28,7 +30,7 @@
             <div class="mb-3 col-sm-4">
                 <label>
                     @Html.CheckBoxFor(m => m.RememberMe, new { @class = "custom-checkbox" })
-                    Remeber Me
+                    Beni Hatırla
                     @Html.ValidationMessageFor(m => m.RememberMe)
                 </label>
             </div>
@@ -39,11 +41,11 @@
     </div>
     <div class="col-sm-5">
         <ul class="list-unstyled d-flex mb-1 mt-sm-0 mt-3">
-            <li class="me-1"><a class="text-dark" href="#"><b>I Forgot My Password</b></a></li>
+            <li class="me-1"><a class="text-dark" href="#"><b>Şifremi unuttum</b></a></li>
         </ul>
     </div>
     <div class="col-sm-5">
-        <button id="loginButton" class="btn btn-primary">Log In</button>
+        <button id="loginButton" class="btn btn-primary">Giriş Yap</button>
     </div>
 </div>
 
