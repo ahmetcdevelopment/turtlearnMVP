@@ -18,6 +18,11 @@ namespace turtlearnMVP.Domain.DTOs
         public string CourseInfo { get; set; }//Kursun ismi veya başlığı olabilir.
 
         /// <summary>
+        /// Sırası
+        /// </summary>
+        public int Queue { get; set; }
+
+        /// <summary>
         /// Birinci oturum, ikinci oturum, 4.12.2023 tarihli oturum
         /// </summary>
         public string SessionName { get; set; }

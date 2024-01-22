@@ -27,6 +27,7 @@ namespace turtlearnMVP.Persistance.Repositories.EntityFramework
                         {
                             Id = S.Id,
                             CourseInfo = C.Name,
+                            Queue = S.Queue,
                             SessionName = S.Name,
                             Description = S.Description,
                             StartDate = S.StartDate,

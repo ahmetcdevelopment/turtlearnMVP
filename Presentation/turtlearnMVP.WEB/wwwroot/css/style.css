@@ -57,6 +57,7 @@ NOTE: This is main stylesheet of template, This file contains the styling for th
   Typography
 *****************************/
 :root {
+    --theme-bg-colo: #fff;
     --theme-color: #538662;
     --theme-dark-color: #1c1a1f;
     --error-color: #bb2525;
@@ -6004,20 +6005,20 @@ textarea.form-control {
 
 /*Sidebar Ýcon*/
 /* Sidebar-icon-rounded */
-.sidebar-icon-rounded ul {
+.sidebar-icon-rounded .sidebar-ul {
     display: block;
     padding: 0;
     margin: 0;
 }
 
-    .sidebar-icon-rounded ul li {
+    .sidebar-icon-rounded .sidebar-ul .sidebar-li {
         display: block;
-        margin: 8px 0; 
+        margin: 8px 0;
     }
 
-        
 
-        .sidebar-icon-rounded ul li a {
+
+        .sidebar-icon-rounded .sidebar-ul .sidebar-li .sidebar-a {
             display: block;
             color: var(--theme-color);
             font-size: 24px;
@@ -6030,54 +6031,54 @@ textarea.form-control {
             overflow: hidden;
         }
 
-        .sidebar-icon-rounded ul li a.active {
+        .sidebar-icon-rounded .sidebar-ul .sidebar-li .sidebar-.active {
             background-color: var(--theme-color);
             color: white;
         }
 
-            .sidebar-icon-rounded ul li a span {
-                text-align: center;
-                margin-left: 100%; 
-                position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
-                opacity: 0;
-                transition: opacity 0.5s ease, margin-left 0.5s ease; 
-            }
+        .sidebar-icon-rounded .sidebar-ul .sidebar-li .sidebar-a .sidebar-span {
+            text-align: center;
+            margin-left: 100%;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: opacity 0.5s ease, margin-left 0.5s ease;
+        }
 
-            .sidebar-icon-rounded ul li a:hover span {
-                opacity: 1;
-                margin-left: 8px;
-            }
+        .sidebar-icon-rounded .sidebar-ul .sidebar-li .sidebar-a:hover .sidebar-span {
+            opacity: 1;
+            margin-left: 8px;
+        }
 
 
-            .sidebar-icon-rounded ul li a:hover {
-                color: #ffffff;
-                /*background: var(--theme-dark-color);*/
-                background: var(--theme-color);
-                width: 300px; 
-            }
+        .sidebar-icon-rounded .sidebar-ul .sidebar-li .sidebar-a:hover {
+            color: #ffffff;
+            /*background: var(--theme-dark-color);*/
+            background: var(--theme-color);
+            width: 300px;
+        }
 
-                .sidebar-icon-rounded ul li a i {
-                    margin-left:15px;
-                    margin-right:15px;
-                }
+        .sidebar-icon-rounded .sidebar-ul .sidebar-li .sidebar-a .sidebar-i {
+            margin-left: 15px;
+            margin-right: 15px;
+        }
 /* Media Query for small screens */
 @media (max-width: 991px) {
-    .sidebar-icon-rounded ul li {
+    .sidebar-icon-rounded .sidebar-ul .sidebar-li {
         margin: 0px 5px;
     }
 }
 
-.social-icon-round ul li a.active {
+.social-icon-round .sidebar-ul .sidebar-li .sidebar-a.active {
     background-color: var(--theme-color);
     color: white;
 }
 
-.social-icon-round ul li a span {
+.social-icon-round .sidebar-ul .sidebar-li .sidebar-a .sidebar-span {
     text-align: start;
     white-space: nowrap;
-    margin-left:-20px;
+    margin-left: -20px;
 }
 
 .custom-theme-button{

@@ -17,6 +17,8 @@ namespace turtlearnMVP.Persistance.Mappings
             builder.Property(s => s.Id).ValueGeneratedOnAdd();
 
             builder.Property(s => s.CourseId).IsRequired();
+
+            builder.Property(s => s.Queue).IsRequired();
             builder.Property(s => s.Name).IsRequired();
             builder.Property(s => s.Name).HasMaxLength(150);
 

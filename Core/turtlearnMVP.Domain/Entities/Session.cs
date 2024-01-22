@@ -20,6 +20,9 @@ namespace turtlearnMVP.Domain.Entities
         /// Ait olduğu kurs
         /// </summary>
         public int CourseId { get; set; }// oturum hangi kursa ait.
+
+        public int Queue { get; set; }
+
         public string Name { get; set; }// Oturumun ismi nedir - 1.oturum vs vs
 
         /// <summary>

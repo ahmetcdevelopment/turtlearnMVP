@@ -1,0 +1,71 @@
+﻿@using turtlearnMVP.Domain.Entities
+@model List<Session>
+@* <script src="~/js/bootstrap/bootstrap.min.js"></script> *@
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script>
+    $(function () {
+        $('[data-toggle="popover"]').popover({
+            trigger: 'hover' // Set trigger to 'hover'
+        });
+    });
+
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        const $ = document.querySelectorAll.bind(document);
+
+        $(".focusable, .button").forEach(el => {
+            // blur only on mouse click
+            // for accessibility, keep focus when keyboard focused
+            el.addEventListener("mousedown", e => e.preventDefault());
+            el.setAttribute("tabindex", "0");
+        });
+
+        $(".session.focusable").forEach(el => {
+            el.addEventListener("click", () => {
+                const activesession = $(".session.active")[0];
+                activesession.classList.remove("active");
+                activesession.removeAttribute("aria-selected");
+
+                el.classList.add("active");
+                el.setAttribute("aria-selected", true);
+            });
+        })
+
+
+    });
+</script>
+<link href="~/css/zurafworks/sidebar.css" rel="stylesheet" />
+<main class="container">
+    <aside class="sessions">
+
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var session in Model)
+            {
+                <div class="sessions-collection" data-toggle="popover" title="@session.Name" data-trigger="hover" data-content="Popover Content" animation="true">
+                    <div class="session focusable @(session.Queue == 1 ? "active" : "unread")" role="button" aria-label="Discord Developers unread" @(session.Queue == 1 ? "aria-selected=\"true\"" : "") @* data-toggle="popover" title="Popover title" data-trigger="hover" data-content="Popover Content" *@>
+                        <div class="session-icon">@session.Queue</div>
+                    </div>
+                </div>
+            }
+        }
+        <div class="sessions-collection" data-toggle="popover" data-trigger="hover" title="Oturum Ekle">
+            <div class="session" >
+                <div class="session-icon">+</div>
+            </div>
+        </div>
+
+
+    </aside>
+
+
+</main>
+
+@* <div class="sessions-collection">
+        <div class="session focusable session-friends unread" role="button" aria-label="Friends unread">
+        <div class="session-icon"><svg><use xlink:href="#icon-friends" /></svg></div>
+        </div>
+        </div> *@

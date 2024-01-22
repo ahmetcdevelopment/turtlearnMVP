@@ -36,6 +36,13 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
             return View();
         }
 
+        public async Task<IActionResult> CourseDetail(int id)
+        {
+            
+            //var model = new CourseListViewModel();
+            return View();
+        }
+
         [HttpGet]
         public async Task<IActionResult> AddOrUpdate(int? id)
         {

@@ -1,0 +1,42 @@
+﻿@using turtlearnMVP.Domain.DTOs
+@model IList<CourseDTO>
+
+
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var course in Model)
+    {
+        <div class="col-sm-6 mb-4 pb-2">
+            <div class="course">
+                <div class="course-img">
+                    <img class="img-fluid" src="~/images/course/default.jpg" alt="">
+                    <a href="#" style="display:flex;justify-content: space-between;" class="course-category">
+                        <div><i class="far fa-bookmark"></i>@course.CategoryName</div>
+                        <div>@course.StatusTitle<i style="margin-left:6px;" class="fas fa-graduation-cap"></i></div>
+                    </a>
+                    <a href="#" class="course-category"></a>
+                </div>
+                <div class="course-info">
+                    <div class="course-title">
+                        <a href="#">@course.Name</a>
+                    </div>
+                    <div class="course-instructor">
+                        <div style="display:flex;justify-content: space-between;">
+                            <a style="font-weight:bold" href="#">@course.TeacherName @course.TeacherLastName</a>
+                            <a style="font-weight:500;" href="#">@course.StartDateStr - @course.EndDateStr</a>
+                        </div>
+                        <a href="#">@course.Description</a>
+                    </div>
+                    <div class="course-rate-price">
+                        <div class="rating">
+                            <span>@course.TotalHour Saat</span>
+                            <br>
+                            <a href="#">Saatlik Ücret: @course.PricePerHour ₺</a>
+                        </div>
+                        <div class="price"><a style="font-size:small;" href="#">@course.Quota / @course.Quota Kontenjan Kaldı</a><br> Fiyat: @course.TotalPrice ₺</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}

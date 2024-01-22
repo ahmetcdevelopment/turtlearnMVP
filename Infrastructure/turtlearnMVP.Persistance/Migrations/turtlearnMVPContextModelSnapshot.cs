@@ -55,14 +55,14 @@ namespace turtlearnMVP.Persistance.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "fc247eea-0e94-4118-b8ad-4e3333fc3334",
+                            ConcurrencyStamp = "71d44c82-f2e1-4350-80a4-a97b2c261acf",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "2269152a-2f41-409f-bcdd-b7c91125ce31",
+                            ConcurrencyStamp = "2374c24f-9935-4419-a0a1-88fb45562042",
                             Name = "Editor",
                             NormalizedName = "EDITOR"
                         });
@@ -179,7 +179,7 @@ namespace turtlearnMVP.Persistance.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "90e12569-21d9-4bcf-aa28-e73797ccf086",
+                            ConcurrencyStamp = "48941199-bf93-4ad2-bceb-bd7b4737a15a",
                             Email = "adminuser@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "admin",
@@ -187,11 +187,11 @@ namespace turtlearnMVP.Persistance.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMINUSER@GMAIL.COM",
                             NormalizedUserName = "ADMINUSER",
-                            PasswordHash = "AQAAAAEAACcQAAAAELN2gUZfsynOlAXv3glQ8jLcoOrWlPnaAChyS1rHCeRt7OHTtTcjgZJCtbM8chku9g==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEAOqP2dORx8CDNF7CCOBgOEfW/M5QnAlLMby80tkG36b+8DYK5apdsKpOcZDvGt9TQ==",
                             PhoneNumber = "+905555555555",
                             PhoneNumberConfirmed = true,
                             Photo = "https://pbs.twimg.com/media/C8QqGm4UQAAUiET.jpg",
-                            SecurityStamp = "d0499b02-134b-4c82-baa4-d609517a44f9",
+                            SecurityStamp = "b5296e90-b87c-441a-83a3-c593ada97390",
                             TwoFactorEnabled = false,
                             UserName = "adminuser"
                         },
@@ -200,7 +200,7 @@ namespace turtlearnMVP.Persistance.Migrations
                             Id = 2,
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "6c20e547-0f10-46bf-a25e-113cb27303ad",
+                            ConcurrencyStamp = "6f1699e4-207d-4709-bf11-ce6388836237",
                             Email = "editoruser@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "editor",
@@ -208,11 +208,11 @@ namespace turtlearnMVP.Persistance.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "EDITORUSER@GMAIL.COM",
                             NormalizedUserName = "EDITORUSER",
-                            PasswordHash = "AQAAAAEAACcQAAAAEH9TEO2N5iEQlxmyT5jcGEyyre3+7qSzvlaaDGmzXcJHlxtaK/H4cTBy7tl661mzrQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGzEyWy2R6+bCibEVcmps+reHEQ5Usd0UTgS7IyRTSrR+rcngEj0Jv4QFoyPkXWN2Q==",
                             PhoneNumber = "+905555555555",
                             PhoneNumberConfirmed = true,
                             Photo = "https://pbs.twimg.com/media/C8QqGm4UQAAUiET.jpg",
-                            SecurityStamp = "a2c41d5c-4834-45de-a916-a7f4c4c57931",
+                            SecurityStamp = "253e9b58-f5fb-4e1d-96ea-196dafcf05f1",
                             TwoFactorEnabled = false,
                             UserName = "editoruser"
                         });
@@ -757,6 +757,9 @@ namespace turtlearnMVP.Persistance.Migrations
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
+
+                    b.Property<int>("Queue")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
