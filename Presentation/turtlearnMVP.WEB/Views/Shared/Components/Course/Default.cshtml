@@ -1,7 +1,6 @@
 ﻿@using turtlearnMVP.Domain.DTOs
 @model IList<CourseDTO>
 
-
 @if (Model != null && Model.Count > 0)
 {
     foreach (var course in Model)
@@ -18,7 +17,7 @@
                 </div>
                 <div class="course-info">
                     <div class="course-title">
-                        <a href="#">@course.Name</a>
+                        <a onclick="openEditForm('/Admin/Course',@course.Id)" href="#">@course.Name</a>
                     </div>
                     <div class="course-instructor">
                         <div style="display:flex;justify-content: space-between;">
