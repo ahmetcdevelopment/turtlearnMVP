@@ -2,7 +2,7 @@
 @model IList<CourseDTO>
 
 
-@if (Model != null && Model.Count > 0)
+@if (Model != null && Model.Count > 0 && ViewBag.Listing == "grid")
 {
     foreach (var course in Model)
     {
@@ -34,6 +34,49 @@
                             <a href="#">Saatlik Ücret: @course.PricePerHour ₺</a>
                         </div>
                         <div class="price"><a style="font-size:small;" href="#">@course.Quota / @course.Quota Kontenjan Kaldı</a><br> Fiyat: @course.TotalPrice ₺</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+@if (Model != null && Model.Count > 0 && ViewBag.Listing == "list")
+{
+    foreach (var course in Model)
+    {
+        <div class="course">
+            <div class="row g-0 box-shadow mb-4">
+                <div class="col-sm-5">
+                    <div class="course-img h-100">
+                        <img class="img-fluid" src="~/images/course/default.jpg" alt="">
+                        <a href="#" style="display:flex;justify-content: space-between;" class="course-category">
+                            <div><i class="far fa-bookmark"></i>@course.CategoryName</div>
+                            <div>@course.StatusTitle<i style="margin-left:6px;" class="fas fa-graduation-cap"></i></div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-sm-7">
+                    <div class="course-info p-0 h-100">
+                        <div class="px-4 pt-4">
+                            <div class="course-title">
+                                <a href="#">@course.Name</a>
+                            </div>
+                            <div class="course-instructor mb-2">
+                                <div style="display:flex;justify-content: space-between;">
+                                    <a style="font-weight:bold" href="#">@course.TeacherName @course.TeacherLastName</a>
+                                    <a style="font-weight:500;" href="#">@course.StartDateStr - @course.EndDateStr</a>
+                                </div>
+                            </div>
+                            <p class="mb-0">@course.Description</p>
+                        </div>
+                        <div class="course-rate-price px-4 pb-3">
+                            <div class="rating">
+                                <span>@course.TotalHour Saat</span>
+                                <br>
+                                <a href="#">Saatlik Ücret: @course.PricePerHour ₺</a>
+                            </div>
+                            <div class="price"><a style="font-size:small;" href="#">@course.Quota / @course.Quota Kontenjan Kaldı</a><br> Fiyat: @course.TotalPrice ₺</div>
+                        </div>
                     </div>
                 </div>
             </div>

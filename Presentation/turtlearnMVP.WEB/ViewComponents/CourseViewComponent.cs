@@ -12,9 +12,19 @@ namespace turtlearnMVP.WEB.ViewComponents
         {
             _courseService = courseService;
         }
-        public IViewComponentResult Invoke()
+
+        public IViewComponentResult Invoke(dynamic arguments)
         {
             IList<CourseDTO> courses = _courseService.FetchAllDtos().Data;
+            string lastListingType = "grid";
+            if (arguments.refresh)
+            {
+                lastListingType = HttpContext.Request.Cookies["LastListingType"];
+            }
+
+            string currentListingType = arguments.listingType ?? lastListingType;
+            HttpContext.Response.Cookies.Append("LastListingType", currentListingType);
+            ViewBag.Listing = currentListingType;
 
             return View(courses);
         }

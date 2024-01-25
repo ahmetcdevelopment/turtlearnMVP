@@ -6155,3 +6155,7 @@ select:focus {
 option{
     font-size:larger;
 }
+
+.header-fix{
+    z-index:9999 !important;
+}

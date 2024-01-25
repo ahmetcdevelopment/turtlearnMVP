@@ -9,6 +9,7 @@ using turtlearnMVP.Domain.Entities;
 using turtlearnMVP.Domain.Enums;
 using turtlearnMVP.WEB.Areas.Admin.Models;
 using turtlearnMVP.WEB.Helpers;
+using turtlearnMVP.WEB.ViewComponents;
 
 
 namespace turtlearnMVP.WEB.Areas.Admin.Controllers
@@ -70,7 +71,8 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
                     result.Data.UpdateUserId = userId != null && int.TryParse(userId, out int _userId) ? _userId : 0;
                 }
                 var addOrUpdateResult = result.Data.Id > 0 ? await _mainService.UpdateOrDelete(result.Data) : await _mainService.InsertAsync(result.Data) ;
-                return Json(new { Result = addOrUpdateResult });
+               
+                return Json(new { Result = addOrUpdateResult});
             }
             return Json(new { Result = new Result(ResultStatus.Error, Messages.PageIsNotFound) });
         }

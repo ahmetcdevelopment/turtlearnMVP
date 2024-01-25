@@ -60,7 +60,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="~/js/popper/popper.min.js"></script>
-@*     <script src="~/js/bootstrap/bootstrap.min.js"></script>
+    @*     <script src="~/js/bootstrap/bootstrap.min.js"></script>
     <script src="~/js/datetimepicker/moment-with-locales.js"></script>
     <script src="~/js/datetimepicker/datetimepicker.min.js"></script> *@
 
@@ -113,7 +113,7 @@
     <div id="loginOrRegisterPartialZone"></div>
     <!--=================================
     Header -->
-    <header class="header header-style-02 header-sticky">
+    <header class="header header-style-02 header-sticky header-fix">
         <nav class="navbar navbar-static-top navbar-expand-lg px-3 px-md-5">
             <div class="container-fluid position-relative px-0">
                 <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"><i class="fas fa-align-left"></i></button>
@@ -467,14 +467,19 @@
     <script src="~/js/custom.js"></script>
     <script type="text/javascript">
 
-        
+
         function setGridWidth(targetGrid) {
             var widgetContainer = targetGrid.closest('.widget-content');
             var containerWidth = widgetContainer.width();
             targetGrid.jqGrid('setGridWidth', containerWidth);
         }
 
-       
+        function getViewComponent(target, url) {
+            debugger;
+            $.get(url, function (data) {
+               target.html(data);
+            });
+        }
 
         $(document).on('click', '#loginbtn', function () {
 
@@ -532,7 +537,7 @@
             // Initial toggle on page load
             toggleSidebarVisibility();
             openEditForm = function (controllerUrl, id, targetGrid) {
-;
+
                 $.ajax({
                     url: controllerUrl + '/AddOrUpdate',
                     type: 'GET',
@@ -624,11 +629,11 @@
                     switchTab(tabId, '#' + buttonId);
                 });
 
-               
+
 
             });
 
-           
+
         });
 
 

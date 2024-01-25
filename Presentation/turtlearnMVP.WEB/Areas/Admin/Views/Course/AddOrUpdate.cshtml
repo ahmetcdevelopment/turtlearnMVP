@@ -196,13 +196,13 @@ Modal login -->
         function submitForm(submitType) {
             // Serialize the form data
             var formData = $('#editForm').serialize();
-
+            debugger;
             // Make an AJAX request to submit the form
             $.ajax({
                 url: "/Admin" + $('#editForm').attr('action'),
                 type: 'POST',
                 data: formData,
-                success: function (result) {
+                success: function (result, component) {
                     $.gritter.add({
                         title: 'Başarılı',
                         text: result.message,
@@ -210,8 +210,10 @@ Modal login -->
                         sticky: false,
                         time: 5000
                     });
-
-                    // You can redirect or perform other actions based on the response
+                    //kart refresh
+                    var componentTarget = $("#viewComponentContainer");
+                    getViewComponent(componentTarget, "/Admin/Course/GetCourseViewComponent?refresh=true")
+                    //------------
                 },
                 error: function (result) {
                     $.gritter.add({

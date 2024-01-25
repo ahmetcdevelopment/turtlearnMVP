@@ -4,8 +4,8 @@ namespace turtlearnMVP.WEB.Areas.Admin.Models
 {
     public class CourseEditViewModel
     {
-        public SelectList SelCategories { get; set; }
-        public SelectList SelStatus { get; set; }
+        public SelectList? SelCategories { get; set; }
+        public SelectList? SelStatus { get; set; }
         public int? Id { get; set; }
         public int TeacherId { get; set; } //UserId'den. her kursun bir öğretmeni vardır.
 
@@ -47,7 +47,7 @@ namespace turtlearnMVP.WEB.Areas.Admin.Models
         /// <summary>
         /// Kursun saatle birlikte toplam ücreti
         /// </summary>
-        public decimal TotalPrice { get; set; }//PricePerHour * TotalHour
+        public decimal? TotalPrice { get; set; }//PricePerHour * TotalHour
 
         public string Description { get; set; }
 

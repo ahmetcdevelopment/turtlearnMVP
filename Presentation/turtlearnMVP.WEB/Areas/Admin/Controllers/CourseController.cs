@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 using System.Security.Claims;
 using System.Text.Json;
 using TurtLearn.Shared.Searching;
@@ -86,7 +87,7 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
                 result.Data.Name = model.Name;
                 result.Data.PricePerHour = model.PricePerHour;
                 result.Data.TotalHour = model.TotalHour;
-                result.Data.TotalPrice = model.TotalPrice;
+                result.Data.TotalPrice = model.PricePerHour * model.TotalHour;
                 result.Data.Description = model.Description;
                 result.Data.Status = model.Status;
                 if (result.Data.Id == 0)
@@ -97,7 +98,8 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
                     result.Data.UpdateUserId = userId != null && int.TryParse(userId, out int _userId) ? _userId : 0;
                 }
                 var addOrUpdateResult = result.Data.Id > 0 ? await _mainService.UpdateOrDelete(result.Data) : await _mainService.InsertAsync(result.Data);
-                return Json(new { Result = addOrUpdateResult });
+                //var component = ViewComponent("Course");
+                return Json(new { Result = addOrUpdateResult/*, Compoent = component */});
             }
             return Json(new { Result = new Result(ResultStatus.Error, Messages.PageIsNotFound) });
         }
@@ -168,6 +170,11 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
             {
                 return null;
             }
+        }
+
+        public IActionResult GetCourseViewComponent(string? listingType, bool? refresh = false)
+        {
+            return ViewComponent("Course", new { listingType = listingType, refresh=refresh });
         }
     }
 }
