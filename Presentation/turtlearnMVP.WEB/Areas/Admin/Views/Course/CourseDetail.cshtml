@@ -1,3 +1,90 @@
-﻿
+﻿@using turtlearnMVP.WEB.Areas.Admin.Models
+@model CourseDetailViewModel;
 
-@await Component.InvokeAsync("Sidebar")
+<main class="container">
+    <div id="viewComponentContainerSidebar" class="row">
+    </div>
+    @* <div class="col-md-12 col-xl-12 mt-4 mt-md-0 order-2 order-lg-1"> *@
+    @* @await Component.InvokeAsync("Sidebar", new { CourseId = Model.Id }) *@
+    @* </div> *@
+    <div style="width:90vw; margin-left:3vw; color:black !important;" class="col-md-12 col-xl-12 mt-4 mt-md-0 order-2 order-lg-1">
+        <div class="blog-sidebar">
+            <div class="widgets">
+                <div class="widget">
+                    <div class="widget-title">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h3>
+                                    @Model.Name
+                                </h3>
+                            </div>
+                            <div class="col-md-4">
+                            </div>
+                            <div class="col-md-4 widget-title-right">
+                                <h3>
+                                    @Model.TeacherName
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-1 mt-5 mt-lg-0"></div>
+                    <div class="col-lg-7 mt-5 mt-lg-0">
+                        <div id="viewComponentContainer" class="row">
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="widgets">
+                            <div class="widget">
+                                <h6 class="widget-title"><i class="fas fa-graduation-cap"></i>  @Model.CategoryStr</h6>
+                                <div class="widget-content">
+                                    <div class="custom-control  mb-3">
+                                        <label class=""><i class="far fa-bookmark"></i>  @Model.StatusStr</label>
+                                    </div>
+                                    <div class="custom-control  mb-3">
+                                        <label class=""><i class="fa fa-calendar"></i>Başlangıç:  @Model.StartDateStr</label>
+                                    </div>
+                                    <div class="custom-control  mb-3">
+                                        <label class=""><i class="fa fa-calendar"></i>Bitiş:  @Model.EndDateStr</label>
+                                    </div>
+                                    <div class="custom-control  mb-3">
+                                        <label class=""><i class="fa fa-clock"></i>Toplam Ders Süresi:  @Model.TotalHour</label>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="widget widget-serach">
+                                <h6 class="widget-title">Yorumlar</h6>
+                                <div class="widget-content">
+                                    <form class="fill-form">
+                                        <div class="form-group mb-3">
+                                            <input type="text" class="form-control" placeholder="Yorum...">
+                                        </div>
+                                        <button type="button" class="btn btn-primary">Gönder</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                @*  <div class="widget-content">
+                <table id="jqGridCourse"></table>
+                <div id="jqGridPagerCourse"></div>
+                </div> *@
+
+            </div>
+        </div>
+    </div>
+</main>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var componentTarget = $("#viewComponentContainerSidebar")
+        getViewComponent(componentTarget, "/Admin/Course/GetSidebarViewComponent?courseId="+@Model.Id)
+
+    });
+</script>

@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using System.Security.Claims;
 using System.Text.Json;
+using TurtLearn.Shared.Entities.Concrete;
 using TurtLearn.Shared.Searching;
+using TurtLearn.Shared.Utilities.Extensions;
 using TurtLearn.Shared.Utilities.Messages;
 using TurtLearn.Shared.Utilities.Results.ComplexTypes;
 using TurtLearn.Shared.Utilities.Results.Concrete;
@@ -23,10 +26,12 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
     {
         private readonly ICourseService _mainService;
         private readonly ICategoryService _categoryService;
-        public CourseController(ICourseService mainService, ICategoryService categoryService)
+        private readonly UserManager<User> _userManager;
+        public CourseController(ICourseService mainService, ICategoryService categoryService, UserManager<User> userManager)
         {
             _mainService = mainService;
             _categoryService = categoryService;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
@@ -39,9 +44,25 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
 
         public async Task<IActionResult> CourseDetail(int id)
         {
-            
-            //var model = new CourseListViewModel();
-            return View();
+            var model = new CourseDetailViewModel();
+            var entity = _mainService.GetById(id).GetAwaiter().GetResult().Data;
+            if(entity != null)
+            {
+                var teacher = _userManager.FindByIdAsync(entity.TeacherId.ToString()).GetAwaiter().GetResult();
+                var category = _categoryService.GetById(entity.CategoryId).GetAwaiter().GetResult().Data;
+                model.Id = entity.Id;
+                model.TeacherId = entity.TeacherId;
+                model.TeacherName = teacher.FirstName +" "+ teacher.LastName;
+                model.CategoryId = entity.CategoryId;
+                model.CategoryStr = EnumExtensions.GetEnumTitle<SinifDuzeyi>(category.SinifDuzeyiId.Value) +" "+  category.Name;
+                model.StartDateStr = entity.StartDate.ToString("dd/MM/yyyy");
+                model.EndDateStr = entity.EndDate.ToString("dd/MM/yyyy");
+                model.Name = entity.Name;
+                model.Description = entity.Description;
+                model.TotalHour = entity.TotalHour.ToString();
+                model.StatusStr = EnumExtensions.GetEnumTitle<CourseStatus>(entity.Status);
+            }
+            return View(model);
         }
 
         [HttpGet]
@@ -175,6 +196,12 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
         public IActionResult GetCourseViewComponent(string? listingType, bool? refresh = false)
         {
             return ViewComponent("Course", new { listingType = listingType, refresh=refresh });
+        }
+
+        [HttpGet]//taşınacak
+        public IActionResult GetSidebarViewComponent(int? courseId)
+        {
+            return ViewComponent("Sidebar", new { CourseId = courseId.Value });
         }
     }
 }

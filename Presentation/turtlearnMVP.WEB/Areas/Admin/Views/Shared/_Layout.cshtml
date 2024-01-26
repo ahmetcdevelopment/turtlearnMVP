@@ -503,6 +503,32 @@
 
         });
 
+        // $(document).on('click', '#addSessionButton', function () {
+
+        //     $.ajax({
+        //         url: "",
+        //         type: 'GET',
+        //         // data: { id: id },
+        //         success: function (result) {
+        //             $('#partialEditContent').html(result);
+        //             $('#editModal').modal({
+        //                 backdrop: 'static',
+        //                 keyboard: false
+        //             }).modal('show');;
+        //         },
+        //         error: function () {
+        //             $.gritter.add({
+        //                 title: 'Hata',
+        //                 text: result.message,
+        //                 class_name: 'gritter-error',
+        //                 sticky: false,
+        //                 time: 5000
+        //             });
+        //         }
+        //     });
+
+        // });
+
 
         $(document).on('click', '#logoutBtn', function () {
             // var row = $(this).closest('tr.jqgrow');
@@ -537,11 +563,35 @@
             // Initial toggle on page load
             toggleSidebarVisibility();
             openEditForm = function (controllerUrl, id, targetGrid) {
-
                 $.ajax({
                     url: controllerUrl + '/AddOrUpdate',
                     type: 'GET',
                     data: { id: id },
+                    success: function (result) {
+                        $('#partialEditContent').html(result);
+                        $('#editModal').modal({
+                            backdrop: 'static',
+                            keyboard: false
+                        }).modal('show');;
+                    },
+                    error: function () {
+                        $.gritter.add({
+                            title: 'Hata',
+                            text: result.message,
+                            class_name: 'gritter-error',
+                            sticky: false,
+                            time: 5000
+                        });
+                    }
+                });
+            };
+
+            openEditFormCustomUrl = function (controllerUrl) {
+                debugger;
+                $.ajax({
+                    url: controllerUrl,
+                    type: 'GET',
+                    // data: { id: id },
                     success: function (result) {
                         $('#partialEditContent').html(result);
                         $('#editModal').modal({
@@ -568,7 +618,6 @@
                     type: 'GET',
                     data: { id: id },
                     success: function (result) {
-                        // var grid = getOperationGrid();
                         reloadGrid(targetGrid);
                         $.gritter.add({
                             title: 'Başarılı',

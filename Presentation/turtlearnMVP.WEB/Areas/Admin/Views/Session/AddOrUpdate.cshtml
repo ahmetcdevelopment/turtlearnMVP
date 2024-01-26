@@ -1,0 +1,202 @@
+﻿@using turtlearnMVP.WEB.Areas.Admin.Models
+@model SessionEditViewModel;
+
+<!-- Gritter.js script -->
+<script src="https://cdn.jsdelivr.net/npm/gritter@1.7.4/js/jquery.gritter.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/gritter@1.7.4/css/jquery.gritter.min.css" rel="stylesheet">
+<!-- Bootstrap Datepicker script and styles -->
+
+<script src="~/js/bootstrap/bootstrap.min.js"></script>
+<script src="~/js/datetimepicker/moment-with-locales.js"></script>
+<script src="~/js/datetimepicker/datetimepicker.min.js"></script>
+<script src="~/js/datetimepicker/moment.min.js"></script>
+
+<script>
+
+</script>
+
+<!--=================================
+  Modal login -->
+<div class="modal login fade show" id="editModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        @* modal-lg modal-xl pop up genişliği için*@
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="loginModalLabel">Kurs</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm" method="post" onsubmit="return false" asp-controller="Session" asp-action="AddOrUpdate">
+                    @Html.HiddenFor(m => m.Id)
+                    @Html.HiddenFor(m => m.CourseId)
+
+                    <div class="row my-4 ">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="mb-12 col-sm-12 form-floating">
+                                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control form-setting", @placeholder = "Kurs Adı" })
+                                    @Html.ValidationMessageFor(m => m.Name)
+                                    <label class="float-setting text-dark fw-bold" for="floatingInput">Kurs Adı</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="mb-12 col-sm-12 input-group form-floating">
+                                    @* @Html.TextBoxFor(m => m.StartDate, "{0:yyyy-MM-dd}", new { @id = "StartDate",@type="text", @class = "form-control form-setting",/*  @type = "date" */ @data_operation = "datetimepicker", @placeholder = "Start Date" })
+                                    <span class="input-group-addon">
+                                    <span class="fa fa-calendar"></span>
+                                    </span> *@
+                                    <div class="input-group date" id="startDate" data-target-input="nearest">
+                                        @Html.TextBoxFor(m => m.StartDate, new { @id = "startDateTbx", @class = "form-control form-setting datetimepicker-input", @placeholder = "Başlama Tarihi", @data_toggle = "datetimepicker", @data_target = "#startDate"/* , @Value = Model.StartDate.ToString("dd MM yyyy")  */})
+                                        <div class="input-group-append form-setting" data-target="#startDate" data-toggle="datetimepicker">
+                                            <div style="border-radius: 0px 100px 100px 0px;background-color: var(--theme-color) !important; color:whitesmoke !important;" class="input-group-text">&nbsp;Başlama&nbsp;<i class="far fa-calendar-alt"></i>&nbsp;&nbsp;</div>
+                                        </div>
+                                    </div>
+
+                                    @Html.ValidationMessageFor(m => m.StartDate)
+                                    @* <label class="float-setting text-dark fw-bold" for="floatingInput">Başlangıç Tarihi</label> *@
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="mb-12 col-sm-12 form-floating">
+                                @Html.TextAreaFor(m => m.Description, new { @class = "form-control form-setting", @placeholder = "Açıklama" })
+                                @Html.ValidationMessageFor(m => m.Description)
+                                <label class="float-setting text-dark fw-bold" for="floatingInput">Açıklama</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="mb-12 col-sm-12 form-floating">
+                                @Html.TextAreaFor(m => m.Link, new { @class = "form-control form-setting", @placeholder = "Ders Linki" })
+                                @Html.ValidationMessageFor(m => m.Link)
+                                <label class="float-setting text-dark fw-bold" for="floatingInput">Açıklama</label>
+                            </div>
+                        </div>
+                        <div class="row form-setting">
+                            <div class="col-sm-6">
+                                <button id="cancelButton" class="btn btn-error">Cancel</button>
+                            </div>
+                            <div class="col-sm-6 text-lg-end">
+                                <button id="saveButton" class="btn btn-primary">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--=================================
+Modal login -->
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        moment.locale('tr');
+        
+
+        $('#registerButton').on('click', function () {
+            submitForm(0);
+        });
+
+        $('#saveButton').on('click', function () {
+            submitForm(1);
+        });
+
+        function submitForm(submitType) {
+            var formData = $('#editForm').serialize();
+            debugger;
+            $.ajax({
+                url: "/Admin" + $('#editForm').attr('action'),
+                type: 'POST',
+                data: formData,
+                success: function (result, component) {
+                    $.gritter.add({
+                        title: 'Başarılı',
+                        text: result.message,
+                        class_name: 'gritter-success',
+                        sticky: false,
+                        time: 5000
+                    });
+                    //kart refresh
+                    var componentTarget = $("#viewComponentContainer");
+                    getViewComponent(componentTarget, "/Admin/Course/GetCourseViewComponent?refresh=true")
+                    //------------
+                },
+                error: function (result) {
+                    $.gritter.add({
+                        title: 'Hata',
+                        text: result.message,
+                        class_name: 'gritter-error',
+                        sticky: false,
+                        time: 5000
+                    });
+                }
+            });
+        }
+
+        // debugger;
+        // $('#startdate').datetimepicker({
+        //     // // format: 'DD/MM/YYYY',  // İhtiyaca uygun bir format seçin.
+        //     // // format: 'DD/MM/YYYY',  // İhtiyaca uygun bir format seçin.
+        //     // showTodayButton: true,
+        //     // // format: 'YYYY-MM-DD HH:mm',
+        //     // showClose: true,
+        //     // showClear: true,
+        //     // toolbarPlacement: 'top',
+        //     // stepping: 15,
+        //     // locale: 'tr'  // Türkçe dilini kullanmak istiyorsanız.
+        //     format: 'DD MM YYYY',
+        //     showTimepicker: false
+        // });
+
+        // $('#datetimepicker-05').datetimepicker({
+        //     format: 'DD MM YYYY',
+        //     showTimepicker: false
+        // });
+        // $('#StartDate').datepicker({
+        //     changeMonth: true,
+        //     changeYear: true,
+        //     format: "dd/mm/yyyy",
+        //     language: "tr"
+        // });
+
+        // $('#EndDate').datepicker({
+        //     changeMonth: true,
+        //     changeYear: true,
+        //     format: "dd/mm/yyyy",
+        //     language: "tr"
+        // });
+
+        // $('#StartDate').datepicker({ autoclose: true });
+
+        // try {
+        //     $('#datetimepicker-05').datetimepicker({
+        //         format: 'DD MM YYYY',
+        //         showTimepicker: false
+        //     });
+        // } catch (error) {
+        //     console.error('Datetimepicker initialization error:', error);
+        // }
+
+        // try {
+        //     $('#enddate').datetimepicker({
+        //         format: 'DD/MM/YYYY',
+        //         showTimepicker: false
+        //     });
+        // } catch (error) {
+        //     console.error('Datetimepicker initialization error:', error);
+        // }
+
+        setDatePicker($('#startDate'));
+        // setDatePicker($('#endDate'));
+    });
+</script>
+@* <script type="text/javascript">
+    $(window).on('load', function () {
+        // Your existing code here...
+
+        // Call your reloadDatetimepickers function here
+        reloadDatetimepickers($);
+
+
+    });
+</script> *@

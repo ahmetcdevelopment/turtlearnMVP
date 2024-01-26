@@ -1,6 +1,6 @@
-﻿@using turtlearnMVP.Domain.Entities
-@model List<Session>
+﻿@model SidebarListViewmodel;
 @* <script src="~/js/bootstrap/bootstrap.min.js"></script> *@
+
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
@@ -38,34 +38,66 @@
     });
 </script>
 <link href="~/css/zurafworks/sidebar.css" rel="stylesheet" />
-<main class="container">
-    <aside class="sessions">
+@* <main class="container"> *@
+<aside class="sessions">
 
-        @if (Model != null && Model.Count > 0)
+    @if (Model != null && Model.Sessions.Count > 0)
+    {
+        foreach (var session in Model.Sessions)
         {
-            foreach (var session in Model)
-            {
-                <div class="sessions-collection" data-toggle="popover" title="@session.Name" data-trigger="hover" data-content="Popover Content" animation="true">
-                    <div class="session focusable @(session.Queue == 1 ? "active" : "unread")" role="button" aria-label="Discord Developers unread" @(session.Queue == 1 ? "aria-selected=\"true\"" : "") @* data-toggle="popover" title="Popover title" data-trigger="hover" data-content="Popover Content" *@>
-                        <div class="session-icon">@session.Queue</div>
-                    </div>
+            <div class="sessions-collection" data-toggle="popover" title="@session.SessionName" data-trigger="hover" data-content="Popover Content" animation="true">
+                <div class="session focusable @(session.Queue == 1 ? "active" : "unread")" role="button" aria-label="Discord Developers unread" @(session.Queue == 1 ? "aria-selected=\"true\"" : "") @* data-toggle="popover" title="Popover title" data-trigger="hover" data-content="Popover Content" *@>
+                    <div class="session-icon">@session.Queue</div>
                 </div>
-            }
-        }
-        <div class="sessions-collection" data-toggle="popover" data-trigger="hover" title="Oturum Ekle">
-            <div class="session" >
-                <div class="session-icon">+</div>
             </div>
+        }
+    }
+    <div onclick="openEditFormCustomUrl2('/Admin/Session/AddOrUpdate?courseId=' + @Model.CourseId)" class="sessions-collection" data-toggle="popover" data-trigger="hover" title="Oturum Ekle">
+        <div class="session">
+            <div class="session-icon">+</div>
         </div>
+    </div>
 
 
-    </aside>
+</aside>
 
 
-</main>
+@* </main> *@
 
 @* <div class="sessions-collection">
         <div class="session focusable session-friends unread" role="button" aria-label="Friends unread">
         <div class="session-icon"><svg><use xlink:href="#icon-friends" /></svg></div>
         </div>
         </div> *@
+
+    <script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        
+        openEditFormCustomUrl2 = function (controllerUrl) {
+            debugger;
+            jQuery.get({
+                url: controllerUrl,
+                type: 'GET',
+                // data: { id: id },
+                success: function (result) {
+                    $('#partialEditContent').html(result);
+                    $('#editModal').modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    }).modal('show');;
+                },
+                error: function () {
+                    $.gritter.add({
+                        title: 'Hata',
+                        text: result.message,
+                        class_name: 'gritter-error',
+                        sticky: false,
+                        time: 5000
+                    });
+                }
+            });
+        };
+
+
+    });
+</script>

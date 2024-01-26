@@ -31,7 +31,7 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
             return Json(data, new Newtonsoft.Json.JsonSerializerSettings());
         }
         [HttpGet]
-        public async Task<IActionResult> AddOrUpdate(int? id)
+        public async Task<IActionResult> AddOrUpdate(int? id, int? courseId)
         {
             var model = new SessionEditViewModel();
             if (id.HasValue && id.Value > 0)
@@ -44,6 +44,10 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
                 model.Description = resultData.Description;
                 model.StartDate = resultData.StartDate;
                 model.Link = resultData.Link;
+            }
+            else
+            {
+                model.CourseId = courseId.HasValue ? courseId.Value : 0;
             }
             return View(model);
         }
@@ -90,6 +94,11 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
                 return Json(new { Result = updateResut });
             }
             return Json(new { Result = new Result(ResultStatus.Error, Messages.ResultIsNotFound) });
+        }
+
+        public IActionResult GetSidebarViewComponent(int courseId)
+        {
+            return ViewComponent("Session", new { CourseId = courseId });
         }
     }
 }

@@ -1,12 +1,23 @@
 ﻿@using turtlearnMVP.Domain.DTOs
 @model IList<CourseDTO>
 
+<link href="~/css/zurafworks/cards.css" rel="stylesheet" />
+
 @if (Model != null && Model.Count > 0 && ViewBag.Listing == "grid")
 {
     foreach (var course in Model)
     {
         <div class="col-sm-6 mb-4 pb-2">
+            
             <div class="course">
+                <div class="social-icon-round card-button-fix">
+                    <ul>
+                        <!-- Trash Button -->
+                        <li><a href="#" onclick="deleteRow('/Admin/Course',@course.Id)" class="deletebutton cardbutton"><i class="fa fa-trash"></i></a></li>
+                        <li><a href="#" onclick="openEditForm('/Admin/Course',@course.Id)" class="editbutton cardbutton"><i class="fas fa-wrench"></i></a></li>
+                        <li><a href="/Admin/Course/Coursedetail/@course.Id" class="examinebutton cardbutton"><i class="fa fa-search"></i></a></li>
+                    </ul>
+                </div>
                 <div class="course-img">
                     <img class="img-fluid" src="~/images/course/default.jpg" alt="">
                     <a href="#" style="display:flex;justify-content: space-between;" class="course-category">
@@ -44,6 +55,14 @@
     foreach (var course in Model)
     {
         <div class="course">
+            <div class="social-icon-round card-button-fix">
+                <ul>
+                    <!-- Trash Button -->
+                    <li><a href="#" onclick="deleteRow('/Admin/Course',@course.Id)" class="deletebutton cardbutton"><i class="fa fa-trash"></i></a></li>
+                    <li><a href="#" onclick="openEditForm('/Admin/Course',@course.Id)" class="editbutton cardbutton"><i class="fas fa-wrench"></i></a></li>
+                    <li><a href="#" class="examinebutton cardbutton"><i class="fa fa-search"></i></a></li>
+                </ul>
+            </div>
             <div class="row g-0 box-shadow mb-4">
                 <div class="col-sm-5">
                     <div class="course-img h-100">

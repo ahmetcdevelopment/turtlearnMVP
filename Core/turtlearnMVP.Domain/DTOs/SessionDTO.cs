@@ -12,6 +12,7 @@ namespace turtlearnMVP.Domain.DTOs
     {
         public int Id { get; set; }
 
+        public int CourseId { get; set; }
         /// <summary>
         /// Ait olduğu kurs
         /// </summary>
