@@ -4,18 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TurtLearn.Shared.Entities.Abstract;
-using TurtLearn.Shared.Utilities.Attributes;
 
-namespace turtlearnMVP.Domain.Entities
+namespace turtlearnMVP.Domain.DTOs
 {
-    [TableTitle("İleti")]
-    /// <summary>
-    /// Ders oturumlarındaki mesajlaşmalar veya özel mesajlaşmalar
-    /// </summary>
-    public class Message : EntityBase<int>, IEntity
+    public class MessageDTO : IDto
     {
+        public int Id { get; set; }
         public int ChatId { get; set; }//Mesaj hangi chate gitti
+        public string ChatName { get; set; }
         public int SenderId { get; set; }//Mesajı gönderen
+        public string SenderName { get; set; }
+        public string SenderLastName { get; set; }
         public string Content { get; set; }//İçerik
         public string Media { get; set; }//Medya eklendiyse medya - fotoğraf, video, ses
     }
