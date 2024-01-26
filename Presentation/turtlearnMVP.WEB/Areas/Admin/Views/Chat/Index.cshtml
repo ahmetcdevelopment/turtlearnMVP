@@ -1,0 +1,272 @@
+﻿@{
+    ViewData["Title"] = "Category";
+    var messangerId = ViewBag.MessangerId as string;
+}
+@section Scripts {
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+
+    <script type="text/javascript">
+        var groupname = $('#messengerGroupName').val();
+        var connection = new signalR.HubConnectionBuilder().withUrl("/liveMeetingHub").build();
+        function convertUtcToDate(utcDateStr) {
+            // UTC zamanıyla gelen tarih
+            var utcDate = new Date(utcDateStr); // Örnek bir UTC tarihi
+
+            // Tarayıcının zaman dilimini al Örn : '2024-01-06T12:34:56Z'
+            var browserTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+            // Tarayıcının zaman dilimine göre tarihi formatla
+            var localDate = new Date(utcDate.toLocaleString('en-US', { timeZone: browserTimeZone }));
+            return localDate.toLocaleString();
+        }
+
+        function sendMessageHub() {
+            if ($('#txtMessage').val().length > 0) {
+                var message = $('#txtMessage').val();
+                connection.invoke("SendGroupMessage", groupname, message).catch(function (err) {
+                    return console.error(err.toString());
+                });
+                $('#txtMessage').val('');
+                $('#txtMessage').focus();
+            }
+        }
+
+        function receiveMessageHub() {
+            connection.on("ReceiveGroupMessage", (name, msgDate, connectionId) => {
+                var bgClassName = connectionId == connection.connectionId ? 'bg-success' : 'bg-info';
+                $('#listName').append($('<li>').addClass('list-group-item ' + bgClassName).text(convertUtcToDate(msgDate) + " : " + name))
+            });
+        }
+
+        function eventSendMessage() {
+            $('#btnSenderName').click(() => {
+                sendMessageHub();
+            });
+            $('#txtMessage').on('keyup', function (event) {
+                if (event.keyCode === 13) {
+                    sendMessageHub();
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            function ShowConnectionState() {
+                $('#connectionState').html(`<div class="alert alert-success">Connection Status : ${connection.q} </div>`);
+            }
+            connection.start().then(() => {
+                ShowConnectionState();
+                connection.invoke("JoinGroupChat", groupname).catch(function (err) {
+                    console.error(err.toString());
+                });
+            }).catch((err) => {
+                ShowConnectionState();
+                console.log('Hata : ' + err.toString());
+            });
+
+            eventSendMessage();
+            receiveMessageHub();
+        });
+        // $(document).ready(() => {
+
+
+        //     var connection = new signalR.HubConnectionBuilder().configureLogging(signalR.LogLevel.Debug).withAutomaticReconnect().withUrl("https://localhost:5000/myhub").build();
+        //     //Hub'ımızı çağırdık. Bağlantı kurduk ve bağlantıyı kimle kuracağımızı yazdık.
+        //     $("#sohbet1").hide();
+        //     $("#sohbet2").hide();
+        //     statusShow()
+        //     Start()
+
+        //     function Start() {
+        //         connection.start().then(() => {
+        //             statusShow()
+        //             if (connection.connectionState == "Connected") {
+        //                 $("#conStatus").text("Bağlandı!");
+        //                 $("#conStatus").addClass("text-success");
+        //                 $("#loading").hide();
+        //                 //connection.invoke("GetNames");
+        //                 connection.invoke("GetNamesByGroup");
+        //             }
+        //         }).catch((err) => {
+        //             console.log(err);
+        //             setTimeout(() => Start(), 2000)
+        //         })
+        //     }
+
+        //     function statusShow() {
+        //         $("#conStatus").text(connection.connectionState);
+        //     }
+
+
+
+        //     connection.onreconnecting(err => {
+        //         alert(err)
+        //         $("#loading").show();
+        //         statusShow()
+        //         console.log("onreconnection:" + err);
+        //     });
+
+        //     connection.onreconnected(connectionId => {
+        //         $("#loading").hide();
+        //         statusShow()
+        //         console.log("connectionId: " + connectionId)
+        //     });
+
+        //     connection.onclose(() => {
+        //         $("#loading").hide();
+        //         statusShow();
+        //         $("#conStatus").addClass("text-danger");
+        //         alert("Yeniden bağlanma başarısız oldu!");
+        //         Start();
+        //     });
+
+        //     connection.on("recieveClientCount", (clientCount) => {
+        //         $("#clientCount").text(clientCount);
+        //     });
+
+        //     connection.on("Notify", (countText) => {
+        //         console.log(countText);
+        //         $("#notify").html(`<div class="alert alert-warning alert-dismissible fade show" role="alert"> ${countText}
+        //                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        //                                             <span aria-hidden="true">&times;</span>
+        //                                         </button>
+        //                                    </div>`);
+        //     });
+
+        //     connection.on("Error", (errorText) => {
+        //         alert(errorText);
+        //     });
+
+        //     connection.on("recieveNames", (names) => {
+        //         $("#namesList").empty();
+        //         names.forEach((item, index) => {
+        //             var colon = item.split(':');
+        //             var messageName = colon[0];
+        //             var messageMsg = colon[1];
+        //             $("#namesList").append(`<li class="list-group-item"><b>${messageName}: </b>${messageMsg}</li>`)
+        //         })
+        //     });
+
+        //     connection.on("recieveName", (newMessage) => {
+        //         console.log(newMessage);
+
+
+        //         var colon = newMessage.split(':');
+        //         var messageName = colon[0];
+        //         var messageMsg = colon[1];
+        //         $("#namesList").append(`<li class="list-group-item"><b>${messageName}: </b>${messageMsg}</li>`)
+        //     })
+        //     //on methodu bir methoda subscribe olma işlemine yarar.
+
+        //     connection.on("recieveMessageByGroup", (name, teamId) => {
+        //         let listName;
+
+        //         if (teamId == 1) {
+        //             listName = "ATeamList";
+        //         }
+        //         else {
+        //             listName = "BTeamList"
+        //         }
+
+        //         let colon = name.split(':');
+        //         let messageName = colon[0];
+        //         let messageMsg = colon[1];
+        //         $(`#${listName}`).append(`<li class="list-group-item"><b>${messageName}</b>: ${messageMsg}</li>`)
+        //     })
+
+        //     connection.on("recieveNamesByGroup", (teams) => {
+
+        //         teams.forEach((team, index) => {
+
+        //             let listName;
+        //             if (team.teamId == 1) {
+        //                 listName = "ATeamList";
+        //             }
+        //             else {
+        //                 listName = "BTeamList";
+        //             }
+        //             team.users.forEach((user, index2) => {
+        //                 let colon = user.name.split(':');
+        //                 let messageName = colon[0];
+        //                 let messageMsg = colon[1];
+        //                 $(`#${listName}`).append(`<li class="list-group-item"><b>${messageName}</b>: ${messageMsg}</li>`)
+
+        //             })
+        //         })
+        //     })
+
+        //     connection.on("RecieveProduct", (product) => {
+        //         console.log(product);
+        //     })
+
+
+        //     $("#btnNameSave").click(() => {
+        //         let name = $("#txtName").val();
+
+        //         let message = $("#txtMessage").val();
+
+        //         let newMessage = name.concat(": ", message);
+        //         connection.invoke("SendName", newMessage).catch((err) =>
+        //             console.log(err))
+        //         //server tarafındaki methodları çağırmaya yarar. (invoke)
+        //     })
+
+        //     $("#btnNameTeam").click(() => {
+        //         let name = $("#txtName").val();
+        //         let message = $("#txtMessage").val();
+        //         let concatName = name.concat(": ", message);
+        //         let teamName = $("input[type=radio]:checked").val();
+        //         if (teamName == null) {
+        //             alert("Sohbet odası seçiniz");
+        //             return;
+        //         }
+
+        //         connection.invoke("SendNameByGroup", concatName, teamName).catch((err) => {
+        //             console.log(err);
+        //         })
+        //     })
+
+        //     $("input[type=radio]").change(() => {
+        //         let value = $(`input[type=radio]:checked`).val();
+
+        //         if (value == "TeamA") {
+        //             $("#sohbet2").hide();
+        //             $("#sohbet1").show();
+        //             connection.invoke("AddToGroup", value);
+        //             connection.invoke("RemoveToGroup", "TeamB");
+
+        //         }
+        //         else {
+        //             $("#sohbet1").hide();
+        //             $("#sohbet2").show();
+        //             connection.invoke("AddToGroup", value);
+        //             connection.invoke("RemoveToGroup", "TeamA");
+        //         }
+        //     })
+
+        // })
+    </script>
+}
+<input type="hidden" id="messengerGroupName" value="@messangerId" />
+
+<section class="space-ptb">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 offset-2">
+                <div id="connectionState">
+                </div>
+                <div class="mb-4">
+                    <label for="name" class="form-label">Mesaj :</label>
+                    <input type="text" class="form-control" id="txtMessage" placeholder="">
+                </div>
+                <hr />
+                <button class="btn btn-primary" id="btnSenderName">Gönder</button>
+                <hr />
+                <div class="clearfix"></div>
+                <div class="col-md-8">
+                    <ul class="list-group" id="listName">
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

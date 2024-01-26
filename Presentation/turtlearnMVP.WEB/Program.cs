@@ -45,7 +45,16 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyCorsPolicy", builder =>
+    {
+        builder.//WithOrigins("https://localhost:44444/", "https://localhost:55555").  //İstediğimiz kadar client ekleyebiliyoruz.
+         AllowAnyHeader().
+         AllowAnyMethod().
+         AllowCredentials();
+    });
+});
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = new PathString("/Home/Index");
@@ -87,6 +96,10 @@ app.MapControllerRoute(
     name: "areas",
     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
+
+//----------------------
+app.UseCors("MyCorsPolicy");
+//----------------------
 app.MapHub<LiveMeetingHub>("/liveMeetingHub"); // endpoint ekliyorum.
 
 app.Run();

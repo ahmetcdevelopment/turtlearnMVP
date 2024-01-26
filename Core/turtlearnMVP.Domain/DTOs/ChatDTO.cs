@@ -4,18 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TurtLearn.Shared.Entities.Abstract;
-using TurtLearn.Shared.Utilities.Attributes;
 
-namespace turtlearnMVP.Domain.Entities
+namespace turtlearnMVP.Domain.DTOs
 {
-    [TableTitle("Sohbet")]
-    /// <summary>
-    /// Grup veya kullanıcı sohbetleri
-    /// </summary>
-    public class Chat : EntityBase<int>, IEntity
+    public class ChatDTO : IDto
     {
+        public int Id { get; set; }
         public string Name { get; set; }//eğer bir grup konuşması ise grubun ismi
         public string Picture { get; set; }
         public int Privacy { get; set; }//Gizlilik public - onlymembers - private
+        public string PrivacyTitle { get; set; }//string
     }
 }
