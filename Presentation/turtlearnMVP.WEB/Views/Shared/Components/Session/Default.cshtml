@@ -1,0 +1,20 @@
+﻿@using turtlearnMVP.Domain.Entities
+@model Session;
+
+<div class="widgets">
+    <div class="widget">
+        <h6 class="widget-title"><i class="fas fa-graduation-cap"></i>  @Model.Name</h6>
+        <div class="widget-content">
+            <div class="custom-control  mb-3">
+                <label class=""><i class="far fa-bookmark"></i>  @Model.Description</label>
+            </div>
+            <div class="custom-control  mb-3">
+                <label class=""><i class="fa fa-calendar"></i>Başlangıç:  @Model.Link</label>
+            </div>
+            <div class="custom-control  mb-3">
+                <label class=""><i class="fa fa-calendar"></i>Bitiş:  @Model.StartDate.ToString("dd/MM/yyyy")</label>
+            </div>
+        </div>
+    </div>
+    
+</div>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using TurtLearn.Shared.Utilities.Messages;
 using TurtLearn.Shared.Utilities.Results.ComplexTypes;
@@ -11,6 +12,7 @@ using turtlearnMVP.WEB.Helpers;
 
 namespace turtlearnMVP.WEB.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class SessionController : Controller
     {
         private readonly ISessionService _sessionService;
@@ -57,6 +59,7 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var result = await _sessionService.GetById(model.Id.HasValue ? model.Id.Value : 0);
+                int last = _sessionService.FetchAllDtos().Data.Where(x => x.CourseId == model.CourseId).OrderBy(x => x.Queue).LastOrDefault().Queue > 0 ? _sessionService.FetchAllDtos().Data.Where(x => x.CourseId == model.CourseId).OrderBy(x => x.Queue).LastOrDefault().Queue: 0;
                 if (result.ResultStatus == ResultStatus.Success && result.Data.Id < 0)
                 {
                     return Json(new { Result = result });
@@ -66,6 +69,7 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
                 result.Data.Description = model.Description;
                 result.Data.StartDate = model.StartDate;
                 result.Data.Link = model.Link;
+                result.Data.Queue = last + 1;
                 if (result.Data.Id == 0)
                 {
                     result.Data.IsDeleted = false;
@@ -99,6 +103,11 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
         public IActionResult GetSidebarViewComponent(int courseId)
         {
             return ViewComponent("Session", new { CourseId = courseId });
+        }
+
+        public IActionResult GetSessionViewComponent(int? id)
+        {
+            return ViewComponent("Session", new { Id = id });
         }
     }
 }

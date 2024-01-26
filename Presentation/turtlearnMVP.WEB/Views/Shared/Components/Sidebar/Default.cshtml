@@ -1,7 +1,8 @@
 ﻿@model SidebarListViewmodel;
 @* <script src="~/js/bootstrap/bootstrap.min.js"></script> *@
 
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+@* <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script> *@
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script>
@@ -45,14 +46,14 @@
     {
         foreach (var session in Model.Sessions)
         {
-            <div class="sessions-collection" data-toggle="popover" title="@session.SessionName" data-trigger="hover" data-content="Popover Content" animation="true">
+            <div onclick="getSession(@session.Id)" class="sessions-collection" data-toggle="popover" title="@session.SessionName" data-trigger="hover" data-content="Popover Content" animation="true">
                 <div class="session focusable @(session.Queue == 1 ? "active" : "unread")" role="button" aria-label="Discord Developers unread" @(session.Queue == 1 ? "aria-selected=\"true\"" : "") @* data-toggle="popover" title="Popover title" data-trigger="hover" data-content="Popover Content" *@>
                     <div class="session-icon">@session.Queue</div>
                 </div>
             </div>
         }
     }
-    <div onclick="openEditFormCustomUrl2('/Admin/Session/AddOrUpdate?courseId=' + @Model.CourseId)" class="sessions-collection" data-toggle="popover" data-trigger="hover" title="Oturum Ekle">
+    <div onclick="openEditFormCustomUrl('/Admin/Session/AddOrUpdate?id=0&&courseId=' + @Model.CourseId)" class="sessions-collection" data-toggle="popover" data-trigger="hover" title="Oturum Ekle">
         <div class="session">
             <div class="session-icon">+</div>
         </div>
@@ -98,6 +99,11 @@
             });
         };
 
+
+        getSession = function (id) {
+            var componentTarget = $("#viewComponentContainerSession")
+            getViewComponent(componentTarget, "/Admin/Session/GetSessionViewComponent?id=" + id)
+        }
 
     });
 </script>

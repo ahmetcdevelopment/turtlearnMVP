@@ -1,6 +1,8 @@
 ﻿@using turtlearnMVP.WEB.Areas.Admin.Models
 @model SessionEditViewModel;
-
+@{
+    Layout = null;
+}
 <!-- Gritter.js script -->
 <script src="https://cdn.jsdelivr.net/npm/gritter@1.7.4/js/jquery.gritter.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/gritter@1.7.4/css/jquery.gritter.min.css" rel="stylesheet">
@@ -31,7 +33,7 @@
                     @Html.HiddenFor(m => m.CourseId)
 
                     <div class="row my-4 ">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="row">
                                 <div class="mb-12 col-sm-12 form-floating">
                                     @Html.TextBoxFor(m => m.Name, new { @class = "form-control form-setting", @placeholder = "Kurs Adı" })
@@ -68,7 +70,7 @@
                             <div class="mb-12 col-sm-12 form-floating">
                                 @Html.TextAreaFor(m => m.Link, new { @class = "form-control form-setting", @placeholder = "Ders Linki" })
                                 @Html.ValidationMessageFor(m => m.Link)
-                                <label class="float-setting text-dark fw-bold" for="floatingInput">Açıklama</label>
+                                <label class="float-setting text-dark fw-bold" for="floatingInput">Ders Linki</label>
                             </div>
                         </div>
                         <div class="row form-setting">
@@ -117,8 +119,8 @@ Modal login -->
                         time: 5000
                     });
                     //kart refresh
-                    var componentTarget = $("#viewComponentContainer");
-                    getViewComponent(componentTarget, "/Admin/Course/GetCourseViewComponent?refresh=true")
+                    var componentTarget = $("#viewComponentContainerSidebar");
+                    getViewComponent(componentTarget, "/Admin/Course/GetSidebarViewComponent?courseId="+ @Model.CourseId)
                     //------------
                 },
                 error: function (result) {

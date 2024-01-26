@@ -26,6 +26,7 @@ namespace turtlearnMVP.Persistance.Repositories.EntityFramework
                         select new SessionDTO
                         {
                             Id = S.Id,
+                            CourseId = S.CourseId,
                             CourseInfo = C.Name,
                             Queue = S.Queue,
                             SessionName = S.Name,

@@ -41,7 +41,7 @@ namespace turtlearnMVP.Persistance.Services
         {
             var session = await _UnitOfWork.Sessions.GetByIdAsync(id);
             return session == null || session.Id <= 0 ?
-                new DataResult<Session>(ResultStatus.Error, Messages.ResultIsNotFound, session) :
+                new DataResult<Session>(ResultStatus.Error, Messages.ResultIsNotFound, new Session()) :
                 new DataResult<Session>(ResultStatus.Success, session); ;
         }
 

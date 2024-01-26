@@ -52,7 +52,7 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
                 var category = _categoryService.GetById(entity.CategoryId).GetAwaiter().GetResult().Data;
                 model.Id = entity.Id;
                 model.TeacherId = entity.TeacherId;
-                model.TeacherName = teacher.FirstName +" "+ teacher.LastName;
+                model.TeacherName = teacher.UserName != null ? teacher.UserName : "Ahmet Çiftçi";
                 model.CategoryId = entity.CategoryId;
                 model.CategoryStr = EnumExtensions.GetEnumTitle<SinifDuzeyi>(category.SinifDuzeyiId.Value) +" "+  category.Name;
                 model.StartDateStr = entity.StartDate.ToString("dd/MM/yyyy");
