@@ -59,7 +59,10 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var result = await _sessionService.GetById(model.Id.HasValue ? model.Id.Value : 0);
-                int last = _sessionService.FetchAllDtos().Data.Where(x => x.CourseId == model.CourseId).OrderBy(x => x.Queue).LastOrDefault().Queue > 0 ? _sessionService.FetchAllDtos().Data.Where(x => x.CourseId == model.CourseId).OrderBy(x => x.Queue).LastOrDefault().Queue: 0;
+                var courses = _sessionService.FetchAllDtos().Data.Where(x => x.CourseId == model.CourseId).ToList();
+                int last = courses.Any() ? courses.OrderBy(x => x.Queue).LastOrDefault().Queue : 0;
+                //int last = _sessionService.FetchAllDtos().Data.Where(x => x.CourseId == model.CourseId).OrderBy(x => x.Queue).LastOrDefault().Queue > 0 
+                //    ? _sessionService.FetchAllDtos().Data.Where(x => x.CourseId == model.CourseId).OrderBy(x => x.Queue).LastOrDefault().Queue: 0;
                 if (result.ResultStatus == ResultStatus.Success && result.Data.Id < 0)
                 {
                     return Json(new { Result = result });
