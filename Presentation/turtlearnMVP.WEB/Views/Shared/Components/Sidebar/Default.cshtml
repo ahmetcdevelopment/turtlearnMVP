@@ -71,9 +71,9 @@
         </div>
         </div> *@
 
-    <script type="text/javascript">
+<script type="text/javascript">
     jQuery(document).ready(function ($) {
-        
+        var list = @Html.Raw(Json.Serialize(Model.Sessions));
         openEditFormCustomUrl2 = function (controllerUrl) {
             debugger;
             jQuery.get({
@@ -105,5 +105,10 @@
             getViewComponent(componentTarget, "/Admin/Session/GetSessionViewComponent?id=" + id)
         }
 
+        if (list != null && list.length > 0) {
+            debugger;
+            getSession(list[0].id)
+
+        }
     });
 </script>
