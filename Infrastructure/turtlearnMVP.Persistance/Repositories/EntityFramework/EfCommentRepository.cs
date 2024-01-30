@@ -21,16 +21,16 @@ namespace turtlearnMVP.Persistance.Repositories.EntityFramework
         public IQueryable<CommentDTO> GetAllQueryableRecords()
         {
             var Query = from C in _Context.Comments
-                        join _course in _Context.Courses.DefaultIfEmpty()
-                        on C.CourseId equals _course.Id
+                        //join _course in _Context.Courses.DefaultIfEmpty()
+                        //on C.CourseId equals _course.Id
                         join _user in _Context.Users.DefaultIfEmpty()
                         on C.StudentId equals _user.Id
                         where C.IsDeleted == true
                         select new CommentDTO
                         {
                             Id = C.Id,
-                            CourseId = _course.Id,
-                            CourseTitle = _course.Name,
+                            //CourseId = _course.Id,
+                            //CourseTitle = _course.Name,
                             ParentId = C.ParentId,
                             Text = C.Text,
                             StudentId = _user.Id,

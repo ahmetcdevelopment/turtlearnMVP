@@ -55,14 +55,14 @@ namespace turtlearnMVP.Persistance.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "71d44c82-f2e1-4350-80a4-a97b2c261acf",
+                            ConcurrencyStamp = "411f74eb-eb21-40b3-85bc-e895590824de",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "2374c24f-9935-4419-a0a1-88fb45562042",
+                            ConcurrencyStamp = "bc21c8a9-0a75-4c72-ae40-4ecfed7dc7c4",
                             Name = "Editor",
                             NormalizedName = "EDITOR"
                         });
@@ -179,7 +179,7 @@ namespace turtlearnMVP.Persistance.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "48941199-bf93-4ad2-bceb-bd7b4737a15a",
+                            ConcurrencyStamp = "4a2c6891-6e9f-45f0-9aa2-e4ff007ac8e3",
                             Email = "adminuser@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "admin",
@@ -187,11 +187,11 @@ namespace turtlearnMVP.Persistance.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMINUSER@GMAIL.COM",
                             NormalizedUserName = "ADMINUSER",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAOqP2dORx8CDNF7CCOBgOEfW/M5QnAlLMby80tkG36b+8DYK5apdsKpOcZDvGt9TQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOW7cjpg6h5RWboN/qkEp6gP/7NwIxjCo8VYV3bL1eCufyW6KDEwpQZ1T55ZVVkt4w==",
                             PhoneNumber = "+905555555555",
                             PhoneNumberConfirmed = true,
                             Photo = "https://pbs.twimg.com/media/C8QqGm4UQAAUiET.jpg",
-                            SecurityStamp = "b5296e90-b87c-441a-83a3-c593ada97390",
+                            SecurityStamp = "3b97e6a5-6267-4ee2-8d34-2eb56a1b52df",
                             TwoFactorEnabled = false,
                             UserName = "adminuser"
                         },
@@ -200,7 +200,7 @@ namespace turtlearnMVP.Persistance.Migrations
                             Id = 2,
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "6f1699e4-207d-4709-bf11-ce6388836237",
+                            ConcurrencyStamp = "fe52e7e3-a095-4684-914b-78e783e82906",
                             Email = "editoruser@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "editor",
@@ -208,11 +208,11 @@ namespace turtlearnMVP.Persistance.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "EDITORUSER@GMAIL.COM",
                             NormalizedUserName = "EDITORUSER",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGzEyWy2R6+bCibEVcmps+reHEQ5Usd0UTgS7IyRTSrR+rcngEj0Jv4QFoyPkXWN2Q==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECIOmEeS+BwMvVKq6uOFYeWS0suhe8Pq6YrTDrWQK9LyROJkpURHJxEMIncyFWToXw==",
                             PhoneNumber = "+905555555555",
                             PhoneNumberConfirmed = true,
                             Photo = "https://pbs.twimg.com/media/C8QqGm4UQAAUiET.jpg",
-                            SecurityStamp = "253e9b58-f5fb-4e1d-96ea-196dafcf05f1",
+                            SecurityStamp = "6548f9ef-08e3-4b5a-9d05-4a794a703bed",
                             TwoFactorEnabled = false,
                             UserName = "editoruser"
                         });
@@ -442,9 +442,6 @@ namespace turtlearnMVP.Persistance.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -456,7 +453,13 @@ namespace turtlearnMVP.Persistance.Migrations
                     b.Property<short>("Rating")
                         .HasColumnType("smallint");
 
+                    b.Property<int>("RecordId")
+                        .HasColumnType("int");
+
                     b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TableId")
                         .HasColumnType("int");
 
                     b.Property<string>("Text")

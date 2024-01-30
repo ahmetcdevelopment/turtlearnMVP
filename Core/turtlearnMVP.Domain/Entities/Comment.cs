@@ -17,7 +17,9 @@ namespace turtlearnMVP.Domain.Entities
     {
 
         public int ParentId { get; set; }
-        public int CourseId { get; set; }//Yapılan yorum hangi kursa ait.
+        public int TableId { get; set; } // Yorum bir kursa veya session'a yapılmış olabilir.
+        //hangisine yapıldı bilgisini enumdan alırız.
+        public int RecordId { get; set; }//Yapılan yorum hangi kayıta ait.
         public int StudentId { get; set; }//Hangi öğrenci yorum yapıyor.
 
         /// <summary>

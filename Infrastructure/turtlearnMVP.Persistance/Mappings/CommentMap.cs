@@ -16,7 +16,8 @@ namespace turtlearnMVP.Persistance.Mappings
             builder.HasKey(c => c.Id);
             builder.Property(c => c.Id).ValueGeneratedOnAdd();
 
-            builder.Property(c => c.CourseId).IsRequired();
+            builder.Property(c => c.TableId).IsRequired();
+            builder.Property(c => c.RecordId).IsRequired();
 
             builder.Property(c => c.StudentId).IsRequired();
 
