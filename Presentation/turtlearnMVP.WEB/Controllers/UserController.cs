@@ -8,6 +8,7 @@ using TurtLearn.Shared.Utilities.Results.ComplexTypes;
 using turtlearnMVP.Application.Persistance.Services;
 using turtlearnMVP.Domain.Entities;
 using turtlearnMVP.Domain.Enums;
+using turtlearnMVP.WEB.Models;
 using turtlearnMVP.WEB.Models.User;
 
 namespace turtlearnMVP.WEB.Controllers
@@ -34,6 +35,47 @@ namespace turtlearnMVP.WEB.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult Profile(string? userName)
+        {
+            var model = new UserProfileViewModel();
+            if(userName == null)
+            {
+                if (User.Identity.IsAuthenticated)
+                {
+                    userName = User.Identity.Name;
+                }
+                else
+                {
+                    var errorModel = new ErrorViewModel();
+                    errorModel.ErrorCode = 404;
+                    errorModel.ErrorDescription = "Böyle Bir Kullanıcı Mevcut Değil!";
+                    errorModel.ErrorMessage = "Bulunamadı";
+                    return View("Error", errorModel);
+                }
+            }
+            var user = _userManager.FindByNameAsync(userName).GetAwaiter().GetResult();
+            if(user == null)
+            {
+                var errorModel = new ErrorViewModel();
+                errorModel.ErrorCode = 404;
+                errorModel.ErrorDescription = "Böyle Bir Kullanıcı Mevcut Değil!";
+                errorModel.ErrorMessage = "Bulunamadı";
+                return View("Error", errorModel);
+            }
+            if(user.UserName == User.Identity.Name)
+            {
+                model.IsHimself = true;
+                model.PhoneNumber = user.PhoneNumber;
+                model.Email = user.Email;
+                model.Id = user.Id;
+            }
+            model.UserName = user.UserName;
+            model.Picture = user.Photo;
+            model.FirstName = user.FirstName;
+            model.LastName = user.LastName;
+            return View(model);
         }
 
         [HttpGet]

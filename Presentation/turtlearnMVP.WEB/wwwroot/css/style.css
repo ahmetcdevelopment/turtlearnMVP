@@ -6159,3 +6159,52 @@ option{
 .header-fix{
     z-index:9999 !important;
 }
+
+
+.img-container {
+    position: relative;
+    max-width: 70vw;
+    width: 100%;
+    margin: auto;
+    overflow: hidden;
+}
+
+    .img-container img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+    }
+
+.overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 2;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+.error-404 {
+    background-color: rgba(255, 255, 255, 0.8); /* Adjust the background color and opacity as needed */
+    padding: 20px;
+    border-radius: 10px;
+    position: relative;
+    z-index: 1;
+}
+
+    /* Add any additional styling for the error-404 div here */
+
+    .error-404 h1,
+    .error-404 h4,
+    .error-404 p {
+        color: #333; /* Adjust the text color as needed */
+    }
+
+@media (max-width: 700px) {
+    .img-container {
+        max-width: 100vw;
+    }
+}

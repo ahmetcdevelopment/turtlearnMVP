@@ -2,19 +2,41 @@
 @model Session;
 
 <div class="widgets">
-    <div class="widget">
-        <h6 class="widget-title"><i class="fas fa-graduation-cap"></i>  @Model.Name</h6>
-        <div class="widget-content">
-            <div class="custom-control  mb-3">
-                <label class=""><i class="far fa-bookmark"></i>  @Model.Description</label>
-            </div>
-            <div class="custom-control  mb-3">
-                <label class=""><i class="fa fa-calendar"></i>Başlangıç:  @Model.Link</label>
-            </div>
-            <div class="custom-control  mb-3">
-                <label class=""><i class="fa fa-calendar"></i>Bitiş:  @Model.StartDate.ToString("dd/MM/yyyy")</label>
-            </div>
+    <h6 class="widget-title">
+        <ul class="meta-course">
+            <li><i class="fa fa-clock"></i>Buraya saat gelecek</li>
+            <li><i class="far fa-calendar"></i>@Model.StartDate.ToString("dd/MM/yyyy")</li>
+            <li><i class="fa fa-link"></i><a href="@Model.Link">@Model.Link</a></li>
+        </ul>
+    </h6>
+
+    <div class="widget-content">
+        <h2> @Model.Name</h2>
+        <p class="mb-4 mb-sm-5"> @Model.Description</p>
+        
+        <div class="table-responsive">
+            <table class="table table-striped border mb-4">
+                <thead>
+                    <tr>
+                        <th style="font-weight:bolder;"><i class="far fa-folder-open"></i> Ek İçerikler:</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><i class="fa fa-link"></i><a href="dosya bağlantısı">dosya bağlantısı</a></td>
+                        <td>dosya adı</td>
+                        <td>dosya açıklaması</td>
+                    </tr>
+                    <tr>
+                        <td><i class="fa fa-link"></i><a href="dosya bağlantısı">dosya bağlantısı</a></td>
+                        <td>dosya adı</td>
+                        <td>dosya açıklaması</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
+
     </div>
-    
 </div>
