@@ -38,7 +38,7 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
             var model = new SessionEditViewModel();
             if (id.HasValue && id.Value > 0)
             {
-                var resultData = (await _sessionService.GetById(id.Value)).Data ?? new Session(); 
+                var resultData = (await _sessionService.GetById(id.Value)).Data ?? new Session();
                 // Assuming there is a GetCourseById method in _mainService
                 model.Id = resultData.Id;
                 model.CourseId = resultData.CourseId;
@@ -59,10 +59,9 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var result = await _sessionService.GetById(model.Id.HasValue ? model.Id.Value : 0);
-                var courses = _sessionService.FetchAllDtos().Data.Where(x => x.CourseId == model.CourseId).ToList();
-                int last = courses.Any() ? courses.OrderBy(x => x.Queue).LastOrDefault().Queue : 0;
-                //int last = _sessionService.FetchAllDtos().Data.Where(x => x.CourseId == model.CourseId).OrderBy(x => x.Queue).LastOrDefault().Queue > 0 
-                //    ? _sessionService.FetchAllDtos().Data.Where(x => x.CourseId == model.CourseId).OrderBy(x => x.Queue).LastOrDefault().Queue: 0;
+                var sessions = _sessionService.FetchAllDtos().Data.Where(x => x.CourseId == model.CourseId).OrderBy(x => x.Queue).ToList();
+
+                int last = sessions.Any() ? sessions.Last().Queue : 0;
                 if (result.ResultStatus == ResultStatus.Success && result.Data.Id < 0)
                 {
                     return Json(new { Result = result });
@@ -80,8 +79,8 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
                     var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                     result.Data.UpdateUserId = userId != null && int.TryParse(userId, out int _userId) ? _userId : 0;
                 }
-                var addOrUpdateResult = result.Data.Id > 0 ? 
-                    await _sessionService.UpdateOrDelete(result.Data) : 
+                var addOrUpdateResult = result.Data.Id > 0 ?
+                    await _sessionService.UpdateOrDelete(result.Data) :
                     await _sessionService.InsertAsync(result.Data);
                 return Json(new { Result = addOrUpdateResult });
             }
