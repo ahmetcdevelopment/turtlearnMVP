@@ -8,7 +8,7 @@ using TurtLearn.Shared.Utilities.Attributes;
 
 namespace turtlearnMVP.Domain.Entities
 {
-    [TableTitle("Sohbet")]
+    [TableInfo("Sohbet", 9)]
     /// <summary>
     /// Grup veya kullanıcı sohbetleri
     /// </summary>

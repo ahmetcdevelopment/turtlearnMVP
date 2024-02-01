@@ -7,13 +7,16 @@ using System.Threading.Tasks;
 namespace TurtLearn.Shared.Utilities.Attributes
 {
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-    public sealed class TableTitleAttribute : Attribute
+    public sealed class TableInfoAttribute : Attribute
     {
         public string Title { get; }
+        public int Id { get; }
 
-        public TableTitleAttribute(string Title)
+
+        public TableInfoAttribute(string Title, int Id)
         {
             this.Title = Title;
+            this.Id = Id;
         }
     }
 }

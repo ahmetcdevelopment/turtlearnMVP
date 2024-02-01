@@ -34,29 +34,33 @@
                 <img class="img-fluid" src="~/images/avatar/@Model.Picture" alt="">
                 <div class="border border-top-0 py-4 py-sm-5">
                     <ul class="ps-0 mb-0">
-                        <li class="d-flex align-items-center px-4 mb-4">
-                            <i class="flaticon-mail-1 fa-3x mt-2 text-light me-3"></i>
-                            <span class="h6 text-light fw-normal mb-0">@Model.Email</span>
-                        </li>
-                        <li class="d-flex align-items-center px-4 mb-4">
-                            <i class="flaticon-phone fa-3x mt-2 text-light me-3"></i>
-                            <span class="h6 text-light fw-normal mb-0">@Model.PhoneNumber</span>
-                        </li>
-                        <li class="d-flex align-items-center px-4 mb-4">
+                        @if (Model.IsHimself)
+                        {
+                            <li class="d-flex align-items-center px-4 mb-4">
+                                <i class="flaticon-mail-1 fa-3x mt-2 text-light me-3"></i>
+                                <span class="h6 text-light fw-normal mb-0">@Model.Email</span>
+                            </li>
+                            <li class="d-flex align-items-center px-4 mb-4">
+                                <i class="flaticon-phone fa-3x mt-2 text-light me-3"></i>
+                                <span class="h6 text-light fw-normal mb-0">@Model.PhoneNumber</span>
+                            </li>
+                        }
+                        @*   <li class="d-flex align-items-center px-4 mb-4">
                             <i class="flaticon-skype fa-3x mt-2 text-light me-3"></i>
                             <span class="h6 text-light fw-normal mb-0">online.courses</span>
                         </li>
                         <li class="d-flex align-items-center px-4 mb-4">
                             <i class="flaticon-link fa-3x mt-2 text-light me-3"></i>
                             <span class="h6 text-light fw-normal mb-0">https://www.guruma.com</span>
-                        </li>
-                        <li class="d-flex align-items-center px-4">
-                            <i class="flaticon-pin-1 fa-3x mt-2 text-light me-3"></i>
-                            <span class="h6 text-light fw-normal mb-0">Hamilton Rd. Willoughby, OH</span>
-                        </li>
+                        </li> *@
+                     @*    <li class="d-flex align-items-center px-4">
+                           @*  <i class="flaticon-pin-1 fa-3x mt-2 text-light me-3"></i>
+                            <span class="h6 text-light fw-normal mb-0">Hamilton Rd. Willoughby, OH</span> 
+
+                        </li> *@
                     </ul>
                 </div>
-                <div class="social-icon-round mt-4 mt-sm-5">
+            @*     <div class="social-icon-round mt-4 mt-sm-5">
                     <ul>
                         <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
                         <li><a href="#"><i class="fab fa-twitter"></i></a></li>
@@ -64,18 +68,21 @@
                         <li><a href="#"><i class="fab fa-instagram"></i></a></li>
                         <li><a href="#"><i class="fab fa-google"></i></a></li>
                     </ul>
-                </div>
+                </div> *@
             </div>
             <div class="col-md-7 col-xl-8 space-sm-pt">
                 <h2>@Model.FirstName @Model.LastName</h2>
                 <span class="text-primary lead fw-bold">Kullanıcı Türü</span>
                 <ul class="d-flex ps-0 mb-4 mb-sm-5 mt-4">
-                    <li class="d-flex">
+                  @*   <li class="d-flex">
                         <a class="btn btn-sm btn-mes me-4" href="#">Message me</a>
-                    </li>
-                    <li class="d-flex">
-                        <a class="btn btn-sm btn-fol" href="#">Follow me</a>
-                    </li>
+                    </li> *@
+                    @if (Model.IsHimself)
+                    {
+                        <li class="d-flex">
+                            <a onclick="openEditForm('/User/Update',3) class="btn btn-sm btn-edit">Edit Profile</a>
+                        </li>
+                    }
                 </ul>
                 <p>The other virtues practice in succession by Franklin were silence, order, resolution, frugality, industry, sincerity, Justice, moderation, cleanliness, tranquility, chastity and humility.</p>
                 <p>For the summary order he followed a little scheme of employing his time each day. From five to seven each morning he spent in bodily personal attention, saying a short prayer, thinking over the day’s business and resolutions, studying and eating breakfast. 12 great free online courses.</p>
@@ -213,3 +220,4 @@
         </div>
     </div>
 </section>
+<div id="partialEditContent"></div>

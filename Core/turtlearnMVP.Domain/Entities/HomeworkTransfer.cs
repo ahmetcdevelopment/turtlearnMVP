@@ -9,7 +9,7 @@ using TurtLearn.Shared.Utilities.Attributes;
 
 namespace turtlearnMVP.Domain.Entities
 {
-    [TableTitle("Ödev Gönderimi")]
+    [TableInfo("Ödev Gönderimi", 16)]
     /// <summary>
     /// Ödevlere öğrenci görevlendirme
     /// </summary>

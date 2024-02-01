@@ -8,7 +8,7 @@ using TurtLearn.Shared.Utilities.Attributes;
 
 namespace turtlearnMVP.Domain.Entities
 {
-    [TableTitle("Katılımcı")]
+    [TableInfo("Katılımcı", 10)]
     public class ChatUser : EntityBase<int>, IEntity
     {
         public int ChatId { get; set; }

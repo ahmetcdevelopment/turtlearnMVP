@@ -8,7 +8,7 @@ using TurtLearn.Shared.Utilities.Attributes;
 
 namespace turtlearnMVP.Domain.Entities
 {
-    [TableTitle("Kurs Başvuru")]
+    [TableInfo("Kurs Başvuru", 13)]
     ///<summary>
     /// Kursa kayıt olmak isteyen öğrencilerin istekleri bu tabloya düşer
     /// approved alanı öğretmen tarafıdan yönetilir.

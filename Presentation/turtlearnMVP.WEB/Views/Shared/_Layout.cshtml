@@ -5,7 +5,7 @@
     if (User.Identity.IsAuthenticated)
     {
         // HttpContext nesnesi oluşturmak için
-        
+
         // Çerezi okumak için
         photo = HttpContextAccessor.HttpContext.Request.Cookies["UserProfilePhoto"];
 
@@ -383,7 +383,32 @@
 
 
         });
+        $(document).ready(function () {
 
+            openEditForm = function (controllerUrl, id, targetGrid) {
+                $.ajax({
+                    url: controllerUrl + '/AddOrUpdate',
+                    type: 'GET',
+                    data: { id: id },
+                    success: function (result) {
+                        $('#partialEditContent').html(result);
+                        $('#editModal').modal({
+                            backdrop: 'static',
+                            keyboard: false
+                        }).modal('show');;
+                    },
+                    error: function () {
+                        $.gritter.add({
+                            title: 'Hata',
+                            text: result.message,
+                            class_name: 'gritter-error',
+                            sticky: false,
+                            time: 5000
+                        });
+                    }
+                });
+            };
+        });
         function displayValidationErrors(data) {
             debugger;
             // Clear previous validation errors

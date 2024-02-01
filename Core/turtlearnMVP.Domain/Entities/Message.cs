@@ -8,7 +8,7 @@ using TurtLearn.Shared.Utilities.Attributes;
 
 namespace turtlearnMVP.Domain.Entities
 {
-    [TableTitle("İleti")]
+    [TableInfo("İleti", 17)]
     /// <summary>
     /// Ders oturumlarındaki mesajlaşmalar veya özel mesajlaşmalar
     /// </summary>

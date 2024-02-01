@@ -1,0 +1,161 @@
+﻿@using turtlearnMVP.WEB.Models.User
+@model UserEditViewModel;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+<!-- Gritter.js script -->
+<script src="https://cdn.jsdelivr.net/npm/gritter@1.7.4/js/jquery.gritter.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/gritter@1.7.4/css/jquery.gritter.min.css" rel="stylesheet">
+<!--=================================
+  Modal login -->
+<div class="modal login fade show" id="editModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="loginModalLabel">Kategori</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm" method="post" onsubmit="return false" asp-controller="Category" asp-action="AddOrUpdate">
+                    @Html.HiddenFor(m => m.Id)
+                    <div class="row my-4 align-items-center">
+                        <div class="col-md-4 col-sm-6">
+                            <div class="gallery-item">
+                                <img class="img-fluid" src="images/gallery/01.jpg" alt="">
+                                <div class="gallery-overlay">
+                                    <div class="gallery-description">
+                                        <div class="gallery-icon">
+                                            <a class="popup gallery-img" href="images/gallery/01.jpg"><i class="fa fa-camera"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="mb-12 col-sm-12 form-floating">
+
+                                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control form-setting", @placeholder = "Kullanıcı Adı" })
+                                @Html.ValidationMessageFor(m => m.UserName)
+                                <label class="float-setting text-dark fw-bold" for="floatingInput">Kullanıcı Adı</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="mb-12 col-sm-12 form-floating">
+
+                                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control form-setting", @placeholder = "Adı" })
+                                @Html.ValidationMessageFor(m => m.FirstName)
+                                <label class="float-setting text-dark fw-bold" for="floatingInput">Adı</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="mb-12 col-sm-12 form-floating">
+
+                                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control form-setting", @placeholder = "Soyadı" })
+                                @Html.ValidationMessageFor(m => m.LastName)
+                                <label class="float-setting text-dark fw-bold" for="floatingInput">Soyadı</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="mb-12 col-sm-12 form-floating">
+
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control form-setting", @placeholder = "Email" })
+                                @Html.ValidationMessageFor(m => m.Email)
+                                <label class="float-setting text-dark fw-bold" for="floatingInput">Email</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="mb-12 col-sm-12 form-floating">
+
+                                @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control form-setting", @placeholder = "Telefon" })
+                                @Html.ValidationMessageFor(m => m.PhoneNumber)
+                                <label class="float-setting text-dark fw-bold" for="floatingInput">Telefon</label>
+                            </div>
+                        </div>
+                       @*  <div class="row"> <!-- For Bio -->
+                            <div class="mb-12 col-sm-12 form-floating">
+                                @Html.TextAreaFor(m => m.Content, new { @class = "form-control form-setting", @placeholder = "İçerik" })
+                                @Html.ValidationMessageFor(m => m.Content)
+                                <label class="float-setting text-dark fw-bold" for="floatingInput">İçerik</label>
+                            </div>
+                        </div> *@
+                       @*  <div class="row">
+                            <div class="mb-12 col-sm-12 form-floating">
+                                @Html.TextAreaFor(m => m.Description, new { @class = "form-control form-setting", @placeholder = "Açıklama" })
+                                @Html.ValidationMessageFor(m => m.Description)
+                                <label class="float-setting text-dark fw-bold" for="floatingInput">Açıklama</label>
+                            </div>
+                        </div> *@
+                        <div class="row form-setting">
+                            <div class="col-sm-6">
+                                <button id="cancelButton" class="btn btn-error">Cancel</button>
+                            </div>
+                            <div class="col-sm-6 text-lg-end">
+                                <button id="saveButton" class="btn btn-primary">Save</button>
+
+                            </div>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--=================================
+Modal login -->
+<script>
+    $(document).ready(function () {
+        // // Handle click event on the login tab
+        // $('#login-tab').on('click', function () {
+        //     // Set the value of RegUserTypeId to -1
+        //     $('input[name="RegUserTypeId"]').val('-1');
+        // });
+
+        // Handle click event on the register tab
+        $('#register-tab').on('click', function () {
+            // Optionally, you can set the value to a different value when the register tab is clicked
+            // $('input[name="RegUserTypeId"]').val('some-other-value');
+        });
+
+        $('#registerButton').on('click', function () {
+            submitForm(0);
+        });
+
+        $('#saveButton').on('click', function () {
+            submitForm(1);
+        });
+
+        function submitForm(submitType) {
+            // Serialize the form data
+            var formData = $('#editForm').serialize();
+
+            var grid = getOperationGrid();
+            $.ajax({
+                url: "/Admin" + $('#editForm').attr('action'),
+                type: 'POST',
+                data: formData,
+                success: function (result) {
+                    $.gritter.add({
+                        title: 'Başarılı',
+                        text: result.message,
+                        class_name: 'gritter-success',
+                        sticky: false,
+                        time: 5000
+                    });
+                    reloadGrid(grid);
+                    closeModal();
+                },
+                error: function (result) {
+                    $.gritter.add({
+                        title: 'Hata',
+                        text: result.message,
+                        class_name: 'gritter-error',
+                        sticky: false,
+                        time: 5000
+                    });
+                }
+            });
+        }
+    });
+</script>

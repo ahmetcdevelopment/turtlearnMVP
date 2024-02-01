@@ -9,7 +9,7 @@ using TurtLearn.Shared.Utilities.Attributes;
 
 namespace turtlearnMVP.Domain.Entities
 {
-    [TableTitle("Kategori")]
+    [TableInfo("Kategori", 8)]
     /// <summary>
     /// Her ders dalı bir kategoriyi temsil eder. Örneğin Matematik kategorisi ya da Biyoloji kategorisi
     /// </summary>

@@ -8,7 +8,7 @@ using TurtLearn.Shared.Utilities.Attributes;
 
 namespace turtlearnMVP.Domain.Entities
 {
-    [TableTitle("Kurs Öğrencileri")]
+    [TableInfo("Kurs Öğrencileri", 14)]
     /// <summary>
     /// hangi öğrenci hangi kurslara dahil onun belirlenmesi için tutuldu.
     /// bir öğrenci birden fazla kursa dahil olabilir.
