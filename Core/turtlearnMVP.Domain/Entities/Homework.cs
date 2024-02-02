@@ -9,7 +9,7 @@ using TurtLearn.Shared.Utilities.Attributes;
 
 namespace turtlearnMVP.Domain.Entities
 {
-    [TableTitle("Ödev")]
+    [TableInfo("Ödev", 15)]
     public class Homework : EntityBase<int>, IEntity
     {
 

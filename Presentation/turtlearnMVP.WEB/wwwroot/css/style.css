@@ -61,6 +61,7 @@ NOTE: This is main stylesheet of template, This file contains the styling for th
     --theme-color: #538662;
     --theme-dark-color: #1c1a1f;
     --error-color: #bb2525;
+    --edit-color: #0079ba;
 }
 body {
   font-family: "Quicksand", sans-serif;
@@ -2469,6 +2470,16 @@ ul.list {
   .teacher-detail .btn-fol:hover {
     color: var(--theme-dark-color);
     border-color: var(--theme-dark-color); }
+
+.teacher-detail .btn-edit {
+    color: var(--edit-color);
+    border: 1px solid var(--edit-color);
+}
+
+    .teacher-detail .btn-edit:hover {
+        color: var(--theme-dark-color);
+        border-color: var(--theme-dark-color);
+    }
 
 /*****************************
     Testimonial
@@ -5908,11 +5919,15 @@ textarea.form-control {
     border-radius: 50px;
 }
 
-@media (max-width: 991px) {
+    .zurafworks-login-button li > a {
+        color: #666666 !important;
+    }
+/*
+@media (max-width: 992px) {
     .zurafworks-login-button {
         background-color: #43533e;
     }
-}
+}*/
 
 /* Kýrmýzý Renkli Error ya da Çýkýþ Butonlarý Ýçin*/
 

@@ -9,7 +9,7 @@ using TurtLearn.Shared.Utilities.Attributes;
 
 namespace turtlearnMVP.Domain.Entities
 {
-    [TableTitle("Yorum")]
+    [TableInfo("Yorum", 11)]
     /// <summary>
     /// Öğrencilerin öğretmenleri değerlendirme sistemidir. E ticaret satıcı yorumları ya da bionluk freelancer yorumları gibi
     /// </summary>

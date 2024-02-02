@@ -8,7 +8,7 @@ using TurtLearn.Shared.Utilities.Attributes;
 
 namespace turtlearnMVP.Domain.Entities
 {
-    [TableTitle("Kullanıcı Ayarları")]
+    [TableInfo("Kullanıcı Ayarları", 20)]
     /// <summary>
     /// Her ders dalı bir kategoriyi temsil eder. Örneğin Matematik kategorisi ya da Biyoloji kategorisi
     /// </summary>

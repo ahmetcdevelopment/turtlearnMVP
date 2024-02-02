@@ -1,13 +1,18 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TurtLearn.Shared.Entities.Abstract;
 using TurtLearn.Shared.Entities.Concrete;
 using TurtLearn.Shared.Entities.Dtos;
+using TurtLearn.Shared.Utilities.Messages;
 using TurtLearn.Shared.Utilities.Results.ComplexTypes;
+using TurtLearn.Shared.Utilities.Results.Concrete;
 using turtlearnMVP.Application.Persistance.Services;
 using turtlearnMVP.Domain.Entities;
 using turtlearnMVP.Domain.Enums;
+using turtlearnMVP.WEB.Areas.Admin.Models;
+using turtlearnMVP.WEB.Helpers;
 using turtlearnMVP.WEB.Models;
 using turtlearnMVP.WEB.Models.User;
 
@@ -39,6 +44,7 @@ namespace turtlearnMVP.WEB.Controllers
 
         public IActionResult Profile(string? userName)
         {
+           
             var model = new UserProfileViewModel();
             if(userName == null)
             {
@@ -76,6 +82,62 @@ namespace turtlearnMVP.WEB.Controllers
             model.FirstName = user.FirstName;
             model.LastName = user.LastName;
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Update(int? id)
+        {
+            var model = new UserEditViewModel();
+            //model.SelStatus = EnumHelper.GetEnumSelectList<CourseStatus>();
+            //model.SelCategories = GetCategoriesAsSelectList();
+            if (id.HasValue && id.Value > 0)
+            {
+                var user = (await _userManager.FindByIdAsync(id.Value.ToString())); // Assuming there is a GetCourseById method in _mainService
+                model.Id = user.Id;
+                model.UserName = user.UserName;
+                model.FirstName = user.FirstName;
+                model.LastName = user.LastName;
+                model.Email = user.Email;
+                model.PhoneNumber = user.PhoneNumber;
+                model.Picture = user.Photo;
+             
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(UserEditViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                //var result = await _mainService.GetById(model.Id.HasValue ? model.Id.Value : 0);
+                //if (result.ResultStatus == ResultStatus.Success && result.Data.Id < 0)
+                //{
+                //    return Json(new { Result = result });
+                //}
+                //result.Data.TeacherId = model.TeacherId;
+                //result.Data.CategoryId = model.CategoryId;
+                //result.Data.StartDate = model.StartDate;
+                //result.Data.EndDate = model.EndDate;
+                //result.Data.Quota = model.Quota;
+                //result.Data.Name = model.Name;
+                //result.Data.PricePerHour = model.PricePerHour;
+                //result.Data.TotalHour = model.TotalHour;
+                //result.Data.TotalPrice = model.PricePerHour * model.TotalHour;
+                //result.Data.Description = model.Description;
+                //result.Data.Status = model.Status;
+                //if (result.Data.Id == 0)
+                //{
+                //    result.Data.IsDeleted = false;
+                //    result.Data.UpdateDate = DateTime.Now;
+                //    var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                //    result.Data.UpdateUserId = userId != null && int.TryParse(userId, out int _userId) ? _userId : 0;
+                //}
+                //var addOrUpdateResult = result.Data.Id > 0 ? await _mainService.UpdateOrDelete(result.Data) : await _mainService.InsertAsync(result.Data);
+                ////var component = ViewComponent("Course");
+                //return Json(new { Result = addOrUpdateResult/*, Compoent = component */});
+            }
+            return Json(new { Result = new Result(ResultStatus.Error, Messages.PageIsNotFound) });
         }
 
         [HttpGet]

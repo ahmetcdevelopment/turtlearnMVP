@@ -8,7 +8,7 @@ using TurtLearn.Shared.Utilities.Attributes;
 
 namespace turtlearnMVP.Domain.Entities
 {
-    [TableTitle("Kurs")]
+    [TableInfo("Kurs", 12)]
     /// <summary>
     /// Kurs aslen kararlaştırılmış oturumlar bütünüdür. Bir nevi ilandır.
     /// </summary>
