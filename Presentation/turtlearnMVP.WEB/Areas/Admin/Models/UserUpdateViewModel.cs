@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace TurtLearn.Shared.Entities.Dtos
+namespace turtlearnMVP.WEB.Areas.Admin.Models
 {
-    public class UserDto
+    public class UserUpdateViewModel
     {
         [Required]
         public int Id { get; set; }
@@ -17,16 +12,6 @@ namespace TurtLearn.Shared.Entities.Dtos
         [MaxLength(50, ErrorMessage = "{0} {1} karakterden büyük olmamalıdır.")]
         [MinLength(3, ErrorMessage = "{0} {1} karakterden küçük olmamalıdır.")]
         public string UserName { get; set; }
-        [DisplayName("İsim")]
-        [Required(ErrorMessage = "{0} Boş Geçilmemelidir.")]
-        [MaxLength(50, ErrorMessage = "{0} {1} karakterden büyük olmamalıdır.")]
-        [MinLength(3, ErrorMessage = "{0} {1} karakterden küçük olmamalıdır.")]
-        public string FirstName { get; set; }
-        [DisplayName("Soyisim")]
-        [Required(ErrorMessage = "{0} Boş Geçilmemelidir.")]
-        [MaxLength(50, ErrorMessage = "{0} {1} karakterden büyük olmamalıdır.")]
-        [MinLength(3, ErrorMessage = "{0} {1} karakterden küçük olmamalıdır.")]
-        public string LastName { get; set; }
         [DisplayName("E-Posta Adresi")]
         [Required(ErrorMessage = "{0} Boş Geçilmemelidir.")]
         [MaxLength(100, ErrorMessage = "{0} {1} karakterden büyük olmamalıdır.")]
@@ -39,9 +24,9 @@ namespace TurtLearn.Shared.Entities.Dtos
         [MinLength(13, ErrorMessage = "{0} {1} karakterden küçük olmamalıdır.")]
         [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }
-        //[DisplayName("Resim Ekle")]
-        //[DataType(DataType.Upload)]
-        //public IFormFile PictureFile { get; set; }
+        [DisplayName("Resim Ekle")]
+        [DataType(DataType.Upload)]
+        public IFormFile PictureFile { get; set; }
         [DisplayName("Resim")]
         public string Photo { get; set; }
     }

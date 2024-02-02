@@ -124,7 +124,6 @@ namespace turtlearnMVP.WEB.Controllers
                 //return Json(new { success = false, message = "Formu eksiksiz doldurunuz." });
             }
         }
-
         [HttpGet]
         public async Task<IActionResult> Register()
         {

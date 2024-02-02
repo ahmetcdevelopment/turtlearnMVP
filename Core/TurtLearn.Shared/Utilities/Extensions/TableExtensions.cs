@@ -15,7 +15,7 @@ namespace TurtLearn.Shared.Utilities.Extensions
         public static string GetTableTitle<TTable>() where TTable : class, IEntity, new()
         {
             Type entityType = typeof(TTable);
-            var titleAttribute = entityType.GetCustomAttribute<TableTitleAttribute>().Title;
+            var titleAttribute = entityType?.GetCustomAttribute<TableTitleAttribute>()?.Title;
             return !string.IsNullOrEmpty(titleAttribute) ? titleAttribute : string.Empty;
         }
     }
