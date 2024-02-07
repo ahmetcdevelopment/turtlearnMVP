@@ -35,7 +35,7 @@ namespace turtlearnMVP.Persistance.Services
             ChatList.ForEach(chat =>
             {
                 chat.PrivacyTitle = chat.Privacy > 0 ?
-                EnumExtensions.GetEnumTitle<ChatPrivacy>(chat.Privacy) : string.Empty; ;
+                EnumExtensions.GetEnumTitle<ChatPrivacy>(chat.Privacy) : string.Empty; 
             });
             return ChatList == null || ChatList.Count <= 0 ?
                 new DataResult<List<ChatDTO>>(ResultStatus.Error, new List<ChatDTO>()) :
