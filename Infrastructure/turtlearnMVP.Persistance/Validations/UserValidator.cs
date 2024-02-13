@@ -16,7 +16,6 @@ namespace turtlearnMVP.Persistance.Validations
                 .MaximumLength(50).WithMessage("Kullanıcı adı 50 karakterden uzun olmamalıdır.");
             RuleFor(x => x.FirstName).NotEmpty().WithMessage("Kullanıcının ismi boş olmamalıdır.")
                 .MaximumLength(100).WithMessage("İsim 100 karakterden uzun olmamalıdır.");
-
         }
     }
 }

@@ -12,12 +12,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
-//Database
+#region DB SETTINGS
 builder.Services.AddDbContext<turtlearnMVPContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("DevelopmentDB")));
-
-// SmtpSettings
+#endregion
+#region SMTP SETTINGS
 builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));
-
+#endregion
+#region API SETTINGS
+await turtlearnApiSetting.generateKey();// Api için key Generate ediyoruz.
+#endregion
 // Add services to the container.
 //builder.Services.AddControllersWithViews();
 
