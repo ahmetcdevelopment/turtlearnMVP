@@ -27,6 +27,8 @@ namespace TurtLearn.Shared.DataAccess.Mappings
             // A concurrency token for use with the optimistic concurrency checking
             builder.Property(u => u.ConcurrencyStamp).IsConcurrencyToken();
 
+            builder.Property(u => u.Biyography).HasMaxLength(1000);//Kullanıcının biyografisi
+
             // Limit the size of columns to use efficient database types
             builder.Property(u => u.UserName).HasMaxLength(50);
             builder.Property(u => u.NormalizedUserName).HasMaxLength(50);

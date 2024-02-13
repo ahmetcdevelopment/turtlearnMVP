@@ -203,4 +203,9 @@ public class UserController : Controller
             return View(userPasswordChangeDto);
         }
     }
+    //[Authorize(Roles = "Admin")]
+    //public Task<IActionResult> AddOrUpdateUserRoles(int userId)
+    //{
+
+    //}
 }

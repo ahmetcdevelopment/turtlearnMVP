@@ -7,10 +7,9 @@ using TurtLearn.Shared.DataAccess.Repositories;
 using turtlearnMVP.Domain.DTOs;
 using turtlearnMVP.Domain.Entities;
 
-namespace turtlearnMVP.Application.Persistance.Repositories
+namespace turtlearnMVP.Application.Persistance.Repositories;
+
+public interface IUserResumeRepository : IRepository<UserResume>
 {
-    public interface IChatRepository : IRepository<Chat>
-    {
-        IQueryable<ChatDTO> GetAllQueryableRecords();
-    }
+    IQueryable<UserResumeDTO> GetAllQueryableRecords();
 }

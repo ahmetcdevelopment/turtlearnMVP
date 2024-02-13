@@ -38,7 +38,7 @@ public class RoleController : Controller
     }
     [Authorize(Roles = "Admin")]
     [HttpGet]
-    public async Task<IActionResult> AddRole(int? id)
+    public async Task<IActionResult> AddOrUpdateRole(int? id)
     {
         var model = new RoleEditViewModel();
         if (id.HasValue)
@@ -51,7 +51,7 @@ public class RoleController : Controller
     }
     [Authorize(Roles = "Admin")]
     [HttpPost]
-    public async Task<IActionResult> AddRole(RoleEditViewModel model)
+    public async Task<IActionResult> AddOrUpdateRole(RoleEditViewModel model)
     {
         TurtLearn.Shared.Utilities.Results.Abstract.IResult jsonResult;
         if (ModelState.IsValid)
@@ -60,9 +60,10 @@ public class RoleController : Controller
             ModelState.AddModelError(string.Empty, "Bu rol zaten mevcut.");
             return View("Error");
         }
-        var newRole = new Role();
-        newRole.Name = model.Name;
-        var result = await _roleManager.CreateAsync(newRole);
+        IdentityResult result;
+        var role = await _roleManager.FindByIdAsync(model.Id.ToString()) ?? new Role();
+        role.Name = model.Name;
+        result = model.Id > 0 ? await _roleManager.UpdateAsync(role) : await _roleManager.CreateAsync(role);
         if (result.Succeeded)
         {
             jsonResult = new Result(ResultStatus.Success, $"Kayıt işlemi başarıyla gerçekleştirildi.");
@@ -71,5 +72,20 @@ public class RoleController : Controller
         jsonResult = new Result(ResultStatus.Error, $"Kayıt işlemi sırasında bir hata meydana geldi.");
         return Json(new { Result = jsonResult });
     }
-
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> DeleteRole(int id)
+    {
+        var role = await _roleManager.FindByIdAsync(id.ToString());
+        if (role == null || role.Id > 0)
+        {
+            return Json(new
+            {
+                Result = new Result(ResultStatus.Error, $"Silmeye çalıştığınız rol bulunamadı.")
+            });
+        }
+        var deleteResult = await _roleManager.DeleteAsync(role);
+        return deleteResult.Succeeded ?
+            Json(new { Result = new Result(ResultStatus.Success, $"{role.Name} adlı rol başarıyla silinmiştir.") }) :
+            Json(new { Result = new Result(ResultStatus.Error, $"{role.Name} adlı rol silinirken bi hata meydana geldi") });
+    }
 }

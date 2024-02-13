@@ -30,6 +30,7 @@ namespace turtlearnMVP.Persistance.Repositories
         private EfSessionRepository _EfSessionRepository;
         private EfSessionRollCallRepository _EfSessionRollCallRepository;
         private EfUserSettingRepository _EfUserSettingRepository;
+        private EfUserResumeRepository _EfUserResumeRepository;
         #region SIGNALR
         private EfChatRepository _EfChatRepository;
         private EfChatUserRepository _EfChatUserRepository;
@@ -60,6 +61,8 @@ namespace turtlearnMVP.Persistance.Repositories
         public IChatUserRepository ChatUsers => _EfChatUserRepository ?? new EfChatUserRepository(_Context);
 
         public IMessageRepository Messages => _EfMessageRepository ?? new EfMessageRepository(_Context);
+
+        public IUserResumeRepository UserResumes => _EfUserResumeRepository ?? new EfUserResumeRepository(_Context);
         #endregion
 
         public async ValueTask DisposeAsync()

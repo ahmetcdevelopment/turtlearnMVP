@@ -16,5 +16,6 @@ namespace TurtLearn.Shared.Entities.Concrete
         public string LastName { get; set; }
         public DateTime BirthDate { get; set; }
         public string? Photo { get; set; }
+        public string? Biyography { get; set; }
     }
 }

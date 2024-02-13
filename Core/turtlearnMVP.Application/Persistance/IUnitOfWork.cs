@@ -20,6 +20,7 @@ namespace turtlearnMVP.Application.Persistance
         ISessionRepository Sessions { get; }
         ISessionRollCallRepository SessionRollCalls { get; }
         IUserSettingRepository UserSettings { get; }
+        IUserResumeRepository UserResumes { get; }
         #region SIGNALR
         IChatRepository Chats { get; }
         IChatUserRepository ChatUsers { get; }

@@ -55,14 +55,14 @@ namespace turtlearnMVP.Persistance.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "411f74eb-eb21-40b3-85bc-e895590824de",
+                            ConcurrencyStamp = "14f0358d-51b1-48b4-9dd4-81a2819cdf8b",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "bc21c8a9-0a75-4c72-ae40-4ecfed7dc7c4",
+                            ConcurrencyStamp = "c2363d97-f7d5-4291-9b03-d58b2f31a59c",
                             Name = "Editor",
                             NormalizedName = "EDITOR"
                         });
@@ -105,6 +105,10 @@ namespace turtlearnMVP.Persistance.Migrations
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Biyography")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -179,7 +183,7 @@ namespace turtlearnMVP.Persistance.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "4a2c6891-6e9f-45f0-9aa2-e4ff007ac8e3",
+                            ConcurrencyStamp = "f3a83047-52b6-4bd8-a456-cacd898e304a",
                             Email = "adminuser@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "admin",
@@ -187,11 +191,11 @@ namespace turtlearnMVP.Persistance.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMINUSER@GMAIL.COM",
                             NormalizedUserName = "ADMINUSER",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOW7cjpg6h5RWboN/qkEp6gP/7NwIxjCo8VYV3bL1eCufyW6KDEwpQZ1T55ZVVkt4w==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECuMDGsU3LI/SHkBCUqq1Pi3LTbiXo4zZtI4OO56g35dgBIn7vlyJXpcizDZzxtKmQ==",
                             PhoneNumber = "+905555555555",
                             PhoneNumberConfirmed = true,
                             Photo = "https://pbs.twimg.com/media/C8QqGm4UQAAUiET.jpg",
-                            SecurityStamp = "3b97e6a5-6267-4ee2-8d34-2eb56a1b52df",
+                            SecurityStamp = "287fbb24-c409-42e5-9150-4cde9e1c533a",
                             TwoFactorEnabled = false,
                             UserName = "adminuser"
                         },
@@ -200,7 +204,7 @@ namespace turtlearnMVP.Persistance.Migrations
                             Id = 2,
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "fe52e7e3-a095-4684-914b-78e783e82906",
+                            ConcurrencyStamp = "84ed9926-7c96-41a3-b2df-883fdd6261b0",
                             Email = "editoruser@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "editor",
@@ -208,11 +212,11 @@ namespace turtlearnMVP.Persistance.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "EDITORUSER@GMAIL.COM",
                             NormalizedUserName = "EDITORUSER",
-                            PasswordHash = "AQAAAAEAACcQAAAAECIOmEeS+BwMvVKq6uOFYeWS0suhe8Pq6YrTDrWQK9LyROJkpURHJxEMIncyFWToXw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMyi98ZbaD0ZqoYK7WtLSssL+S/T5+e4BszZBr1KUM46okqwiU2B8Qa81HWjUnOm3w==",
                             PhoneNumber = "+905555555555",
                             PhoneNumberConfirmed = true,
                             Photo = "https://pbs.twimg.com/media/C8QqGm4UQAAUiET.jpg",
-                            SecurityStamp = "6548f9ef-08e3-4b5a-9d05-4a794a703bed",
+                            SecurityStamp = "ed6c4eab-35dc-4b30-a0a5-03150b0f56b5",
                             TwoFactorEnabled = false,
                             UserName = "editoruser"
                         });
@@ -812,6 +816,52 @@ namespace turtlearnMVP.Persistance.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SessionRollCalls", (string)null);
+                });
+
+            modelBuilder.Entity("turtlearnMVP.Domain.Entities.UserResume", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Link")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("ResumeType")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<DateTime>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UpdateUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserResumes", (string)null);
                 });
 
             modelBuilder.Entity("turtlearnMVP.Domain.Entities.UserSetting", b =>
