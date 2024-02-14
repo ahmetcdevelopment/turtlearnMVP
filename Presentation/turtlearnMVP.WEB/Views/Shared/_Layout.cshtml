@@ -218,8 +218,8 @@
                                                 <span>$350</span>
                                             </div>
                                             <div class="d-inline-block d-sm-flex">
-                                                <a id="logoutBtn" class="btn btn-sm btn-error text-white me-2 px-4" href="#">Çıkış Yap</a>
-                                                <a class="btn btn-sm btn-dark text-white ms-0 mt-1 mt-sm-0 ms-sm-2 px-4" href="#">Kontrol</a>
+                                                <a id="logoutBtn" class="btn btn-sm btn-error text-white me-2 px-4" @* href="#" *@>Çıkış Yap</a>
+                                                <a class="btn btn-sm btn-dark text-white ms-0 mt-1 mt-sm-0 ms-sm-2 px-4" @* href="#" *@>Kontrol</a>
                                             </div>
                                         </div>
                                     </div>
@@ -335,6 +335,12 @@
     <!-- Template Scripts (Do not remove)-->
     <script src="~/js/custom.js"></script>
     <script type="text/javascript">
+        function getViewComponent(target, url) {
+            debugger;
+            $.get(url, function (data) {
+                target.html(data);
+            });
+        }
         $(document).on('click', '#loginbtn', function () {
             // var row = $(this).closest('tr.jqgrow');
             // var rowId = row.attr('id');
@@ -409,6 +415,7 @@
                 });
             };
         });
+
         function displayValidationErrors(data) {
             debugger;
             // Clear previous validation errors

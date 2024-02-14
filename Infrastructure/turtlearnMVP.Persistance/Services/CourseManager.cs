@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using TurtLearn.Shared.Utilities.Extensions;
@@ -29,18 +30,39 @@ namespace turtlearnMVP.Persistance.Services
 
         public IQueryable<CourseDTO> _QueryableCourses => _UnitOfWork.Courses.GetAllQueryableRecords();
 
-        public IDataResult<IList<CourseDTO>> FetchAllDtos()
+        //public IDataResult<IList<CourseDTO>> FetchAllDtos()
+        //{
+
+        //    var allQueryableRecords = _UnitOfWork.Courses.GetAllQueryableRecords();
+        //    var CourseList = allQueryableRecords.ToList();
+        //    CourseList.ForEach(course =>
+        //    {
+        //        course.StatusTitle = course.Status > 0 ? EnumExtensions.GetEnumTitle<CourseStatus>((int)course.Status) : string.Empty;
+        //    });
+        //    return CourseList == null || CourseList.Count <= 0 ?
+        //        new DataResult<List<CourseDTO>>(ResultStatus.Error, new List<CourseDTO>()) :
+        //        new DataResult<List<CourseDTO>>(ResultStatus.Success, CourseList);
+        //}
+
+        public IDataResult<IList<CourseDTO>> FetchAllDtos(Expression<Func<CourseDTO, bool>> filter = null)
         {
-            
-            var allQueryableRecords = _UnitOfWork.Courses.GetAllQueryableRecords();
-            var CourseList = allQueryableRecords.ToList();
-            CourseList.ForEach(course =>
+            var allQueryableRecords = _UnitOfWork.Courses.GetAllQueryableRecords().AsQueryable();
+
+            // Eğer bir filtre varsa, veriyi filtrele
+            if (filter != null)
+            {
+                allQueryableRecords = allQueryableRecords.Where(filter);
+            }
+
+            var courseList = allQueryableRecords.ToList();
+            courseList.ForEach(course =>
             {
                 course.StatusTitle = course.Status > 0 ? EnumExtensions.GetEnumTitle<CourseStatus>((int)course.Status) : string.Empty;
             });
-            return CourseList == null || CourseList.Count <= 0 ?
+
+            return courseList == null || courseList.Count <= 0 ?
                 new DataResult<List<CourseDTO>>(ResultStatus.Error, new List<CourseDTO>()) :
-                new DataResult<List<CourseDTO>>(ResultStatus.Success, CourseList);
+                new DataResult<List<CourseDTO>>(ResultStatus.Success, courseList);
         }
 
         public async Task<IDataResult<Course>> GetById(int id)

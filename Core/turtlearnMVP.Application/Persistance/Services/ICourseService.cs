@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using TurtLearn.Shared.Utilities.Results.Abstract;
@@ -14,7 +15,7 @@ namespace turtlearnMVP.Application.Persistance.Services
         IQueryable<CourseDTO> _QueryableCourses { get; }
         Task<IResult> InsertAsync(Course entity);
         Task<IResult> UpdateOrDelete(Course entity);
-        IDataResult<IList<CourseDTO>> FetchAllDtos();
+        IDataResult<IList<CourseDTO>> FetchAllDtos(Expression<Func<CourseDTO, bool>> filter= null);
         Task<IDataResult<Course>> GetById(int id);
     }
 }

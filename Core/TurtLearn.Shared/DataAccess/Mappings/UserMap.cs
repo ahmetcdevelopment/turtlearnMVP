@@ -27,13 +27,13 @@ namespace TurtLearn.Shared.DataAccess.Mappings
             // A concurrency token for use with the optimistic concurrency checking
             builder.Property(u => u.ConcurrencyStamp).IsConcurrencyToken();
 
-            builder.Property(u => u.Biyography).HasMaxLength(1000);//Kullanıcının biyografisi
-
             // Limit the size of columns to use efficient database types
             builder.Property(u => u.UserName).HasMaxLength(50);
             builder.Property(u => u.NormalizedUserName).HasMaxLength(50);
             builder.Property(u => u.Email).HasMaxLength(100);
             builder.Property(u => u.NormalizedEmail).HasMaxLength(100);
+            builder.Property(u => u.Photo).HasMaxLength(100);
+            builder.Property(u => u.Biography).HasMaxLength(1300);
 
             // The relationships between User and other entity types
             // Note that these relationships are configured with no navigation properties
@@ -56,7 +56,8 @@ namespace TurtLearn.Shared.DataAccess.Mappings
                 UserName = "adminuser",
                 FirstName = "admin",
                 LastName = "admin",
-                Photo = "https://pbs.twimg.com/media/C8QqGm4UQAAUiET.jpg",
+                Photo = "adminuser.jpg",
+                Biography = "Adminin Biyografisi",
                 NormalizedUserName = "ADMINUSER",
                 Email = "adminuser@gmail.com",
                 NormalizedEmail = "ADMINUSER@GMAIL.COM",
@@ -72,7 +73,8 @@ namespace TurtLearn.Shared.DataAccess.Mappings
                 UserName = "editoruser",
                 FirstName = "editor",
                 LastName = "editor ",
-                Photo = "https://pbs.twimg.com/media/C8QqGm4UQAAUiET.jpg",
+                Photo = "editoruser.jpg",
+                Biography = "Editörün Biyografisi",
                 NormalizedUserName = "EDITORUSER",
                 Email = "editoruser@gmail.com",
                 NormalizedEmail = "EDITORUSER@GMAIL.COM",

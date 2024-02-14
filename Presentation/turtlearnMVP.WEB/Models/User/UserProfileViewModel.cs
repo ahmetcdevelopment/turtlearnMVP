@@ -37,5 +37,6 @@ namespace turtlearnMVP.WEB.Models.User
         public string PhoneNumber { get; set; }
         [DisplayName("Resim")]
         public string Picture { get; set; }
+        public string Biography { get; set; }
     }
 }

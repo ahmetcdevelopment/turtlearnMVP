@@ -75,12 +75,14 @@ namespace turtlearnMVP.WEB.Controllers
                 model.IsHimself = true;
                 model.PhoneNumber = user.PhoneNumber;
                 model.Email = user.Email;
-                model.Id = user.Id;
             }
+
+            model.Id = user.Id;//değişebilir
             model.UserName = user.UserName;
             model.Picture = user.Photo;
             model.FirstName = user.FirstName;
             model.LastName = user.LastName;
+            model.Biography = user.Biography == null || user.Biography.Length < 1  ? "Bu kullanıcı henüz hakkında bir şeyler söylemedi. Ama eminiz harika biridir" : user.Biography ;
             return View(model);
         }
 
@@ -284,5 +286,11 @@ namespace turtlearnMVP.WEB.Controllers
             }
             return Json(new { success = false });
         }
+
+        public IActionResult GetSliderViewComponent(int? teacherId)
+        {
+            return ViewComponent("UserCoursesSlider", new { TeacherId = teacherId });
+        }
+
     }
 }

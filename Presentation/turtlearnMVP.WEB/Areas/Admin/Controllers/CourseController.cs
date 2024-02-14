@@ -193,9 +193,9 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
             }
         }
 
-        public IActionResult GetCourseViewComponent(string? listingType, bool? refresh = false)
+        public IActionResult GetCourseViewComponent(IList<CourseDTO>? courses,string? listingType, bool? refresh = false)
         {
-            return ViewComponent("Course", new { listingType = listingType, refresh=refresh });
+            return ViewComponent("Course", new { listingType = listingType, refresh=refresh, Courses = courses });
         }
 
         [HttpGet]//taşınacak

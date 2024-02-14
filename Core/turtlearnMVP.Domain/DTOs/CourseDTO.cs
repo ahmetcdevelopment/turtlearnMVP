@@ -10,6 +10,7 @@ namespace turtlearnMVP.Domain.DTOs
     public class CourseDTO : IDto
     {
         public int? Id { get; set; }
+        public int TeacherId { get; set; }
         public string TeacherName { get; set; }
         public string TeacherLastName { get; set; }
         public string CategoryName { get; set; }

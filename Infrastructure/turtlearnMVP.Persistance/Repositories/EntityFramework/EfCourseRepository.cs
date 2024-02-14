@@ -29,6 +29,7 @@ namespace turtlearnMVP.Persistance.Repositories.EntityFramework
                         select new CourseDTO
                         {
                             Id = C.Id,
+                            TeacherId = C.TeacherId,
                             CategoryName = _Category.Name,
                             TeacherName = U.FirstName,
                             TeacherLastName = U.LastName,

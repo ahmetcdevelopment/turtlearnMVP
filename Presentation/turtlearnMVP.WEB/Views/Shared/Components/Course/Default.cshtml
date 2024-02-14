@@ -8,42 +8,42 @@
     foreach (var course in Model)
     {
         <div class="col-sm-6 mb-4 pb-2">
-            
+
             <div class="course">
                 <div class="social-icon-round card-button-fix">
                     <ul>
                         <!-- Trash Button -->
                         <li><a onclick="deleteRow('/Admin/Course',@course.Id)" class="deletebutton cardbutton"><i class="fa fa-trash"></i></a></li>
-                        <li><a   onclick="openEditForm('/Admin/Course',@course.Id)" class="editbutton cardbutton"><i class="fas fa-wrench"></i></a></li>
+                        <li><a onclick="openEditForm('/Admin/Course',@course.Id)" class="editbutton cardbutton"><i class="fas fa-wrench"></i></a></li>
                         <li><a href="/Admin/Course/Coursedetail/@course.Id" class="examinebutton cardbutton"><i class="fa fa-search"></i></a></li>
                     </ul>
                 </div>
                 <div class="course-img">
                     <img class="img-fluid" src="~/images/course/default.jpg" alt="">
-                    <a   style="display:flex;justify-content: space-between;" class="course-category">
+                    <a style="display:flex;justify-content: space-between;" class="course-category">
                         <div><i class="far fa-bookmark"></i>@course.CategoryName</div>
                         <div>@course.StatusTitle<i style="margin-left:6px;" class="fas fa-graduation-cap"></i></div>
                     </a>
-                    <a   class="course-category"></a>
+                    <a class="course-category"></a>
                 </div>
                 <div class="course-info">
                     <div class="course-title">
-                        <a onclick="openEditForm('/Admin/Course',@course.Id)"  >@course.Name</a>
+                        <a onclick="openEditForm('/Admin/Course',@course.Id)">@course.Name</a>
                     </div>
                     <div class="course-instructor">
                         <div style="display:flex;justify-content: space-between;">
-                            <a style="font-weight:bold"  >@course.TeacherName @course.TeacherLastName</a>
-                            <a style="font-weight:500;"  >@course.StartDateStr - @course.EndDateStr</a>
+                            <a style="font-weight:bold">@course.TeacherName @course.TeacherLastName</a>
+                            <a style="font-weight:500;">@course.StartDateStr - @course.EndDateStr</a>
                         </div>
-                        <a  >@course.Description</a>
+                        <a>@course.Description</a>
                     </div>
                     <div class="course-rate-price">
                         <div class="rating">
                             <span>@course.TotalHour Saat</span>
                             <br>
-                            <a  >Saatlik Ücret: @course.PricePerHour ₺</a>
+                            <a>Saatlik Ücret: @course.PricePerHour ₺</a>
                         </div>
-                        <div class="price"><a style="font-size:small;"  >@course.Quota / @course.Quota Kontenjan Kaldı</a><br> Fiyat: @course.TotalPrice ₺</div>
+                        <div class="price"><a style="font-size:small;">@course.Quota / @course.Quota Kontenjan Kaldı</a><br> Fiyat: @course.TotalPrice ₺</div>
                     </div>
                 </div>
             </div>
@@ -58,16 +58,16 @@
             <div class="social-icon-round card-button-fix">
                 <ul>
                     <!-- Trash Button -->
-                    <li><a   onclick="deleteRow('/Admin/Course',@course.Id)" class="deletebutton cardbutton"><i class="fa fa-trash"></i></a></li>
-                    <li><a   onclick="openEditForm('/Admin/Course',@course.Id)" class="editbutton cardbutton"><i class="fas fa-wrench"></i></a></li>
-                    <li><a   class="examinebutton cardbutton"><i class="fa fa-search"></i></a></li>
+                    <li><a onclick="deleteRow('/Admin/Course',@course.Id)" class="deletebutton cardbutton"><i class="fa fa-trash"></i></a></li>
+                    <li><a onclick="openEditForm('/Admin/Course',@course.Id)" class="editbutton cardbutton"><i class="fas fa-wrench"></i></a></li>
+                    <li><a class="examinebutton cardbutton"><i class="fa fa-search"></i></a></li>
                 </ul>
             </div>
             <div class="row g-0 box-shadow mb-4">
                 <div class="col-sm-5">
                     <div class="course-img h-100">
                         <img class="img-fluid" src="~/images/course/default.jpg" alt="">
-                        <a   style="display:flex;justify-content: space-between;" class="course-category">
+                        <a style="display:flex;justify-content: space-between;" class="course-category">
                             <div><i class="far fa-bookmark"></i>@course.CategoryName</div>
                             <div>@course.StatusTitle<i style="margin-left:6px;" class="fas fa-graduation-cap"></i></div>
                         </a>
@@ -77,12 +77,12 @@
                     <div class="course-info p-0 h-100">
                         <div class="px-4 pt-4">
                             <div class="course-title">
-                                <a  >@course.Name</a>
+                                <a>@course.Name</a>
                             </div>
                             <div class="course-instructor mb-2">
                                 <div style="display:flex;justify-content: space-between;">
-                                    <a style="font-weight:bold"  >@course.TeacherName @course.TeacherLastName</a>
-                                    <a style="font-weight:500;"  >@course.StartDateStr - @course.EndDateStr</a>
+                                    <a style="font-weight:bold">@course.TeacherName @course.TeacherLastName</a>
+                                    <a style="font-weight:500;">@course.StartDateStr - @course.EndDateStr</a>
                                 </div>
                             </div>
                             <p class="mb-0">@course.Description</p>
@@ -91,9 +91,50 @@
                             <div class="rating">
                                 <span>@course.TotalHour Saat</span>
                                 <br>
-                                <a  >Saatlik Ücret: @course.PricePerHour ₺</a>
+                                <a>Saatlik Ücret: @course.PricePerHour ₺</a>
                             </div>
-                            <div class="price"><a style="font-size:small;"  >@course.Quota / @course.Quota Kontenjan Kaldı</a><br> Fiyat: @course.TotalPrice ₺</div>
+                            <div class="price"><a style="font-size:small;">@course.Quota / @course.Quota Kontenjan Kaldı</a><br> Fiyat: @course.TotalPrice ₺</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+@if (Model != null && Model.Count > 0 && ViewBag.Listing == "slider")
+{
+    foreach (var course in Model)
+    {
+        <div class="owl-item cloned" style="width: 241.532px; margin-right: 20px;">
+            <div class="item">
+                <div class="course">
+                  
+                    <div class="course-img">
+                        <img class="img-fluid" src="~/images/course/default.jpg" alt="">
+                        <a style="display:flex;justify-content: space-between;" class="course-category">
+                            <div><i class="far fa-bookmark"></i>@course.CategoryName</div>
+                            <div>@course.StatusTitle<i style="margin-left:6px;" class="fas fa-graduation-cap"></i></div>
+                        </a>
+                        <a class="course-category"></a>
+                    </div>
+                    <div class="course-info">
+                        <div class="course-title">
+                            <a onclick="openEditForm('/Admin/Course',@course.Id)">@course.Name</a>
+                        </div>
+                        <div class="course-instructor">
+                            <div style="display:flex;justify-content: space-between;">
+                                <a style="font-weight:bold">@course.TeacherName @course.TeacherLastName</a>
+                                <a style="font-weight:500;">@course.StartDateStr - @course.EndDateStr</a>
+                            </div>
+                            <a>@course.Description</a>
+                        </div>
+                        <div class="course-rate-price">
+                            <div class="rating">
+                                <span>@course.TotalHour Saat</span>
+                                <br>
+                                <a>Saatlik Ücret: @course.PricePerHour ₺</a>
+                            </div>
+                            <div class="price"><a style="font-size:small;">@course.Quota / @course.Quota Kontenjan Kaldı</a><br> Fiyat: @course.TotalPrice ₺</div>
                         </div>
                     </div>
                 </div>
