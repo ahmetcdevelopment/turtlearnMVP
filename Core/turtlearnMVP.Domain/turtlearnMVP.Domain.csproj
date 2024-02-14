@@ -10,4 +10,8 @@
     <ProjectReference Include="..\TurtLearn.Shared\TurtLearn.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTOs\ApiDTOs\" />
+  </ItemGroup>
+
 </Project>
