@@ -3,16 +3,16 @@ using turtlearnMVP.Domain.DTOs;
 
 namespace turtlearnMVP.WEB.Search
 {
-    //Course ile ilgili Filtrelemeler Buradadır. Yeni bir filtreleme sınıfı yazılırken İlgili Filtreleme adı ile class açılmalı. -utarid
+    //Course ile ilgili Filtrelemeler Buradadır. Yeni bir filtreleme sınıfı yazılırken İlgili Filtreleme adı ile class açılmalı.
     public class Course
     {
-        //filtreleme kriterleri burada belirlenir. isme bir standart getirmek adına bu şekilde yapıldı. -utarid
+        //filtreleme kriterleri burada belirlenir. isme bir standart getirmek adına bu şekilde yapıldı.
         public class Criteria
         {
             public string Name { get; set; }
         }
 
-        //türetilen kriter sınıfı doldurulur ve namespace yazılarak buraya geri gönderilir -utarid
+        //türetilen kriter sınıfı doldurulur ve namespace yazılarak buraya geri gönderilir.
         public Expression<Func<CourseDTO, bool>> CreateFilter(Criteria criteria)
         {
             Expression<Func<CourseDTO, bool>> filter = null;
@@ -41,6 +41,5 @@ namespace turtlearnMVP.WEB.Search
     /// Expression<Func<CourseDTO, bool>> filter = search.CreateFilter(criteria);  // filtre oluşturmak için yine aynı namespaceden metot kullanılır
     /// IList<CourseDTO> courses = _courseService.FetchAllDtos(filter).Data; //filtreli data çekilir.
     /// -------------------------------------------------------------------------------/ 
-    /// -utarid
     /// </summary>
 }
