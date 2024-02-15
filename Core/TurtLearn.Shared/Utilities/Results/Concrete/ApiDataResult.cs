@@ -17,6 +17,15 @@ public class ApiDataResult<T> : IDataResult<T>
         Key = _Key;
         ResponseDate = DateTime.Now;
     }
+    public ApiDataResult(string _Key, ResultStatus resultStatus, T data, IDictionary<string, string[]> validationPairs)
+    {
+        ResultStatus = resultStatus;
+        Data = data;
+        Key = _Key;
+        ResponseDate = DateTime.Now;
+        ValidationPairs = validationPairs;
+    }
+
 
     public ApiDataResult(string _Key, ResultStatus resultStatus, string message, T data)
     {
@@ -25,6 +34,15 @@ public class ApiDataResult<T> : IDataResult<T>
         Key = _Key;
         Data = data;
         ResponseDate = DateTime.Now;
+    }
+    public ApiDataResult(string _Key, ResultStatus resultStatus, string message, T data, IDictionary<string, string[]> validationPairs)
+    {
+        ResultStatus = resultStatus;
+        Message = message;
+        Key = _Key;
+        Data = data;
+        ResponseDate = DateTime.Now;
+        ValidationPairs = validationPairs;
     }
     public ApiDataResult(string _Key, ResultStatus resultStatus, string message, T data, Exception exception)
     {
@@ -37,6 +55,7 @@ public class ApiDataResult<T> : IDataResult<T>
     }
     public string Key { get; set; }
     public DateTime ResponseDate { get; set; }
+    public IDictionary<string, string[]> ValidationPairs { get; set; }
     public T Data { get; }
 
     public ResultStatus ResultStatus { get; }

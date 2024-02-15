@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TurtLearn.Shared.Entities.Concrete;
 
-namespace turtlearnMVP.Persistance.Validations
+namespace turtlearnMVP.Persistance.Validations.Entities
 {
     public class UserValidator : AbstractValidator<User>
     {

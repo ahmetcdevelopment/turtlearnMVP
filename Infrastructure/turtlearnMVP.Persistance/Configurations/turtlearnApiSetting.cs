@@ -22,7 +22,7 @@ public static class turtlearnApiSetting
     /// <param name="key"></param>
     /// <returns></returns>
     public static async Task<bool> isKeyValid(string key)
-    => _Key.Trim().ToLower().Equals(key.Trim().ToLower(), StringComparison.OrdinalIgnoreCase);
+    => _Key.Trim().Equals(key.Trim(), StringComparison.OrdinalIgnoreCase);
     public static async Task generateKey()
     {
         _Key = _Key.GenerateRandomString(20);

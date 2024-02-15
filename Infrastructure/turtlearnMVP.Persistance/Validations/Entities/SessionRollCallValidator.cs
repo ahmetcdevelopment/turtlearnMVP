@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using turtlearnMVP.Domain.Entities;
 
-namespace turtlearnMVP.Persistance.Validations
+namespace turtlearnMVP.Persistance.Validations.Entities
 {
     public class SessionRollCallValidator : AbstractValidator<SessionRollCall>
     {

@@ -46,7 +46,7 @@ namespace turtlearnMVP.Persistance.Services
 
         public IDataResult<IList<CourseDTO>> FetchAllDtos(Expression<Func<CourseDTO, bool>> filter = null)
         {
-            var allQueryableRecords = _UnitOfWork.Courses.GetAllQueryableRecords().AsQueryable();
+            var allQueryableRecords = _UnitOfWork.Courses.GetAllQueryableRecords();
 
             // Eğer bir filtre varsa, veriyi filtrele
             if (filter != null)

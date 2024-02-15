@@ -17,6 +17,14 @@ namespace TurtLearn.Shared.Utilities.Results.Concrete
             Message = message;
             ResponseDate = DateTime.Now;
         }
+        public ApiResult(string _Key, ResultStatus resultStatus, string message, IDictionary<string, string[]> validationPairs)
+        {
+            Key = _Key;
+            ResultStatus = resultStatus;
+            Message = message;
+            ResponseDate = DateTime.Now;
+            ValidationPairs = validationPairs;
+        }
         public ApiResult(string _Key, ResultStatus resultStatus, Exception exception)
         {
             ResultStatus = resultStatus;
@@ -34,6 +42,7 @@ namespace TurtLearn.Shared.Utilities.Results.Concrete
         }
         public string Key { get; set; }
         public DateTime ResponseDate { get; set; }
+        public IDictionary<string,string[]> ValidationPairs { get; set; }
         public ResultStatus ResultStatus { get; }
 
         public string Message { get; }
