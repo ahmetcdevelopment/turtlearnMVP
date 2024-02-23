@@ -85,18 +85,20 @@ namespace turtlearnMVP.WEB.Areas.API
           : BadRequest(new ApiDataResult<IList<CourseDTO>>(_Key, ResultStatus.Error,
           Messages.FailedDelete(TableExtensions.GetTableTitle<Course>()), courseListResult.Data));
         }
-        //[AllowAnonymous]
-        //[HttpPost("GetCourseDetails")]
-        //public async Task<IActionResult> GetCourseDetails([FromForm] string key, [FromForm] int courseId)
-        //{
-        //    var _Key = await turtlearnApiSetting.getKey();
-        //    if (string.IsNullOrEmpty(key) || !(await turtlearnApiSetting.isKeyValid(key)))
-        //    {
-        //        return BadRequest(new ApiResult(_Key, ResultStatus.Error, Messages.PageIsNotFound));
-        //    }
-        //    var courseResult = await _courseService.GetById(courseId);
-        //    var apiDTO = 
-            
-        //}
+        [AllowAnonymous]
+        [HttpPost("GetCourseDetails")]
+        public async Task<IActionResult> GetCourseDetails([FromForm] string key, [FromForm] int courseId)
+        {
+            var _Key = await turtlearnApiSetting.getKey();
+            if (string.IsNullOrEmpty(key) || !(await turtlearnApiSetting.isKeyValid(key)))
+            {
+                return BadRequest(new ApiResult(_Key, ResultStatus.Error, Messages.PageIsNotFound));
+            }
+            var result = await _courseService.GetCourseDetailApiDTO(courseId);
+            return result.ResultStatus == ResultStatus.Success && result.Data != null
+                ? Ok(new ApiDataResult<CourseDetailApiDTO>(_Key, ResultStatus.Success, result.Data))
+           : BadRequest(new ApiDataResult<CourseDetailApiDTO>(_Key, ResultStatus.Error,
+           Messages.FailedUpdate(TableExtensions.GetTableTitle<Course>()), result.Data ?? new CourseDetailApiDTO()));
+        }
     }
 }

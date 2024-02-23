@@ -12,6 +12,7 @@ using TurtLearn.Shared.Utilities.Results.Concrete;
 using turtlearnMVP.Application.Persistance;
 using turtlearnMVP.Application.Persistance.Services;
 using turtlearnMVP.Domain.DTOs;
+using turtlearnMVP.Domain.DTOs.ApiDTOs;
 using turtlearnMVP.Domain.Entities;
 using turtlearnMVP.Domain.Enums;
 
@@ -98,5 +99,9 @@ namespace turtlearnMVP.Persistance.Services
             }
             return new Result(ResultStatus.Error, message);
         }
+
+        public async Task<IDataResult<CourseDetailApiDTO>> GetCourseDetailApiDTO(int courseId)
+        => courseId > 0 ? new DataResult<CourseDetailApiDTO>(ResultStatus.Success, await _UnitOfWork.Courses.GetCourseDetailsAsync(courseId))
+            : new DataResult<CourseDetailApiDTO>(ResultStatus.Error, $"Aradığınız kurs mevcut değil", null);
     }
 }

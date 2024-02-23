@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TurtLearn.Shared.Utilities.Results.Abstract;
 using turtlearnMVP.Domain.DTOs;
+using turtlearnMVP.Domain.DTOs.ApiDTOs;
 using turtlearnMVP.Domain.Entities;
 
 namespace turtlearnMVP.Application.Persistance.Services
@@ -17,5 +18,6 @@ namespace turtlearnMVP.Application.Persistance.Services
         Task<IResult> UpdateOrDelete(Course entity);
         IDataResult<IList<CourseDTO>> FetchAllDtos(Expression<Func<CourseDTO, bool>> filter= null);
         Task<IDataResult<Course>> GetById(int id);
+        Task<IDataResult<CourseDetailApiDTO>> GetCourseDetailApiDTO(int courseId);
     }
 }
