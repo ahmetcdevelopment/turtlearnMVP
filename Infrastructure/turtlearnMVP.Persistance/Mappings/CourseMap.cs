@@ -36,7 +36,7 @@ namespace turtlearnMVP.Persistance.Mappings
             builder.Property(c => c.TotalPrice).IsRequired();
 
             builder.Property(c => c.Status).IsRequired();
-
+            builder.Property(c => c.Description).HasMaxLength(500);
 
             builder.Property(c => c.IsDeleted).IsRequired().HasDefaultValue(false);
 
