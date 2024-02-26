@@ -14,7 +14,7 @@ using turtlearnMVP.Domain.DTOs.ApiDTOs;
 using turtlearnMVP.Domain.Entities;
 using turtlearnMVP.Persistance.Configurations;
 using turtlearnMVP.Persistance.Validations.Entities;
-using turtlearnMVP.WEB.Search;
+//using turtlearnMVP.WEB.Search;
 
 namespace turtlearnMVP.WEB.Areas.API;
 
