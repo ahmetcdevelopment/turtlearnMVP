@@ -26,6 +26,7 @@ namespace turtlearnMVP.Persistance.Repositories.EntityFramework
                         select new HomeworkDTO
                         {
                             Id = H.Id,
+                            SessionId = S.Id,
                             SessionInfo = S.Name,
                             StartDate = H.StartDate,//ödevin başlangıç tarihi
                             EndDate = H.EndDate,//ödevin bitiş tarihi

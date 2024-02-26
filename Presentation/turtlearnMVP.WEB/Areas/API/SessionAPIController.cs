@@ -89,5 +89,15 @@ public class SessionAPIController : ControllerBase
       : BadRequest(new ApiDataResult<List<SessionDTO>>(_Key, ResultStatus.Error,
       Messages.FailedDelete(TableExtensions.GetTableTitle<Session>()), sessionListResult.Data));
     }
-    
+    [AllowAnonymous]
+    [HttpPost("GetSessionDetails")]
+    public async Task<IActionResult> GetSessionDetails([FromForm] string key, [FromForm] int sessionId)
+    {
+        var _Key = await turtlearnApiSetting.getKey();
+        if (string.IsNullOrEmpty(key) || !(await turtlearnApiSetting.isKeyValid(key)))
+        {
+            return BadRequest(new ApiResult(_Key, ResultStatus.Error, Messages.PageIsNotFound));
+        }
+
+    }
 }

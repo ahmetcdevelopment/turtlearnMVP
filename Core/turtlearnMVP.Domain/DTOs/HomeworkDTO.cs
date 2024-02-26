@@ -11,10 +11,11 @@ namespace turtlearnMVP.Domain.DTOs;
 public class HomeworkDTO : IDto
 {
     public int Id { get; set; }
+
     /// <summary>
     /// Ödevin ait olduğu oturum.
     /// </summary>
-
+    public int SessionId { get; set; }
     public string SessionInfo { get; set; }//Oturum bilgisi
 
     /// <summary>
