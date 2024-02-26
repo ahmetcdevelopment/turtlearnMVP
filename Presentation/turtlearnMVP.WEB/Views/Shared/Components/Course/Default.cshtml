@@ -101,14 +101,22 @@
         </div>
     }
 }
-@if (Model != null && Model.Count > 0 && ViewBag.Listing == "slider")
+@if (Model != null && Model.Count > 0 && ViewBag.Listing == "slidera")
 {
-    foreach (var course in Model)
-    {
-        <div class="owl-item cloned" style="width: 241.532px; margin-right: 20px;">
+    @* <div class="owl-stage-outer"> *@
+    <div class="owl-stage" style="transform: translate3d(-7188px, 0px, 0px); transition: all 1s ease 0s; width: 15276px;">
+        @* <div class="owl-item cloned" style="width: 878.532px; margin-right: 20px;"> *@
+
+
+        @* <div class="owl-carousel testimonial-center" data-nav-dots="false" data-nav-arrow="false" data-items="@Model.Count" data-md-items="3" data-sm-items="2" data-xs-items="2" data-xx-items="1" data-space="20" data-autoheight="false"> *@
+        @foreach (var course in Model)
+        {
+
+            <div style="z-index:99999" class="owl-item active" style="width: 241.532px; margin-right: 20px;">
+                @* <div class="col-md-12"> *@
             <div class="item">
                 <div class="course">
-                  
+
                     <div class="course-img">
                         <img class="img-fluid" src="~/images/course/default.jpg" alt="">
                         <a style="display:flex;justify-content: space-between;" class="course-category">
@@ -138,7 +146,59 @@
                         </div>
                     </div>
                 </div>
+                @* </div> *@
+                 </div> 
             </div>
-        </div>
-    }
+        }
+        @* </div> *@
+    </div>
+    @* </div> *@
+    @* </div> *@
+}
+@if (Model != null && Model.Count > 0 && ViewBag.Listing == "slider")
+{
+    <div>c</div>
+    @* <div class="owl-stage-outer"> *@
+        @* <div class="owl-stage" style="transform: translate3d(-7188px, 0px, 0px); transition: all 1s ease 0s; width: 15276px;"> *@
+            @foreach (var course in Model)
+            {
+                
+                <div style="z-index:99999" class="owl-item active" style="width: 241.532px; margin-right: 20px;">b
+                    <div class="item">
+                        <div class="course">
+                            <div class="course-img">
+                                <img class="img-fluid" src="~/images/course/default.jpg" alt="">
+                                <a style="display:flex;justify-content: space-between;" class="course-category">
+                                    <div><i class="far fa-bookmark"></i>@course.CategoryName</div>
+                                    <div>@course.StatusTitle<i style="margin-left:6px;" class="fas fa-graduation-cap"></i></div>
+                                </a>
+                                <a class="course-category"></a>
+                            </div>
+                            <div class="course-info">
+                                <div class="course-title">
+                                    <a onclick="openEditForm('/Admin/Course',@course.Id)">@course.Name</a>
+                                </div>
+                                <div class="course-instructor">
+                                    <div style="display:flex;justify-content: space-between;">
+                                        <a style="font-weight:bold">@course.TeacherName @course.TeacherLastName</a>
+                                        <a style="font-weight:500;">@course.StartDateStr - @course.EndDateStr</a>
+                                    </div>
+                                    <a>@course.Description</a>
+                                </div>
+                                <div class="course-rate-price">
+                                    <div class="rating">
+                                        <span>@course.TotalHour Saat</span>
+                                        <br>
+                                        <a>Saatlik Ücret: @course.PricePerHour ₺</a>
+                                    </div>
+                                    <div class="price"><a style="font-size:small;">@course.Quota / @course.Quota Kontenjan Kaldı</a><br> Fiyat: @course.TotalPrice ₺</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            }
+        @* </div> *@
+    @* </div> *@
 }

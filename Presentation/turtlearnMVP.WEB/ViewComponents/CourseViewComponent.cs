@@ -17,19 +17,19 @@ namespace turtlearnMVP.WEB.ViewComponents
 
         public IViewComponentResult Invoke(dynamic arguments)
         {
-            var search = new Search.Course();
-            var criteria = new Search.Course.Criteria
-            {
-                Name = "matematik"
-            };
-            Expression<Func<CourseDTO, bool>> filter = search.CreateFilter(criteria);
-            IList<CourseDTO> courses = _courseService.FetchAllDtos(filter).Data;
+            //var search = new Search.Course();
+            //var criteria = new Search.Course.Criteria
+            //{
+            //    Name = "matematik"
+            //};
+            //Expression<Func<CourseDTO, bool>> filter = search.CreateFilter(criteria);
+            //IList<CourseDTO> courses = _courseService.FetchAllDtos(filter).Data;
             string lastListingType = "grid";
             if (arguments.refresh)
             {
                 lastListingType = HttpContext.Request.Cookies["LastListingType"];
             }
-
+            var courses = arguments.Courses; 
             string currentListingType = arguments.listingType ?? lastListingType;
             HttpContext.Response.Cookies.Append("LastListingType", currentListingType);
             ViewBag.Listing = currentListingType;

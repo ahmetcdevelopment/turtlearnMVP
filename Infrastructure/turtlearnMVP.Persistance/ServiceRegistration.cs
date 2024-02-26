@@ -1,14 +1,18 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Linq.Expressions;
 using TurtLearn.Shared.Searching;
 using turtlearnMVP.Application.Persistance;
+using turtlearnMVP.Application.Persistance.SearchFilters;
 using turtlearnMVP.Application.Persistance.Services;
 using turtlearnMVP.Domain.DTOs;
 using turtlearnMVP.Persistance.Configurations;
 using turtlearnMVP.Persistance.Context;
 using turtlearnMVP.Persistance.Repositories;
+using turtlearnMVP.Persistance.SearchFilters;
 using turtlearnMVP.Persistance.Services;
+//using static TurtLearn.Shared.Searching.BaseExpressions<T>;
 
 namespace turtlearnMVP.Persistance
 {
@@ -28,8 +32,21 @@ namespace turtlearnMVP.Persistance
             services.AddScoped<ISessionRollCallService, SessionRollCallManager>();
             services.AddScoped<IMailService, MailManager>();
             services.AddScoped<IUserSettingService, UserSettingManager>();
+            //services.AddScoped<ISearchService, SearchManager>();
 
-            services.AddScoped<ISearch<CategoryDTO>, Search<CategoryDTO>>();
+            services.AddTransient<Expression<Func<CourseDTO, bool>>>(_ => _ => true);
+
+            //services.AddScoped<ISearch<CourseDTO>, Search<CourseDTO>>();
+            //services.AddScoped<ISearch<CourseDTO>, StringContains>();
+            services.AddScoped<ISearch<CourseDTO>, AndSearch<CourseDTO>>();
+            services.AddScoped<BaseExpressions<CourseDTO>.StringContains>();
+            services.AddScoped<AndSearch<CourseDTO>>();
+            //services.AddScoped(typeof(ISearch<CourseDTO>), typeof(AndSearch<CourseDTO>));
+
+
+            //search denemesi
+            services.AddScoped<ICourseFilter<CourseDTO>, CourseFilter>();
+            services.AddScoped(typeof(ISearchService<CourseDTO>), typeof(SearchManager<CourseDTO>));
 
         }
     }

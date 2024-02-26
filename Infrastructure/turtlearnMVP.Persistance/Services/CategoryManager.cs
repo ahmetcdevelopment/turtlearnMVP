@@ -13,7 +13,7 @@ using TurtLearn.Shared.Utilities.Results.Concrete;
 using turtlearnMVP.Application.Persistance;
 using turtlearnMVP.Application.Persistance.Services;
 using turtlearnMVP.Domain.DTOs;
-using turtlearnMVP.Domain.DTOs.QueryDTOs;
+//using turtlearnMVP.Domain.DTOs.QueryDTOs;
 using turtlearnMVP.Domain.Entities;
 using turtlearnMVP.Domain.Enums;
 using turtlearnMVP.Persistance.Repositories;
@@ -24,11 +24,11 @@ namespace turtlearnMVP.Persistance.Services
     public class CategoryManager : ICategoryService
     {
         private readonly IUnitOfWork _UnitOfWork;
-        private readonly ISearch<CategoryDTO> _Search;
-        public CategoryManager(IUnitOfWork unitOfWork, ISearch<CategoryDTO> search)
+        //private readonly ISearch<CategoryDTO> _Search;
+        public CategoryManager(IUnitOfWork unitOfWork/*, ISearch<CategoryDTO> search*/)
         {
             _UnitOfWork = unitOfWork;
-            _Search = search;
+            //_Search = search;
         }
 
         private static string _tableNameTR = TableExtensions.GetTableTitle<Category>();

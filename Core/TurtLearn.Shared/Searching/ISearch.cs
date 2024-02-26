@@ -9,9 +9,10 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace TurtLearn.Shared.Searching
 {
-    public interface ISearch<TDto> where TDto : class, IDto, new()
+    public interface ISearch<T>
     {
-        public IQueryable<TDto> FilterData(IQueryable<TDto> _Query, params Expression<Func<TDto, bool>>[] Exp);
-        public int GetPropertyCount();
+        bool IsSatisfiedBy(T entity);
+        Expression<Func<T, bool>> ToExpression(dynamic arguments);
+        ISearch<T> And(Expression<Func<T, bool>> left, Expression<Func<T, bool>> right);
     }
 }

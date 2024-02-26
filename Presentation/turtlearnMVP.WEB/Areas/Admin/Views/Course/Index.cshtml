@@ -2,7 +2,9 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-    ViewData["Title"] = "Category";
+    ViewData["Title"] = "Course";
+
+    var emptySelectList = new SelectList(new List<SelectListItem>(), "Value", "Text");
 }
 <style>
 
@@ -55,6 +57,7 @@
 <div class="tab-content" id="myTabContent">
     @* Kurs Section *@
     <div class="tab-pane fade show active" id="courseSection" role="tabpanel" aria-labelledby="course-tab">
+
         <section style="max-width:100vw !important;" class="space-ptb">
             <div class="row">
                 <div class="col-md-12 col-xl-12 mt-4 mt-md-0 order-2 order-lg-1">
@@ -78,7 +81,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <form id="courseFilterForm" class="filterForm row" data-filter-class="Course" data-result-div-id="viewComponentContainer" data-result-target-url="/Admin/Course/GetCourseViewComponent" onsubmit="return false">
+                                @* <input type="text" name="Name" placeholder="İsim"> *@
                                 <div class="col-lg-1 mt-5 mt-lg-0"></div>
                                 <div class="col-lg-7 mt-5 mt-lg-0">
                                     <div class="row mb-4">
@@ -89,7 +93,7 @@
                                     <div class="course-filter d-sm-flex mb-4">
                                         <ul class="course-short list-unstyled d-sm-flex mb-0">
                                             <li>
-                                                <form class="form-inline">
+                                                <div class="form-inline">
                                                     <div class="form-group d-sm-flex d-block align-items-center">
                                                         <label class="justify-content-start">Short by:</label>
                                                         <div class="short-by">
@@ -102,12 +106,12 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                </form>
+                                                </div>
                                             </li>
                                         </ul>
                                         <ul class="course-view-list list-unstyled d-flex mb-0">
                                             <li>
-                                                <form class="form-inline">
+                                                <div class="form-inline">
                                                     <div class="form-group d-sm-flex d-block align-items-center">
                                                         <label class="justify-content-start pe-4">Sort by: </label>
                                                         <div class="short-by">
@@ -120,7 +124,7 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                </form>
+                                                </div>
                                             </li>
                                             <li><a href="index-05.html"><i class="fas fa-map-marker-alt fa-lg"></i></a></li>
                                             <li>
@@ -144,7 +148,7 @@
 
                                         <div class="row justify-content-center h-100">
                                             <div class="col-md-10 text-center my-4 align-self-center" style="color: var(--theme-color);">
-                                                <div class="maintenance-icon mb-4 mb-md-5" >
+                                                <div class="maintenance-icon mb-4 mb-md-5">
                                                     <img src="~/images/turtlearn/loading.svg" alt="Loading" class="fa-spin" style="width: 8em; height: 8em; color: var(--theme-color);">
                                                 </div>
                                                 <h5 class="text-primary">Yükleniyor...</h5>
@@ -188,14 +192,77 @@
                                 <div class="col-lg-3">
                                     <div class="widgets">
                                         <div class="widget widget-serach">
-                                            <h6 class="widget-title">Search</h6>
-                                            <div class="widget-content">
-                                                <form class="fill-form">
-                                                    <div class="form-group mb-3">
-                                                        <input type="text" class="form-control" placeholder="Search">
+                                            <h6 class="widget-title">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <h3>
+                                                            Filtreler
+                                                        </h3>
                                                     </div>
-                                                    <button type="button" class="btn btn-primary">Search</button>
-                                                </form>
+                                                    <div class="col-md-4">
+                                                    </div>
+                                                    <div class="col-md-4 widget-title-right">
+                                                        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                                                    </div>
+                                                </div>
+                                            </h6>
+                                            <div class="widget-content">
+                                                <div class="fill-form">
+                                                    <div class="form-group mb-3">
+                                                        <div class="form-floating">
+                                                            @Html.TextBox("Name", null, new { placeholder = "Kurs Adı", @class = "form-control form-setting" })
+                                                            <label class="float-setting text-dark fw-bold" for="floatingInput">Kurs Adı</label>
+                                                        </div>
+                                                        <hr />
+                                                        
+                                                        @Html.DropDownList("CategoryId", emptySelectList, "Kategori", new { @class = "form-control form-setting form-select zuraf-select", data_fill_target_url = "/Admin/Category/GetAsSelectList", @placeholder = "Kategori" })
+                                                        <hr />
+
+
+                                                        @Html.DropDownList("Status", emptySelectList, "Kategori", new { @class = "form-control form-setting form-select zuraf-select", data_fill_target_url = "/Admin/Category/GetAsSelectList", @placeholder = "Ders Türü" })
+                                                        <hr />
+
+                                                        <div class=" form-floating">
+                                                            @Html.TextArea("TeacherName", null, new { placeholder = "Öğretmen Adı", @class = "form-control form-setting" })
+                                                            <label class="float-setting text-dark fw-bold" for="floatingInput">Öğretmen Adı</label>
+                                                        </div>
+                                                        <hr />
+
+                                                        <div class=" form-floating">
+                                                            @Html.TextBox("Quota", null, new { placeholder = "Kota(düşünülecek)", @class = "form-control form-setting", @disabled = true })
+                                                            <label class="float-setting text-dark fw-bold" for="floatingInput">Kota</label>
+                                                        </div>
+                                                        <hr />
+                                                        
+                                                        <div class="price_label">
+                                                            Saatlik Ücret
+                                                        </div>
+                                                        <div class="input-group date">
+
+                                                            @Html.TextBox("PricePerHourMin", null, new { @class = "form-control form-setting datetimepicker-input", @placeholder = "En Az" })
+                                                            <div class="input-group-append form-setting" data-target="#startDate" data-toggle="datetimepicker">
+                                                                <div style="border-radius: 0px 0px 0px 0px;background-color: var(--theme-color) !important; color:whitesmoke !important;" class="input-group-text">₺</div>
+                                                            </div>
+                                                            @Html.TextBox("PricePerHourMax", null, new { @class = "form-control form-setting datetimepicker-input", @placeholder = "En Çok" })
+                                                        </div>
+                                                        <hr />
+
+                                                        <div class="price_label">
+                                                            Toplam Ücret
+                                                        </div>
+                                                        <div class="input-group date">
+
+                                                            @Html.TextBox("TotalPriceMin", null, new { @class = "form-control form-setting datetimepicker-input", @placeholder = "En Az" })
+                                                            <div class="input-group-append form-setting" data-target="#startDate" data-toggle="datetimepicker">
+                                                                <div style="border-radius: 0px 0px 0px 0px;background-color: var(--theme-color) !important; color:whitesmoke !important;" class="input-group-text">₺</div>
+                                                            </div>
+                                                            @Html.TextBox("TotalPriceMax", null, new { @class = "form-control form-setting datetimepicker-input", @placeholder = "En Çok" })
+                                                        </div>
+                                                        <hr />
+
+                                                    </div>
+
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="widget widget-Categories">
@@ -287,8 +354,9 @@
                                         </div>
                                     </div>
                                 </div>
-
-                            </div>
+                                @* <button type="submit">Filtrele</button> *@
+                                @* </form> *@
+                            </form>
 
                             @*  <div class="widget-content">
                             <table id="jqGridCourse"></table>
@@ -428,199 +496,199 @@ blog single -->
     // }
 
     var grid;
-    var grid1 = $("#jqGridCourse");
-    var grid2 = $("#jqGridEnrollment");
-    var grid3 = $("#jqGridStudent");
-    var grid4 = $("#jqGridComment");
+    // var grid1 = $("#jqGridCourse");
+    // var grid2 = $("#jqGridEnrollment");
+    // var grid3 = $("#jqGridStudent");
+    // var grid4 = $("#jqGridComment");
 
-    grid1.jqGrid({
-        url: '/Admin/Course/GetAllToGrid',
-        mtype: "GET",
-        datatype: "json",
-        colNames: ["Id", "Öğretmen Adı", "Öğretmen Soyadı", "Kategorisi", "Başlangıç Tarihi", "Bitiş Tarihi", "Kota", "Kurs Adı", "Saatlik Ücret", "Toplam Saat", "Toplam Fiyat", "Açıklama", "Durum", "Actions"],
-        colModel: [
-            { name: 'Id', key: true, width: 15, hidden: true },
-            { name: 'TeacherName', width: 100 },
-            { name: 'TeacherLastName', width: 100 },
-            { name: 'CategoryName', width: 100 },
-            { name: 'StartDateStr', width: 100 },
-            { name: 'EndDateStr', width: 100 },
-            { name: 'Quota', width: 100 },
-            { name: 'Name', width: 100 },
-            { name: 'PricePerHour', width: 100 },
-            { name: 'TotalHour', width: 100 },
-            { name: 'TotalPrice', width: 100 },
-            { name: 'Description', width: 100 },
-            { name: 'StatusTitle', width: 100 },
-            {
-                name: 'actions',
-                width: 100,
-                align: 'center',
-                sortable: false,
-                formatter: function (cellvalue, options, rowObject) {
-                    return '<button style="padding:5px;" class="btn btn-sm btn-primary" onclick="openEditForm(\'/Admin/Course\',' + options.rowId + ',' + "grid1" + ')">Edit</button>&nbsp;&nbsp;&nbsp;' +
-                        '<button style="padding:5px;" class="btn btn-sm btn-error" onclick="deleteRow(\'/Admin/Course\',' + options.rowId + "grid1" + ')">Delete</button>';
-                }
-            }
-        ],
-        loadonce: true,
-        navOptions: { reloadGridOptions: { fromServer: true } },
-        multiSort: true,
-        multiSelect: true,
-        sortable: true,
-        viewrecords: true,
-        search: true,
-        width: "auto",
-        height: "400",
-        rowNum: 15,
-        pager: "#jqGridPagerCourse",
-    });
+    // grid1.jqGrid({
+    //     url: '/Admin/Course/GetAllToGrid',
+    //     mtype: "GET",
+    //     datatype: "json",
+    //     colNames: ["Id", "Öğretmen Adı", "Öğretmen Soyadı", "Kategorisi", "Başlangıç Tarihi", "Bitiş Tarihi", "Kota", "Kurs Adı", "Saatlik Ücret", "Toplam Saat", "Toplam Fiyat", "Açıklama", "Durum", "Actions"],
+    //     colModel: [
+    //         { name: 'Id', key: true, width: 15, hidden: true },
+    //         { name: 'TeacherName', width: 100 },
+    //         { name: 'TeacherLastName', width: 100 },
+    //         { name: 'CategoryName', width: 100 },
+    //         { name: 'StartDateStr', width: 100 },
+    //         { name: 'EndDateStr', width: 100 },
+    //         { name: 'Quota', width: 100 },
+    //         { name: 'Name', width: 100 },
+    //         { name: 'PricePerHour', width: 100 },
+    //         { name: 'TotalHour', width: 100 },
+    //         { name: 'TotalPrice', width: 100 },
+    //         { name: 'Description', width: 100 },
+    //         { name: 'StatusTitle', width: 100 },
+    //         {
+    //             name: 'actions',
+    //             width: 100,
+    //             align: 'center',
+    //             sortable: false,
+    //             formatter: function (cellvalue, options, rowObject) {
+    //                 return '<button style="padding:5px;" class="btn btn-sm btn-primary" onclick="openEditForm(\'/Admin/Course\',' + options.rowId + ',' + "grid1" + ')">Edit</button>&nbsp;&nbsp;&nbsp;' +
+    //                     '<button style="padding:5px;" class="btn btn-sm btn-error" onclick="deleteRow(\'/Admin/Course\',' + options.rowId + "grid1" + ')">Delete</button>';
+    //             }
+    //         }
+    //     ],
+    //     loadonce: true,
+    //     navOptions: { reloadGridOptions: { fromServer: true } },
+    //     multiSort: true,
+    //     multiSelect: true,
+    //     sortable: true,
+    //     viewrecords: true,
+    //     search: true,
+    //     width: "auto",
+    //     height: "400",
+    //     rowNum: 15,
+    //     pager: "#jqGridPagerCourse",
+    // });
 
-    grid2.jqGrid({
-        url: '/Admin/CourseEnrollment/GetAllToGrid',
-        mtype: "GET",
-        datatype: "json",
-        colNames: ["Id", "Öğretmen Adı", "Öğretmen Soyadı", "Kategorisi", "Başlangıç Tarihi", "Bitiş Tarihi", "Kota", "Kurs Adı", "Saatlik Ücret", "Toplam Saat", "Toplam Fiyat", "Açıklama", "Durum", "Actions"],
-        colModel: [
-            { name: 'Id', key: true, width: 15, hidden: true },
-            { name: 'TeacherName', width: 100 },
-            { name: 'TeacherLastName', width: 100 },
-            { name: 'CategoryName', width: 100 },
-            { name: 'StartDateStr', width: 100 },
-            { name: 'EndDateStr', width: 100 },
-            { name: 'Quota', width: 100 },
-            { name: 'Name', width: 100 },
-            { name: 'PricePerHour', width: 100 },
-            { name: 'TotalHour', width: 100 },
-            { name: 'TotalPrice', width: 100 },
-            { name: 'Description', width: 100 },
-            { name: 'StatusTitle', width: 100 },
-            {
-                name: 'actions',
-                width: 100,
-                align: 'center',
-                sortable: false,
-                formatter: function (cellvalue, options, rowObject) {
-                    return '<button style="padding:5px;" class="btn btn-sm btn-primary" onclick="openEditForm(\'/Admin/CourseEnrollment\',' + options.rowId + ',' + "grid2" + ')">Edit</button>&nbsp;&nbsp;&nbsp;' +
-                        '<button style="padding:5px;" class="btn btn-sm btn-error" onclick="deleteRow(\'/Admin/CourseEnrollment\',' + options.rowId + "grid2" + ')">Delete</button>';
-                }
-            }
-        ],
-        loadonce: true,
-        navOptions: { reloadGridOptions: { fromServer: true } },
-        multiSort: true,
-        multiSelect: true,
-        sortable: true,
-        viewrecords: true,
-        search: true,
-        width: "auto",
-        height: "400",
-        rowNum: 15,
-        pager: "#jqGridPagerEnrollment",
-    });
+    // grid2.jqGrid({
+    //     url: '/Admin/CourseEnrollment/GetAllToGrid',
+    //     mtype: "GET",
+    //     datatype: "json",
+    //     colNames: ["Id", "Öğretmen Adı", "Öğretmen Soyadı", "Kategorisi", "Başlangıç Tarihi", "Bitiş Tarihi", "Kota", "Kurs Adı", "Saatlik Ücret", "Toplam Saat", "Toplam Fiyat", "Açıklama", "Durum", "Actions"],
+    //     colModel: [
+    //         { name: 'Id', key: true, width: 15, hidden: true },
+    //         { name: 'TeacherName', width: 100 },
+    //         { name: 'TeacherLastName', width: 100 },
+    //         { name: 'CategoryName', width: 100 },
+    //         { name: 'StartDateStr', width: 100 },
+    //         { name: 'EndDateStr', width: 100 },
+    //         { name: 'Quota', width: 100 },
+    //         { name: 'Name', width: 100 },
+    //         { name: 'PricePerHour', width: 100 },
+    //         { name: 'TotalHour', width: 100 },
+    //         { name: 'TotalPrice', width: 100 },
+    //         { name: 'Description', width: 100 },
+    //         { name: 'StatusTitle', width: 100 },
+    //         {
+    //             name: 'actions',
+    //             width: 100,
+    //             align: 'center',
+    //             sortable: false,
+    //             formatter: function (cellvalue, options, rowObject) {
+    //                 return '<button style="padding:5px;" class="btn btn-sm btn-primary" onclick="openEditForm(\'/Admin/CourseEnrollment\',' + options.rowId + ',' + "grid2" + ')">Edit</button>&nbsp;&nbsp;&nbsp;' +
+    //                     '<button style="padding:5px;" class="btn btn-sm btn-error" onclick="deleteRow(\'/Admin/CourseEnrollment\',' + options.rowId + "grid2" + ')">Delete</button>';
+    //             }
+    //         }
+    //     ],
+    //     loadonce: true,
+    //     navOptions: { reloadGridOptions: { fromServer: true } },
+    //     multiSort: true,
+    //     multiSelect: true,
+    //     sortable: true,
+    //     viewrecords: true,
+    //     search: true,
+    //     width: "auto",
+    //     height: "400",
+    //     rowNum: 15,
+    //     pager: "#jqGridPagerEnrollment",
+    // });
 
-    grid3.jqGrid({
-        url: '/Admin/CourseStudent/GetAllToGrid',
-        mtype: "GET",
-        datatype: "json",
-        colNames: ["Id", "Öğretmen Adı", "Öğretmen Soyadı", "Kategorisi", "Başlangıç Tarihi", "Bitiş Tarihi", "Kota", "Kurs Adı", "Saatlik Ücret", "Toplam Saat", "Toplam Fiyat", "Açıklama", "Durum", "Actions"],
-        colModel: [
-            { name: 'Id', key: true, width: 15, hidden: true },
-            { name: 'TeacherName', width: 100 },
-            { name: 'TeacherLastName', width: 100 },
-            { name: 'CategoryName', width: 100 },
-            { name: 'StartDateStr', width: 100 },
-            { name: 'EndDateStr', width: 100 },
-            { name: 'Quota', width: 100 },
-            { name: 'Name', width: 100 },
-            { name: 'PricePerHour', width: 100 },
-            { name: 'TotalHour', width: 100 },
-            { name: 'TotalPrice', width: 100 },
-            { name: 'Description', width: 100 },
-            { name: 'StatusTitle', width: 100 },
-            {
-                name: 'actions',
-                width: 100,
-                align: 'center',
-                sortable: false,
-                formatter: function (cellvalue, options, rowObject) {
-                    return '<button style="padding:5px;" class="btn btn-sm btn-primary" onclick="openEditForm(\'/Admin/CourseStudent\',' + options.rowId + ',' + "grid3" + ')">Edit</button>&nbsp;&nbsp;&nbsp;' +
-                        '<button style="padding:5px;" class="btn btn-sm btn-error" onclick="deleteRow(\'/Admin/CourseStudent\',' + options.rowId + "grid3" + ')">Delete</button>';
-                }
-            }
-        ],
-        loadonce: true,
-        navOptions: { reloadGridOptions: { fromServer: true } },
-        multiSort: true,
-        multiSelect: true,
-        sortable: true,
-        viewrecords: true,
-        search: true,
-        width: "auto",
-        height: "400",
-        rowNum: 15,
-        pager: "#jqGridPagerStudent",
-    });
+    // grid3.jqGrid({
+    //     url: '/Admin/CourseStudent/GetAllToGrid',
+    //     mtype: "GET",
+    //     datatype: "json",
+    //     colNames: ["Id", "Öğretmen Adı", "Öğretmen Soyadı", "Kategorisi", "Başlangıç Tarihi", "Bitiş Tarihi", "Kota", "Kurs Adı", "Saatlik Ücret", "Toplam Saat", "Toplam Fiyat", "Açıklama", "Durum", "Actions"],
+    //     colModel: [
+    //         { name: 'Id', key: true, width: 15, hidden: true },
+    //         { name: 'TeacherName', width: 100 },
+    //         { name: 'TeacherLastName', width: 100 },
+    //         { name: 'CategoryName', width: 100 },
+    //         { name: 'StartDateStr', width: 100 },
+    //         { name: 'EndDateStr', width: 100 },
+    //         { name: 'Quota', width: 100 },
+    //         { name: 'Name', width: 100 },
+    //         { name: 'PricePerHour', width: 100 },
+    //         { name: 'TotalHour', width: 100 },
+    //         { name: 'TotalPrice', width: 100 },
+    //         { name: 'Description', width: 100 },
+    //         { name: 'StatusTitle', width: 100 },
+    //         {
+    //             name: 'actions',
+    //             width: 100,
+    //             align: 'center',
+    //             sortable: false,
+    //             formatter: function (cellvalue, options, rowObject) {
+    //                 return '<button style="padding:5px;" class="btn btn-sm btn-primary" onclick="openEditForm(\'/Admin/CourseStudent\',' + options.rowId + ',' + "grid3" + ')">Edit</button>&nbsp;&nbsp;&nbsp;' +
+    //                     '<button style="padding:5px;" class="btn btn-sm btn-error" onclick="deleteRow(\'/Admin/CourseStudent\',' + options.rowId + "grid3" + ')">Delete</button>';
+    //             }
+    //         }
+    //     ],
+    //     loadonce: true,
+    //     navOptions: { reloadGridOptions: { fromServer: true } },
+    //     multiSort: true,
+    //     multiSelect: true,
+    //     sortable: true,
+    //     viewrecords: true,
+    //     search: true,
+    //     width: "auto",
+    //     height: "400",
+    //     rowNum: 15,
+    //     pager: "#jqGridPagerStudent",
+    // });
 
-    grid4.jqGrid({
-        url: '/Admin/Comment/GetAllToGrid',
-        mtype: "GET",
-        datatype: "json",
-        colNames: ["Id", "Öğretmen Adı", "Öğretmen Soyadı", "Kategorisi", "Başlangıç Tarihi", "Bitiş Tarihi", "Kota", "Kurs Adı", "Saatlik Ücret", "Toplam Saat", "Toplam Fiyat", "Açıklama", "Durum", "Actions"],
-        colModel: [
-            { name: 'Id', key: true, width: 15, hidden: true },
-            { name: 'TeacherName', width: 100 },
-            { name: 'TeacherLastName', width: 100 },
-            { name: 'CategoryName', width: 100 },
-            { name: 'StartDateStr', width: 100 },
-            { name: 'EndDateStr', width: 100 },
-            { name: 'Quota', width: 100 },
-            { name: 'Name', width: 100 },
-            { name: 'PricePerHour', width: 100 },
-            { name: 'TotalHour', width: 100 },
-            { name: 'TotalPrice', width: 100 },
-            { name: 'Description', width: 100 },
-            { name: 'StatusTitle', width: 100 },
-            {
-                name: 'actions',
-                width: 100,
-                align: 'center',
-                sortable: false,
-                formatter: function (cellvalue, options, rowObject) {
-                    return '<button style="padding:5px;" class="btn btn-sm btn-primary" onclick="openEditForm(\'/Admin/Comment\',' + options.rowId + ',' + "grid4" + ')">Edit</button>&nbsp;&nbsp;&nbsp;' +
-                        '<button style="padding:5px;" class="btn btn-sm btn-error" onclick="deleteRow(\'/Admin/Comment\',' + options.rowId + "grid4" + ')">Delete</button>';
-                }
-            }
-        ],
-        loadonce: true,
-        navOptions: { reloadGridOptions: { fromServer: true } },
-        multiSort: true,
-        multiSelect: true,
-        sortable: true,
-        viewrecords: true,
-        search: true,
-        width: "auto",
-        height: "400",
-        rowNum: 15,
-        pager: "#jqGridPagerComment",
-    });
+    // grid4.jqGrid({
+    //     url: '/Admin/Comment/GetAllToGrid',
+    //     mtype: "GET",
+    //     datatype: "json",
+    //     colNames: ["Id", "Öğretmen Adı", "Öğretmen Soyadı", "Kategorisi", "Başlangıç Tarihi", "Bitiş Tarihi", "Kota", "Kurs Adı", "Saatlik Ücret", "Toplam Saat", "Toplam Fiyat", "Açıklama", "Durum", "Actions"],
+    //     colModel: [
+    //         { name: 'Id', key: true, width: 15, hidden: true },
+    //         { name: 'TeacherName', width: 100 },
+    //         { name: 'TeacherLastName', width: 100 },
+    //         { name: 'CategoryName', width: 100 },
+    //         { name: 'StartDateStr', width: 100 },
+    //         { name: 'EndDateStr', width: 100 },
+    //         { name: 'Quota', width: 100 },
+    //         { name: 'Name', width: 100 },
+    //         { name: 'PricePerHour', width: 100 },
+    //         { name: 'TotalHour', width: 100 },
+    //         { name: 'TotalPrice', width: 100 },
+    //         { name: 'Description', width: 100 },
+    //         { name: 'StatusTitle', width: 100 },
+    //         {
+    //             name: 'actions',
+    //             width: 100,
+    //             align: 'center',
+    //             sortable: false,
+    //             formatter: function (cellvalue, options, rowObject) {
+    //                 return '<button style="padding:5px;" class="btn btn-sm btn-primary" onclick="openEditForm(\'/Admin/Comment\',' + options.rowId + ',' + "grid4" + ')">Edit</button>&nbsp;&nbsp;&nbsp;' +
+    //                     '<button style="padding:5px;" class="btn btn-sm btn-error" onclick="deleteRow(\'/Admin/Comment\',' + options.rowId + "grid4" + ')">Delete</button>';
+    //             }
+    //         }
+    //     ],
+    //     loadonce: true,
+    //     navOptions: { reloadGridOptions: { fromServer: true } },
+    //     multiSort: true,
+    //     multiSelect: true,
+    //     sortable: true,
+    //     viewrecords: true,
+    //     search: true,
+    //     width: "auto",
+    //     height: "400",
+    //     rowNum: 15,
+    //     pager: "#jqGridPagerComment",
+    // });
 
     $(document).ready(function () {
 
-        setGridWidth(grid1);
-        setGridWidth(grid2);
-        setGridWidth(grid3);
-        setGridWidth(grid4);
+        // setGridWidth(grid1);
+        // setGridWidth(grid2);
+        // setGridWidth(grid3);
+        // setGridWidth(grid4);
         var componentTarget = $("#viewComponentContainer")
         getViewComponent(componentTarget, "/Admin/Course/GetCourseViewComponent")
 
     });
 
     $(window).on('resize', function () {
-        setGridWidth(grid1);
-        setGridWidth(grid2);
-        setGridWidth(grid3);
-        setGridWidth(grid4);
+        // setGridWidth(grid1);
+        // setGridWidth(grid2);
+        // setGridWidth(grid3);
+        // setGridWidth(grid4);
     });
 
     $(document).on('click', '#listButton', function () {
@@ -650,9 +718,9 @@ blog single -->
         $('#editModal').modal('hide');
     }
 
-    setGridWidth(grid1);
-    setGridWidth(grid2);
-    setGridWidth(grid3);
-    setGridWidth(grid4);
-
+    // setGridWidth(grid1);
+    // setGridWidth(grid2);
+    // setGridWidth(grid3);
+    // setGridWidth(grid4);
+    fillDropdowns()
 </script>

@@ -68,16 +68,16 @@ public class EfCourseRepository : Repository<Course>, ICourseRepository
             });
 
         var sessionQuery = await _Context.Sessions
-            .Where(session => session.CourseId == courseId && !session.IsDeleted)
-            .Select(session => new SessionDetailApiDTO
-            {
-                SessionName = session.Name,
-                Description = session.Description,
-                StartDate = session.StartDate.ToShortDateString(),
-                Link = session.Link,
-                Queue = session.Queue,
-            })
-            .ToListAsync();
+           .Where(session => session.CourseId == courseId && !session.IsDeleted)
+           .Select(session => new SessionDetailApiDTO
+           {
+               SessionName = session.Name,
+               Description = session.Description,
+               StartDate = session.StartDate.ToShortDateString(),
+               Link = session.Link,
+               Queue = session.Queue,
+           })
+           .ToListAsync();
 
         var course = await courseQuery.SingleOrDefaultAsync();
 

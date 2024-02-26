@@ -8,7 +8,6 @@
 
         // Çerezi okumak için
         photo = HttpContextAccessor.HttpContext.Request.Cookies["UserProfilePhoto"];
-
     }
 }
 <!DOCTYPE html>
@@ -103,6 +102,43 @@
                 console.error('Datetimepicker initialization error:', error);
             }
         }
+
+        function fillDropdowns() {
+            $(".zuraf-select").each(function () {
+                var dropdown = $(this);
+                var targetUrl = dropdown.data("fill-target-url");
+                // Placeholder değerini al
+                var placeholder = dropdown.attr("placeholder");
+
+                // AJAX isteği göndererek verileri al
+                $.ajax({
+                    url: targetUrl,
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        // Verileri alındıktan sonra dropdown'u doldur
+                         dropdown.empty(); // Önce dropdown'u temizle
+
+                        // Placeholder'ı ekleyin, eğer varsa
+                        if (placeholder) {
+                            dropdown.append($('<option disabled selected value="0"></option>').text(placeholder));
+                        }
+
+                        $.each(data, function (key, entry) {
+                            dropdown.append($('<option></option>').attr('value', entry.value).text(entry.text));
+                        });
+
+                        // İlgili dropdown seçilen değeri yükle
+                        dropdown.val(0);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                        // Hata durumunda bir işlem yapılabilir
+                    }
+                });
+            });
+        }
+
 
         // $(function () {
         //     $('[data-toggle="popover"]').popover();
@@ -651,6 +687,7 @@
                 }
             }
 
+           
             $(window).on("resize", function () {
                 toggleSidebarVisibility();
             });
@@ -683,6 +720,70 @@
             });
 
 
+        });
+
+
+    </script>
+
+    <script>
+        // $(document).ready(function () {
+        //     $('.filterForm').submit(function (e) {
+        //         e.preventDefault();
+
+        //         // Formun hangi filtreleme sınıfına ait olduğunu al
+        //         var filterClass = $(this).data('filter-class');
+        //         var resultDivId = $(this).data('result-div-id');
+        //         var targetUrl = $(this).data('result-target-url');
+
+        //         // Tüm inputlardan filtre bilgilerini topla
+        //         var criteria = {};
+        //         $(this).find('input').each(function () {
+        //             var fieldName = $(this).attr('name');
+        //             var fieldValue = $(this).val();
+        //             criteria[fieldName] = fieldValue;
+        //         });
+        //         debugger;
+        //         // Filtre sınıfına göre filtreleme yap
+        //         $.ajax({
+        //             type: "POST",
+        //             // url: "/Path/To/Your/ViewComponentEndpoint/" + filterClass, // Filtreleme sınıfının adını kullanarak doğru endpointi çağır
+        //             url: targetUrl, // Filtreleme sınıfının adını kullanarak doğru endpointi çağır
+        //             // data: JSON.stringify(criteria),
+        //             data: JSON.stringify({ /* filterClass: filterClass, */ criteria: criteria }),
+        //             contentType: "application/json; charset=utf-8",
+        //             dataType: "html", // View component'inin HTML içeriğini almak istiyoruz
+        //             success: function (html) {
+        //                 // View component'inin içeriğini belirli bir div'e yerleştir
+        //                 $('#'+resultDivId).html(html);
+        //             },
+        //             error: function (error) {
+        //                 console.error("Filtreleme hatası:", error);
+        //             }
+        //         });
+        //     });
+        // });
+        $(document).ready(function () {
+            $(".filterForm").submit(function (e) {
+                e.preventDefault();
+
+                var resultDivId = $(this).data("result-div-id");
+                var targetUrl = $(this).data("result-target-url");
+                var formData = $(this).serialize(); // Form verilerini al
+
+                $.ajax({
+                    type: "POST",
+                    url: targetUrl,
+                    data: formData,
+                    success: function (html) {
+                        $("#" + resultDivId).html(html);
+                    },
+                    error: function (error) {
+                        console.error("Filtreleme hatası:", error);
+                    }
+                });
+            });
+
+           
         });
 
 

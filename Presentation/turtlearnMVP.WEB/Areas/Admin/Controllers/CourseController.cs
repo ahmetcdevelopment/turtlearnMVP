@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Text.Json;
 using TurtLearn.Shared.Entities.Concrete;
@@ -11,13 +12,18 @@ using TurtLearn.Shared.Utilities.Extensions;
 using TurtLearn.Shared.Utilities.Messages;
 using TurtLearn.Shared.Utilities.Results.ComplexTypes;
 using TurtLearn.Shared.Utilities.Results.Concrete;
+using turtlearnMVP.Application.Persistance.SearchFilters;
 using turtlearnMVP.Application.Persistance.Services;
 using turtlearnMVP.Domain.DTOs;
-using turtlearnMVP.Domain.DTOs.QueryDTOs;
+using turtlearnMVP.Domain.DTOs.SearchCritreiaDTOs;
+
+//using turtlearnMVP.Domain.DTOs.QueryDTOs;
 using turtlearnMVP.Domain.Entities;
 using turtlearnMVP.Domain.Enums;
 using turtlearnMVP.WEB.Areas.Admin.Models;
 using turtlearnMVP.WEB.Helpers;
+using turtlearnMVP.WEB.Search;
+using Course = turtlearnMVP.Domain.Entities.Course;
 
 namespace turtlearnMVP.WEB.Areas.Admin.Controllers
 {
@@ -27,11 +33,13 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
         private readonly ICourseService _mainService;
         private readonly ICategoryService _categoryService;
         private readonly UserManager<User> _userManager;
-        public CourseController(ICourseService mainService, ICategoryService categoryService, UserManager<User> userManager)
+        private readonly ICourseFilter<CourseDTO> _filter;
+        public CourseController(ICourseService mainService, ICategoryService categoryService, UserManager<User> userManager, ICourseFilter<CourseDTO> filter)
         {
             _mainService = mainService;
             _categoryService = categoryService;
             _userManager = userManager;
+            _filter = filter;
         }
 
         public async Task<IActionResult> Index()
@@ -46,7 +54,7 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
         {
             var model = new CourseDetailViewModel();
             var entity = _mainService.GetById(id).GetAwaiter().GetResult().Data;
-            if(entity != null)
+            if (entity != null)
             {
                 var teacher = _userManager.FindByIdAsync(entity.TeacherId.ToString()).GetAwaiter().GetResult();
                 var category = _categoryService.GetById(entity.CategoryId).GetAwaiter().GetResult().Data;
@@ -54,7 +62,7 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
                 model.TeacherId = entity.TeacherId;
                 model.TeacherName = teacher.UserName != null ? teacher.UserName : "Ahmet Çiftçi";
                 model.CategoryId = entity.CategoryId;
-                model.CategoryStr = EnumExtensions.GetEnumTitle<SinifDuzeyi>(category.SinifDuzeyiId.Value) +" "+  category.Name;
+                model.CategoryStr = EnumExtensions.GetEnumTitle<SinifDuzeyi>(category.SinifDuzeyiId.Value) + " " + category.Name;
                 model.StartDateStr = entity.StartDate.ToString("dd/MM/yyyy");
                 model.EndDateStr = entity.EndDate.ToString("dd/MM/yyyy");
                 model.Name = entity.Name;
@@ -193,9 +201,22 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
             }
         }
 
-        public IActionResult GetCourseViewComponent(IList<CourseDTO>? courses,string? listingType, bool? refresh = false)
+        public IActionResult GetCourseViewComponent([FromForm] CourseCriteria criteria, int? teacherId, string? listingType, bool? refresh = false)
         {
-            return ViewComponent("Course", new { listingType = listingType, refresh=refresh, Courses = courses });
+            //var stringContains = new BaseExpressions<CourseDTO>.StringContains();
+            //var andSearch = new AndSearch<CourseDTO>(null, null);
+
+            //var search = new Search.Course();
+
+            //var search = new Search.Course(); //Search klasöründeki Course olduğu belirlenir böylece entity ile karışmaz
+            //var criteria = new Search.Course.Criteria //Aynı şekilde Search Klasöründeki Course içindeki kriter sınıfı içini doldurmak amacıyla kullanılır
+            //{
+            //     TeacherId = teacherId,
+            //};
+            Expression<Func<CourseDTO, bool>> filter = _filter.CreateFilter(criteria);  // filtre oluşturmak için yine aynı namespaceden metot kullanılır
+            IList<CourseDTO> courses = _mainService.FetchAllDtos(filter).Data; //filtreli data çekilir.
+            
+            return ViewComponent("Course", new { listingType = listingType, refresh = refresh, Courses = courses });
         }
 
         [HttpGet]//taşınacak
