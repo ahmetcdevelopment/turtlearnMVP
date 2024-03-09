@@ -12,5 +12,6 @@ namespace turtlearnMVP.Application.Persistance.Abstract
     public interface IHomeworkRepository : IRepository<Homework>
     {
         IQueryable<HomeworkDTO> GetAllQueryableRecords();
+        Task<>
     }
 }

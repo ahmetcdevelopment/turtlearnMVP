@@ -56,6 +56,37 @@ public class HomeworkDetailApiDTO
     public string EndDateStr => EndDate.ToString("dd/MM/yyyy");
 
     public string Description { get; set; }//ödev açıklaması.
+    public IList<HomeworkTransferDetailApiDTO> HomeworkTransfers { get; set; }
+}
+public class HomeworkTransferDetailApiDTO
+{
+    public int HomeworkId { get; set; }
+
+    /// <summary>
+    /// Ödevin muhatabı öğrenci
+    /// </summary>
+    public int StudentId { get; set; }//ödevi yapması gereken öğrenci
+    public string StudentFirstName { get; set; }
+    public string StudentLastName { get; set; }
+
+    /// <summary>
+    /// Teslim durumu (enum)
+    /// </summary>
+    public int Status { get; set; }//teslim edildi - geç teslim edildi - teslim edilmedi
+    public string StatusTitle { get; set; }
+    [StringLength(500)]
+    public string Description { get; set; }
+
+    /// <summary>
+    /// Ödev dosyası
+    /// </summary>
+    public string Attachment { get; set; }//veritabanında IFromFile tutulmaz, string tutulur.
+
+    /// <summary>
+    /// Veriliş tarihi
+    /// </summary>
+    public DateTime TransferDate { get; set; }
+    public string TransferDateStr => TransferDate.ToString("dd/MM/yyyy");
 }
 public class CommentDetailApiDTO
 {

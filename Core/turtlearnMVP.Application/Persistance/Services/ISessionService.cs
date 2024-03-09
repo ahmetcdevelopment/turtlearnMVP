@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TurtLearn.Shared.Utilities.Results.Abstract;
 using turtlearnMVP.Domain.DTOs;
+using turtlearnMVP.Domain.DTOs.ApiDTOs;
 using turtlearnMVP.Domain.Entities;
 
 namespace turtlearnMVP.Application.Persistance.Services
@@ -16,5 +17,6 @@ namespace turtlearnMVP.Application.Persistance.Services
         Task<IResult> UpdateOrDelete(Session entity);
         IDataResult<IList<SessionDTO>> FetchAllDtos();
         Task<IDataResult<Session>> GetById(int id);
+        Task<IDataResult<SessionDetailApiDTO>> GetSessionApiDTO(int sessionId);
     }
 }

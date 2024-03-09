@@ -29,6 +29,7 @@ namespace turtlearnMVP.Persistance.Repositories.EntityFramework
                         {
                             Id = HT.Id,
                             StudentId = U.Id,
+                            HomeworkId = HT.Id,
                             StudentFirstName = U.FirstName,
                             StudentLastName = U.LastName,
                             HomeworkInfo = H.Title,

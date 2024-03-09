@@ -11,6 +11,7 @@ namespace turtlearnMVP.Domain.DTOs
     public class HomeworkTransferDTO : IDto
     {
         public int Id { get; set; }
+        public int HomeworkId { get; set; }
         public string HomeworkInfo { get; set; } // Başlık veya ödev veriliş tarihi olabilir.
 
         /// <summary>

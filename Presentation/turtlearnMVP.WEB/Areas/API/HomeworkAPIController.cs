@@ -23,14 +23,17 @@ namespace turtlearnMVP.WEB.Areas.API;
 public class HomeworkAPIController : ControllerBase
 {
     private readonly IHomeworkService _homeworkService;
+    private readonly IHomeworkTransferService _homeworkTransferService;
     private readonly IValidator<HomeworkApiDTO> _homeworkValidator;
     private readonly IMapper _mapper;
 
-    public HomeworkAPIController(IHomeworkService homeworkService, IValidator<HomeworkApiDTO> homeworkValidator, IMapper mapper)
+    public HomeworkAPIController(IHomeworkService homeworkService, IValidator<HomeworkApiDTO> homeworkValidator, IMapper mapper
+        , IHomeworkTransferService homeworkTransferService)
     {
         _homeworkService = homeworkService;
         _homeworkValidator = homeworkValidator;
         _mapper = mapper;
+        _homeworkTransferService = homeworkTransferService;
     }
 
     [AllowAnonymous]
@@ -88,5 +91,23 @@ public class HomeworkAPIController : ControllerBase
            Messages.SuccessDelete(TableExtensions.GetTableTitle<Homework>()), homeworkListResult.Data))
       : BadRequest(new ApiDataResult<List<HomeworkDTO>>(_Key, ResultStatus.Error,
       Messages.FailedDelete(TableExtensions.GetTableTitle<Homework>()), homeworkListResult.Data));
+    }
+    [AllowAnonymous]
+    [HttpPost("GetAllHomeworkTransfers")]
+    public async Task<IActionResult> GetAllHomeworkTransfers([FromForm] string key, [FromForm] int homeworkId)
+    {
+        var _Key = await turtlearnApiSetting.getKey();
+        if (string.IsNullOrEmpty(key) || !(await turtlearnApiSetting.isKeyValid(key)))
+        {
+            return BadRequest(new ApiResult(_Key, ResultStatus.Error, Messages.PageIsNotFound));
+        }
+        var homeworkTransfers = _homeworkTransferService._QueryableHomeworkTransfers.Where(x => x.HomeworkId == homeworkId);
+        var result = homeworkTransfers.Count() > 0 && homeworkId > 0 ?
+            new DataResult<List<HomeworkTransferDTO>>(ResultStatus.Success, await homeworkTransfers.ToListAsync()) :
+            new DataResult<List<HomeworkTransferDTO>>(ResultStatus.Error, Messages.ResultIsNotFound
+            , await homeworkTransfers.ToListAsync() ?? new List<HomeworkTransferDTO>());
+        return result.ResultStatus == ResultStatus.Success
+            ? Ok(new ApiDataResult<List<HomeworkTransferDTO>>(_Key, ResultStatus.Success, result.Data))
+       : BadRequest(new ApiDataResult<List<HomeworkTransferDTO>>(_Key, ResultStatus.Error, result.Message, null));
     }
 }

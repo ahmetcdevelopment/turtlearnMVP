@@ -14,6 +14,7 @@ using turtlearnMVP.Domain.DTOs.ApiDTOs;
 using turtlearnMVP.Domain.Entities;
 using turtlearnMVP.Persistance.Configurations;
 using turtlearnMVP.Persistance.Validations.Entities;
+using turtlearnMVP.WEB.Search;
 //using turtlearnMVP.WEB.Search;
 
 namespace turtlearnMVP.WEB.Areas.API;
@@ -98,6 +99,10 @@ public class SessionAPIController : ControllerBase
         {
             return BadRequest(new ApiResult(_Key, ResultStatus.Error, Messages.PageIsNotFound));
         }
-
+        var result = await _sessionService.GetSessionApiDTO(sessionId);
+        return result.ResultStatus == ResultStatus.Success && result.Data != null
+            ? Ok(new ApiDataResult<SessionDetailApiDTO>(_Key, ResultStatus.Success, result.Data))
+       : BadRequest(new ApiDataResult<SessionDetailApiDTO>(_Key, ResultStatus.Error,
+       Messages.FailedUpdate(TableExtensions.GetTableTitle<Session>()), result.Data ?? new SessionDetailApiDTO()));
     }
 }

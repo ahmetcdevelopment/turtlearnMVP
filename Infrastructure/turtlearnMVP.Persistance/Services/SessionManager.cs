@@ -11,6 +11,7 @@ using TurtLearn.Shared.Utilities.Results.Concrete;
 using turtlearnMVP.Application.Persistance;
 using turtlearnMVP.Application.Persistance.Services;
 using turtlearnMVP.Domain.DTOs;
+using turtlearnMVP.Domain.DTOs.ApiDTOs;
 using turtlearnMVP.Domain.Entities;
 using turtlearnMVP.Domain.Enums;
 
@@ -70,5 +71,9 @@ namespace turtlearnMVP.Persistance.Services
             }
             return new Result(ResultStatus.Error, message);
         }
+
+        public async Task<IDataResult<SessionDetailApiDTO>> GetSessionApiDTO(int sessionId)
+         => sessionId > 0 ? new DataResult<SessionDetailApiDTO>(ResultStatus.Success, await _UnitOfWork.Sessions.GetSessionDetails(sessionId))
+            : new DataResult<SessionDetailApiDTO>(ResultStatus.Error, $"Aradığınız oturum mevcut değil", null);
     }
 }

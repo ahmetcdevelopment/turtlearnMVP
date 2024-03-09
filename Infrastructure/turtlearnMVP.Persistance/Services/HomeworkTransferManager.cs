@@ -14,61 +14,71 @@ using turtlearnMVP.Domain.DTOs;
 using turtlearnMVP.Domain.Entities;
 using turtlearnMVP.Domain.Enums;
 
-namespace turtlearnMVP.Persistance.Services
+namespace turtlearnMVP.Persistance.Services;
+
+public class HomeworkTransferManager : IHomeworkTransferService
 {
-    public class HomeworkTransferManager : IHomeworkTransferService
+    private readonly IUnitOfWork _UnitOfWork;
+
+    public HomeworkTransferManager(IUnitOfWork unitOfWork)
     {
-        private readonly IUnitOfWork _UnitOfWork;
+        _UnitOfWork = unitOfWork;
+    }
+    private static string _tableNameTR = TableExtensions.GetTableTitle<HomeworkTransfer>();
 
-        public HomeworkTransferManager(IUnitOfWork unitOfWork)
+    public IQueryable<HomeworkTransferDTO> _QueryableHomeworkTransfers => _UnitOfWork.HomeworkTransfers.GetAllQueryableRecords();
+
+    public IDataResult<IList<HomeworkTransferDTO>> FetchAllDtos()
+    {
+        var allQueryableRecords = _UnitOfWork.HomeworkTransfers.GetAllQueryableRecords();
+        var HomeworkTransfers = allQueryableRecords.ToList();
+        return HomeworkTransfers == null || HomeworkTransfers.Count <= 0 ?
+            new DataResult<List<HomeworkTransferDTO>>(ResultStatus.Error, new List<HomeworkTransferDTO>()) :
+            new DataResult<List<HomeworkTransferDTO>>(ResultStatus.Success, HomeworkTransfers);
+    }
+
+    public async Task<IDataResult<HomeworkTransfer>> GetById(int id)
+    {
+        var homeworkTransfer = await _UnitOfWork.HomeworkTransfers.GetByIdAsync(id);
+        return homeworkTransfer == null || homeworkTransfer.Id <= 0 ?
+            new DataResult<HomeworkTransfer>(ResultStatus.Error, Messages.ResultIsNotFound, homeworkTransfer) :
+            new DataResult<HomeworkTransfer>(ResultStatus.Success, homeworkTransfer);
+    }
+
+    public async Task<IResult> InsertAsync(HomeworkTransfer entity)
+    {
+        var message = Messages.FailedAdd(_tableNameTR);
+        if (entity != null || entity.Id < 0)
         {
-            _UnitOfWork = unitOfWork;
+            await _UnitOfWork.HomeworkTransfers.AddAsync(entity);
+            message = Messages.SuccessAdd(_tableNameTR);
+            await _UnitOfWork.SaveChanges();
+            return new Result(ResultStatus.Success, message);
         }
-        private static string _tableNameTR = TableExtensions.GetTableTitle<HomeworkTransfer>();
+        return new Result(ResultStatus.Error, message);
+    }
 
-        public IQueryable<HomeworkTransferDTO> _QueryableHomeworkTransfers => _UnitOfWork.HomeworkTransfers.GetAllQueryableRecords();
-
-        public IDataResult<IList<HomeworkTransferDTO>> FetchAllDtos()
+    public async Task<IResult> UpdateOrDelete(HomeworkTransfer entity)
+    {
+        var message = Messages.FailedUpdate(_tableNameTR);
+        if (entity != null || entity.Id > 0)
         {
-            var allQueryableRecords = _UnitOfWork.HomeworkTransfers.GetAllQueryableRecords();
-            var HomeworkTransfers = allQueryableRecords.ToList();
-            return HomeworkTransfers == null || HomeworkTransfers.Count <= 0 ?
-                new DataResult<List<HomeworkTransferDTO>>(ResultStatus.Error, new List<HomeworkTransferDTO>()) :
-                new DataResult<List<HomeworkTransferDTO>>(ResultStatus.Success, HomeworkTransfers);
+            await _UnitOfWork.HomeworkTransfers.UpdateAsync(entity);
+            message = Messages.SuccessUpdate(_tableNameTR);
+            await _UnitOfWork.SaveChanges();
+            return new Result(ResultStatus.Success, message);
         }
+        return new Result(ResultStatus.Error, message);
+    }
 
-        public async Task<IDataResult<HomeworkTransfer>> GetById(int id)
-        {
-            var homeworkTransfer = await _UnitOfWork.HomeworkTransfers.GetByIdAsync(id);
-            return homeworkTransfer == null || homeworkTransfer.Id <= 0 ?
-                new DataResult<HomeworkTransfer>(ResultStatus.Error, Messages.ResultIsNotFound, homeworkTransfer) :
-                new DataResult<HomeworkTransfer>(ResultStatus.Success, homeworkTransfer);
-        }
+    public async Task<IDataResult<int>> DetermineStatus(int homeworkId)
+    {
+        var homework = _UnitOfWork.Homeworks.GetById(homeworkId);
+        if (homework == null || homework.Id <= 0)
+            return new DataResult<int>(ResultStatus.Error, "Lütfen geçerli bir ödev seçiniz.", 0);
 
-        public async Task<IResult> InsertAsync(HomeworkTransfer entity)
-        {
-            var message = Messages.FailedAdd(_tableNameTR);
-            if (entity != null || entity.Id < 0)
-            {
-                await _UnitOfWork.HomeworkTransfers.AddAsync(entity);
-                message = Messages.SuccessAdd(_tableNameTR);
-                await _UnitOfWork.SaveChanges();
-                return new Result(ResultStatus.Success, message);
-            }
-            return new Result(ResultStatus.Error, message);
-        }
+        var status = homework.EndDate < DateTime.Now ? (int)HomeworkTransferStatus.GecTeslim : (int)HomeworkTransferStatus.TeslimEdildi;
 
-        public async Task<IResult> UpdateOrDelete(HomeworkTransfer entity)
-        {
-            var message = Messages.FailedUpdate(_tableNameTR);
-            if (entity != null || entity.Id > 0)
-            {
-                await _UnitOfWork.HomeworkTransfers.UpdateAsync(entity);
-                message = Messages.SuccessUpdate(_tableNameTR);
-                await _UnitOfWork.SaveChanges();
-                return new Result(ResultStatus.Success, message);
-            }
-            return new Result(ResultStatus.Error, message);
-        }
+        return new DataResult<int>(ResultStatus.Success, status);
     }
 }

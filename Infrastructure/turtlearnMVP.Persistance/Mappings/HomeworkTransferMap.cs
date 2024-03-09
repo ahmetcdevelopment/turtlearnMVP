@@ -23,6 +23,7 @@ namespace turtlearnMVP.Persistance.Mappings
             builder.Property(ht => ht.Status).IsRequired();
 
             builder.Property(ht => ht.Attachment).IsRequired(); //isrequired olmalı mı?
+            builder.Property(ht => ht.Attachment).HasMaxLength(150);//yeni eklendi migration atılacak 29.02.24
 
             builder.Property(ht => ht.TransferDate).IsRequired();
 
