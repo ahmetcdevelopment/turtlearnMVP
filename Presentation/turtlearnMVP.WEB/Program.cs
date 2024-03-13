@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Configuration;
 using TurtLearn.Shared.Entities.Concrete;
 using turtlearnMVP.Persistance;
 using turtlearnMVP.Persistance.Configurations;
 using turtlearnMVP.Persistance.Context;
+using turtlearnMVP.WEB.Helpers.Abstract;
+using turtlearnMVP.WEB.Helpers.Concrete;
 using turtlearnMVP.WEB.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +30,15 @@ await turtlearnApiSetting.generateKey();// Api için key Generate ediyoruz.
 builder.Services.AddSignalR(); //signalr modülünü devreye sok.
 
 builder.Services.LoadMyPersistanceServices(builder.Configuration);
+
+builder.Services.AddScoped<IImageHelper, ImageHelper>();
+
+builder.Services.AddAuthorization(options =>
+{
+    PolicyRegistiration.ConfigurePolicies(options);
+});
+
+//builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddIdentity<User, Role>(options =>
 {

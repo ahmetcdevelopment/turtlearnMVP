@@ -1,4 +1,6 @@
-﻿namespace turtlearnMVP.WEB.Areas.Admin.Models
+﻿using turtlearnMVP.Domain.DTOs;
+
+namespace turtlearnMVP.WEB.Areas.Admin.Models
 {
     public class RoleEditViewModel
     {
@@ -8,5 +10,7 @@
         /// Gets or sets the name for this role.
         /// </summary>
         public string Name { get; set; }
+        public IList<ClaimsByModulesDTO>? Modules { get; set; }
+        public string? SelectedIds { get; set; }
     }
 }

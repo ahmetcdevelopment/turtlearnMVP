@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using turtlearnMVP.Domain.DTOs;
 
 namespace turtlearnMVP.WEB.Areas.Admin.Models
 {
@@ -29,5 +30,14 @@ namespace turtlearnMVP.WEB.Areas.Admin.Models
         public IFormFile PictureFile { get; set; }
         [DisplayName("Resim")]
         public string Photo { get; set; }
+
+        public IList<ClaimsByModulesDTO>? Modules { get; set; }
+        public string? SelectedIds { get; set; }
+
+        public IList<RoleDTO>? Roles { get; set; }
+        public string? SelectedRoleIds { get; set; }
+
+        public string? RegisterDate { get; set; }
+        public string? UserType { get; set; }
     }
 }

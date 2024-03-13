@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq.Expressions;
@@ -32,6 +33,10 @@ namespace turtlearnMVP.Persistance
             services.AddScoped<ISessionRollCallService, SessionRollCallManager>();
             services.AddScoped<IMailService, MailManager>();
             services.AddScoped<IUserSettingService, UserSettingManager>();
+            services.AddScoped<IClaimService, ClaimManager>();
+            services.AddScoped<IZrfRoleService, ZrfRoleManager>();
+
+
             //services.AddScoped<ISearchService, SearchManager>();
 
             services.AddTransient<Expression<Func<CourseDTO, bool>>>(_ => _ => true);
@@ -47,6 +52,7 @@ namespace turtlearnMVP.Persistance
             //search denemesi
             services.AddScoped<ICourseFilter<CourseDTO>, CourseFilter>();
             services.AddScoped(typeof(ISearchService<CourseDTO>), typeof(SearchManager<CourseDTO>));
+
 
         }
     }

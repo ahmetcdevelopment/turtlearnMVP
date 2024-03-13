@@ -25,6 +25,7 @@ namespace turtlearnMVP.Persistance.Context
         public DbSet<SessionRollCall> SessionRollCalls { get; set; }
         public DbSet<UserSetting> UserSettings { get; set; }
         public DbSet<UserResume> UserResumes { get; set; }
+        public DbSet<Claim> Claims { get; set; }
         #region SignalR
         public DbSet<Chat> Chats { get; set; }
         public DbSet<ChatUser> ChatUsers { get; set; }
@@ -53,6 +54,7 @@ namespace turtlearnMVP.Persistance.Context
             builder.ApplyConfiguration(new SessionRollCallMap());
             builder.ApplyConfiguration(new UserSettingMap());
             builder.ApplyConfiguration(new UserResumeMap());
+            builder.ApplyConfiguration(new ClaimMap());
             #region SignalR
             builder.ApplyConfiguration(new ChatMap());
             builder.ApplyConfiguration(new ChatUserMap());

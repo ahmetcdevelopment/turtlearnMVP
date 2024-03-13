@@ -1,0 +1,238 @@
+﻿@using turtlearnMVP.WEB.Areas.Admin.Models;
+@model RoleEditViewModel;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+<!-- Gritter.js script -->
+<script src="https://cdn.jsdelivr.net/npm/gritter@1.7.4/js/jquery.gritter.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/gritter@1.7.4/css/jquery.gritter.min.css" rel="stylesheet">
+<style>
+    .role-scroll {
+        overflow-y: auto;
+        max-height: 50vh;
+    }
+
+        .role-scroll::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        border-radius: 10px;
+        background-color: #F5F5F5;
+    }
+
+        .role-scroll::-webkit-scrollbar {
+        width: 12px;
+        background-color: #F5F5F5;
+    }
+
+        .role-scroll::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+            background-color: #538662;
+    }
+</style>
+<!--=================================
+  Modal login -->
+<div class="modal login fade show" id="editModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="loginModalLabel">Kategori</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm" method="post" onsubmit="return false" asp-controller="Role" asp-action="AddOrUpdate">
+                    @Html.HiddenFor(m => m.Id, new { id = "Id" })
+                    <div class="row my-4 align-items-center">
+                        <div class="row">
+                            <div class="mb-12 col-sm-12 form-floating">
+                                @Html.TextBoxFor(m => m.Name, new { @class = "form-control form-setting", @placeholder = "Kategori Adı",  @id = "Name" })
+                                @Html.ValidationMessageFor(m => m.Name)
+                                <label class="float-setting text-dark fw-bold" for="floatingInput">Rolün Adı</label>
+                            </div>
+                        </div>
+
+                        <div class="row my-4 align-items-center">
+                            @if (Model.Modules != null && Model.Modules.Count > 0)
+                            {
+                                var halfCount = (int)Math.Ceiling((double)Model.Modules.Count / 2);
+                                var firstHalfModules = Model.Modules.Take(halfCount).ToList();
+                                var secondHalfModules = Model.Modules.Skip(halfCount).ToList();
+                                <div class="col-md-6 mt-6 mt-md-0">
+                                    <div class="section-title">
+                                        <h6 class="title">Yetkiler</h6>
+                                    </div>
+                                    <div class="checkout-review d-grid role-scroll">
+                                        <div class="accordion mb-3" id="accordion-faq">
+
+                                            @foreach (var module in firstHalfModules)
+                                            {
+                                                <div class="card">
+                                                    <div class="accordion-icon card-header" id="heading_@module.ModuleId">
+                                                        <h6 class="mb-0">
+                                                            <button class="btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_@module.ModuleId" aria-expanded="false" aria-controls="collapse_@module.ModuleId">
+                                                                @module.ModuleName
+                                                            </button>
+                                                        </h6>
+                                                    </div>
+                                                    <div id="collapse_@module.ModuleId" class="collapse" aria-labelledby="heading_@module.ModuleId" data-bs-parent="#accordion-faq" style="">
+                                                        <div class="card-body">
+                                                            @if (module.Claims != null && module.Claims.Count > 0)
+                                                            {
+                                                                foreach (var claim in module.Claims)
+                                                                {
+
+                                                                    <div class="form-check form-switch">
+                                                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault_@claim.Id" data-claim-id="@claim.Id" @claim.Checked>
+                                                                        <label class="form-check-label" for="flexSwitchCheckDefault">@claim.ClaimValue</label>
+                                                                    </div>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="form-check form-switch">
+                                                                    @* <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"> *@
+                                                                    <label class="form-check-label" for="flexSwitchCheckDefault">Henüz bu modül için bir yetki atanmamış!</label>
+                                                                </div>
+                                                            }
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mt-6 mt-md-0">
+                                    <div class="section-title">
+                                        <h6 class="title">&nbsp;</h6>
+                                    </div>
+                                    <div class="checkout-review d-grid role-scroll">
+                                        <div class="accordion mb-3" id="accordion-faq">
+                                            @foreach (var module in secondHalfModules)
+                                            {
+                                                <div class="card">
+                                                    <div class="accordion-icon card-header" id="heading_@module.ModuleId">
+                                                        <h6 class="mb-0">
+                                                            <button class="btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_@module.ModuleId" aria-expanded="false" aria-controls="collapse_@module.ModuleId">
+                                                                @module.ModuleName
+                                                            </button>
+                                                        </h6>
+                                                    </div>
+                                                    <div id="collapse_@module.ModuleId" class="collapse" aria-labelledby="heading_@module.ModuleId" data-bs-parent="#accordion-faq" style="">
+                                                        <div class="card-body">
+                                                            @if (module.Claims != null && module.Claims.Count > 0)
+                                                            {
+                                                                foreach (var claim in module.Claims)
+                                                                {
+
+                                                                    <div class="form-check form-switch">
+                                                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault_@claim.Id" data-claim-id="@claim.Id" @claim.Checked>
+                                                                        <label class="form-check-label" for="flexSwitchCheckDefault">@claim.ClaimValue</label>
+                                                                    </div>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="form-check form-switch">
+                                                                    @* <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"> *@
+                                                                    <label class="form-check-label" for="flexSwitchCheckDefault">Henüz bu modül için bir yetki atanmamış!</label>
+                                                                </div>
+                                                            }
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+
+                    <div class="row form-setting">
+                        <div class="col-sm-6">
+                            <button id="cancelButton" class="btn btn-error">Cancel</button>
+                        </div>
+                        <div class="col-sm-6 text-lg-end">
+                            <button id="saveButton" class="btn btn-primary">Save</button>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--=================================
+Modal login -->
+<script>
+    $(document).ready(function () {
+        // // Handle click event on the login tab
+        // $('#login-tab').on('click', function () {
+        //     // Set the value of RegUserTypeId to -1
+        //     $('input[name="RegUserTypeId"]').val('-1');
+        // });
+
+        // Handle click event on the register tab
+        $('#register-tab').on('click', function () {
+            // Optionally, you can set the value to a different value when the register tab is clicked
+            // $('input[name="RegUserTypeId"]').val('some-other-value');
+        });
+
+        $('#registerButton').on('click', function () {
+            submitForm(0);
+        });
+
+        $('#saveButton').on('click', function () {
+            submitForm(1);
+        });
+        function submitForm(submitType) {
+            var selectedIds = [];
+
+            // Tüm checkbox'ları al
+            $('input[type="checkbox"]:checked').each(function () {
+                // Her seçili checkbox'un id'sini diziye ekle
+                selectedIds.push($(this).data('claim-id'));
+            });
+
+            // JSON formatında string oluştur
+            var selectedIdsJson = JSON.stringify(selectedIds);
+
+            // Form verilerini elle oluştur
+            var formData = 'Id=' + $('#Id').val() + '&Name=' + $('#Name').val() + '&SelectedIds=' + selectedIdsJson;
+
+            var grid = getOperationGrid();
+            $.ajax({
+                url: "/Admin" + $('#editForm').attr('action'),
+                type: 'POST',
+                data: formData,
+                success: function (result) {
+                    $.gritter.add({
+                        title: 'Başarılı',
+                        text: result.message,
+                        class_name: 'gritter-success',
+                        sticky: false,
+                        time: 5000
+                    });
+                    reloadGrid(grid);
+                    closeModal();
+                },
+                error: function (result) {
+                    $.gritter.add({
+                        title: 'Hata',
+                        text: result.message,
+                        class_name: 'gritter-error',
+                        sticky: false,
+                        time: 5000
+                    });
+                }
+            });
+        }
+    });
+</script>
