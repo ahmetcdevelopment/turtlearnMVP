@@ -23,7 +23,7 @@ namespace turtlearnMVP.Persistance.Services
         {
             _UnitOfWork = unitOfWork;
         }
-        private static string _tableNameTR = TableExtensions.GetTableTitle<ChatUser>();
+        private static string _tableNameTR = TableExtensions.GetTableTitle<Message>();
 
         public IQueryable<MessageDTO> _QueryableMessages => _UnitOfWork.Messages.GetAllQueryableRecords();
 

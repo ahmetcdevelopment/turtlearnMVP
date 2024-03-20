@@ -28,6 +28,13 @@ namespace turtlearnMVP.Application.Persistance
         IChatUserRepository ChatUsers { get; }
         IMessageRepository Messages { get; }
         #endregion
+
+        #region OFFER AND ORDER OPERATIONS 
+        IOfferRepository Offers { get; }
+        IOfferDetailRepository OffersDetail { get; }
+        IOrderRepository Orders { get; }
+        IOrderDetailRepository OrderDetails { get; }
+        #endregion
         Task<int> SaveChanges();
     }
 }

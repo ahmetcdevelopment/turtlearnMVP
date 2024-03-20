@@ -19,68 +19,67 @@ using turtlearnMVP.Domain.Enums;
 using turtlearnMVP.Persistance.Repositories;
 //using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace turtlearnMVP.Persistance.Services
+namespace turtlearnMVP.Persistance.Services;
+
+public class CategoryManager : ICategoryService
 {
-    public class CategoryManager : ICategoryService
+    private readonly IUnitOfWork _UnitOfWork;
+    //private readonly ISearch<CategoryDTO> _Search;
+    public CategoryManager(IUnitOfWork unitOfWork/*, ISearch<CategoryDTO> search*/)
     {
-        private readonly IUnitOfWork _UnitOfWork;
-        //private readonly ISearch<CategoryDTO> _Search;
-        public CategoryManager(IUnitOfWork unitOfWork/*, ISearch<CategoryDTO> search*/)
+        _UnitOfWork = unitOfWork;
+        //_Search = search;
+    }
+
+    private static string _tableNameTR = TableExtensions.GetTableTitle<Category>();
+
+    public IQueryable<CategoryDTO> _QueryableCategories => _UnitOfWork.Categories.GetAllQueryableRecords();
+
+    public IDataResult<IList<CategoryDTO>> FetchAllDtos()
+    {
+        var allQueryableRecords = _UnitOfWork.Categories.GetAllQueryableRecords();
+        var CategoryList = allQueryableRecords.ToList();
+        CategoryList.ForEach(category =>
         {
-            _UnitOfWork = unitOfWork;
-            //_Search = search;
-        }
+            category.SinifDuzeyiTitle = category.SinifDuzeyiId > 0 && category.SinifDuzeyiId.HasValue ?
+            EnumExtensions.GetEnumTitle<SinifDuzeyi>(category.SinifDuzeyiId.Value) : string.Empty;
+        });
+        return CategoryList == null || CategoryList.Count <= 0 ?
+            new DataResult<List<CategoryDTO>>(ResultStatus.Error, new List<CategoryDTO>()) :
+            new DataResult<List<CategoryDTO>>(ResultStatus.Success, CategoryList);
+    }
 
-        private static string _tableNameTR = TableExtensions.GetTableTitle<Category>();
+    public async Task<IDataResult<Category>> GetById(int id)
+    {
+        var category = await _UnitOfWork.Categories.GetByIdAsync(id);
+        return category == null || category.Id <= 0 ?
+            new DataResult<Category>(ResultStatus.Error, Messages.ResultIsNotFound, new Category()) :
+            new DataResult<Category>(ResultStatus.Success, category);
+    }
 
-        public IQueryable<CategoryDTO> _QueryableCategories => _UnitOfWork.Categories.GetAllQueryableRecords();
-
-        public IDataResult<IList<CategoryDTO>> FetchAllDtos()
+    public async Task<IResult> InsertAsync(Category entity)
+    {
+        var message = Messages.FailedAdd(_tableNameTR);
+        if (entity != null || entity.Id < 0)
         {
-            var allQueryableRecords = _UnitOfWork.Categories.GetAllQueryableRecords();
-            var CategoryList = allQueryableRecords.ToList();
-            CategoryList.ForEach(category =>
-            {
-                category.SinifDuzeyiTitle = category.SinifDuzeyiId > 0 && category.SinifDuzeyiId.HasValue ?
-                EnumExtensions.GetEnumTitle<SinifDuzeyi>(category.SinifDuzeyiId.Value) : string.Empty;
-            });
-            return CategoryList == null || CategoryList.Count <= 0 ?
-                new DataResult<List<CategoryDTO>>(ResultStatus.Error, new List<CategoryDTO>()) :
-                new DataResult<List<CategoryDTO>>(ResultStatus.Success, CategoryList);
+            await _UnitOfWork.Categories.AddAsync(entity);
+            message = Messages.SuccessAdd(_tableNameTR);
+            await _UnitOfWork.SaveChanges();
+            return new Result(ResultStatus.Success, message);
         }
+        return new Result(ResultStatus.Error, message);
+    }
 
-        public async Task<IDataResult<Category>> GetById(int id)
+    public async Task<IResult> UpdateOrDelete(Category entity)
+    {
+        var message = Messages.FailedUpdate(_tableNameTR);
+        if (entity != null || entity.Id > 0)
         {
-            var category = await _UnitOfWork.Categories.GetByIdAsync(id);
-            return category == null || category.Id <= 0 ?
-                new DataResult<Category>(ResultStatus.Error, Messages.ResultIsNotFound, new Category()) :
-                new DataResult<Category>(ResultStatus.Success, category);
+            await _UnitOfWork.Categories.UpdateAsync(entity);
+            message = Messages.SuccessUpdate(_tableNameTR);
+            await _UnitOfWork.SaveChanges();
+            return new Result(ResultStatus.Success, message);
         }
-
-        public async Task<IResult> InsertAsync(Category entity)
-        {
-            var message = Messages.FailedAdd(_tableNameTR);
-            if (entity != null || entity.Id < 0)
-            {
-                await _UnitOfWork.Categories.AddAsync(entity);
-                message = Messages.SuccessAdd(_tableNameTR);
-                await _UnitOfWork.SaveChanges();
-                return new Result(ResultStatus.Success, message);
-            }
-            return new Result(ResultStatus.Error, message);
-        }
-
-        public async Task<IResult> UpdateOrDelete(Category entity)
-        {
-            var message = Messages.FailedUpdate(_tableNameTR);
-            if (entity != null || entity.Id > 0)
-            {
-                await _UnitOfWork.Categories.UpdateAsync(entity);
-                message = Messages.SuccessUpdate(_tableNameTR);
-                await _UnitOfWork.SaveChanges();
-                return new Result(ResultStatus.Success, message);
-            }
-            return new Result(ResultStatus.Error, message);
-        }
+        return new Result(ResultStatus.Error, message);
     }
 }

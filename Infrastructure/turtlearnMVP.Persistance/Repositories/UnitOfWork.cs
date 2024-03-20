@@ -38,6 +38,13 @@ namespace turtlearnMVP.Persistance.Repositories
         private EfChatUserRepository _EfChatUserRepository;
         private EfMessageRepository _EfMessageRepository;
         #endregion
+
+        #region OFFER AND ORDER OPERATIONS 
+        private EfOfferRepository _EfOfferRepository;
+        private EfOfferDetailRepository _EfOfferDetailRepository;
+        private EfOrderRepository _EfOrderRepository;
+        private EfOrderDetailRepository _EfOrderDetailRepository;
+        #endregion
         public ICategoyRepository Categories => _EfCategoryRepository ?? new EfCategoryRepository(_Context);
 
         public ICourseRepository Courses => _EfCourseRepository ?? new EfCourseRepository(_Context);
@@ -70,6 +77,14 @@ namespace turtlearnMVP.Persistance.Repositories
         public IMessageRepository Messages => _EfMessageRepository ?? new EfMessageRepository(_Context);
 
         public IUserResumeRepository UserResumes => _EfUserResumeRepository ?? new EfUserResumeRepository(_Context);
+
+        public IOfferRepository Offers => _EfOfferRepository ?? new EfOfferRepository(_Context);
+
+        public IOfferDetailRepository OffersDetail => _EfOfferDetailRepository ?? new EfOfferDetailRepository(_Context);
+
+        public IOrderRepository Orders => _EfOrderRepository ?? new EfOrderRepository(_Context);
+
+        public IOrderDetailRepository OrderDetails => _EfOrderDetailRepository ?? new EfOrderDetailRepository(_Context);
 
         #endregion
 

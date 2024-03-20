@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using turtlearnMVP.Application.Persistance.Services;
 using turtlearnMVP.WEB.Models;
 
 namespace turtlearnMVP.WEB.Controllers
@@ -7,6 +8,7 @@ namespace turtlearnMVP.WEB.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ICourseService _courseService;
 
         public HomeController(ILogger<HomeController> logger)
         {

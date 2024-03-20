@@ -31,6 +31,12 @@ namespace turtlearnMVP.Persistance.Context
         public DbSet<ChatUser> ChatUsers { get; set; }
         public DbSet<Message> Messages { get; set; }
         #endregion
+        #region OFFER AND ORDER OPERATIONS
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<Offer> Offers { get; set; }
+        public DbSet<OfferDetail> OfferDetails { get; set; }
+        #endregion
         public turtlearnMVPContext(DbContextOptions options) : base(options)
         {
         }
@@ -59,6 +65,12 @@ namespace turtlearnMVP.Persistance.Context
             builder.ApplyConfiguration(new ChatMap());
             builder.ApplyConfiguration(new ChatUserMap());
             builder.ApplyConfiguration(new MessageMap());
+            #endregion
+            #region OFFER AND ORDER OPERATIONS
+            builder.ApplyConfiguration(new OrderMap());
+            builder.ApplyConfiguration(new OrderDetailMap());
+            builder.ApplyConfiguration(new OfferMap());
+            builder.ApplyConfiguration(new OfferDetailMap());
             #endregion
         }
     }
