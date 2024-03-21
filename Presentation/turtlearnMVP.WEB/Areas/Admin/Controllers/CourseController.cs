@@ -213,6 +213,7 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
             //{
             //     TeacherId = teacherId,
             //};
+            
             Expression<Func<CourseDTO, bool>> filter = _filter.CreateFilter(criteria);  // filtre oluşturmak için yine aynı namespaceden metot kullanılır
             IList<CourseDTO> courses = _mainService.FetchAllDtos(filter).Data; //filtreli data çekilir.
             

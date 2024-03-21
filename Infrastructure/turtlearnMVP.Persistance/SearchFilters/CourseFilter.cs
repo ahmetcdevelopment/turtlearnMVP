@@ -10,30 +10,29 @@ using turtlearnMVP.Application.Persistance.Services;
 using turtlearnMVP.Domain.DTOs;
 using turtlearnMVP.Domain.DTOs.SearchCritreiaDTOs;
 
-namespace turtlearnMVP.Persistance.SearchFilters
+namespace turtlearnMVP.Persistance.SearchFilters;
+
+
+public class CourseFilter : ICourseFilter<CourseDTO>
 {
-
-    public class CourseFilter : ICourseFilter<CourseDTO>
+    private readonly ISearchService<CourseDTO> _searchService;
+    public CourseFilter(ISearchService<CourseDTO> searchService)
     {
-        private readonly ISearchService<CourseDTO> _searchService;
-        public CourseFilter(ISearchService<CourseDTO> searchService)
+
+        _searchService = searchService;
+
+    }
+
+    public Expression<Func<CourseDTO, bool>> CreateFilter(CourseCriteria criteria)
+    {
+        Expression<Func<CourseDTO, bool>> filter = x => true;
+
+        if (!string.IsNullOrEmpty(criteria.Name))
         {
-
-            _searchService = searchService;
-
+            var newFilter = _searchService.StringContains("Name", criteria.Name);
+            filter = _searchService.AndConcat(filter, newFilter).ToExpression(null);
         }
 
-        public Expression<Func<CourseDTO, bool>> CreateFilter(CourseCriteria criteria)
-        {
-            Expression<Func<CourseDTO, bool>> filter = x => true;
-
-            if (!string.IsNullOrEmpty(criteria.Name))
-            {
-                var newFilter = _searchService.StringContains("Name", criteria.Name);
-                filter = _searchService.AndConcat(filter, newFilter).ToExpression(null);
-            }
-
-            return filter;
-        }
+        return filter;
     }
 }

@@ -16,7 +16,7 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return Redirect($"/{Guid.NewGuid()}");
+            return Redirect($"/Admin/Chat/{Guid.NewGuid()}");
         }
         [Route("testmessenge-{id}")]
         public IActionResult TestMessenge(string id)
@@ -24,7 +24,7 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
             ViewBag.MessengerId = id;
             return View();
         }
-        [HttpGet("/{roomId}")]
+        [HttpGet("/Admin/Chat/{roomId}")]
         public IActionResult Room(string roomId)
         {
             ViewBag.roomId = roomId;

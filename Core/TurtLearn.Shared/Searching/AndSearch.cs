@@ -23,9 +23,18 @@ namespace TurtLearn.Shared.Searching
             Expression<Func<T, bool>> leftExpression = _leftSpecification;
             Expression<Func<T, bool>> rightExpression = _rightSpecification;
 
-            BinaryExpression andExpression = Expression.AndAlso(leftExpression.Body, rightExpression.Body);
+            // Sol ve sağ ifadelerin parametrelerini alın
+            var leftParameter = leftExpression.Parameters[0];
+            var rightParameter = rightExpression.Parameters[0];
 
-            return Expression.Lambda<Func<T, bool>>(andExpression, leftExpression.Parameters[0]);
+            // Sol ve sağ ifadelerin gövdelerini birbiriyle AND işlemine geçirin
+            var andExpression = Expression.AndAlso(
+                Expression.Invoke(leftExpression, rightParameter),
+                Expression.Invoke(rightExpression, rightParameter)
+            );
+
+            // Lambda ifadesini oluşturun ve döndürün
+            return Expression.Lambda<Func<T, bool>>(andExpression, rightParameter);
         }
     }
 }
