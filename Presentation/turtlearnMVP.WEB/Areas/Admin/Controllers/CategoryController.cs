@@ -12,114 +12,113 @@ using turtlearnMVP.WEB.Helpers;
 using turtlearnMVP.WEB.ViewComponents;
 
 
-namespace turtlearnMVP.WEB.Areas.Admin.Controllers
+namespace turtlearnMVP.WEB.Areas.Admin.Controllers;
+
+[Area("Admin")]
+public class CategoryController : Controller
 {
-    [Area("Admin")]
-    public class CategoryController : Controller
+    private readonly ICategoryService _mainService;
+    public CategoryController
+        (
+            ICategoryService mainService
+        )
     {
-        private readonly ICategoryService _mainService;
-        public CategoryController
-            (
-                ICategoryService mainService
-            )
-        {
-            _mainService = mainService;
-        }
+        _mainService = mainService;
+    }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+    public IActionResult Index()
+    {
+        return View();
+    }
 
-        [HttpGet]
-        public async Task<IActionResult> AddOrUpdate(int? id)
+    [HttpGet]
+    public async Task<IActionResult> AddOrUpdate(int? id)
+    {
+        var model = new CategoryEditViewModel();
+        model.SelSinifDuzeyi = EnumHelper.GetEnumSelectList<SinifDuzeyi>();
+        if (id.HasValue && id.Value > 0)
         {
-            var model = new CategoryEditViewModel();
-            model.SelSinifDuzeyi = EnumHelper.GetEnumSelectList<SinifDuzeyi>();
-            if (id.HasValue && id.Value > 0)
+            var main = (await _mainService.GetById(id.Value)).Data ?? new Category();
+            model.Id = main.Id;
+            model.SinifDuzeyiId = main.SinifDuzeyiId;
+            model.Content = main.Content;
+            model.Name = main.Name;
+            model.Description = main.Description;
+        }
+        return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AddOrUpdate(CategoryEditViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            var result = await _mainService.GetById(model.Id.HasValue?model.Id.Value:0);
+            if (result.ResultStatus == ResultStatus.Success && result.Data.Id < 0)
             {
-                var main = (await _mainService.GetById(id.Value)).Data ?? new Category();
-                model.Id = main.Id;
-                model.SinifDuzeyiId = main.SinifDuzeyiId;
-                model.Content = main.Content;
-                model.Name = main.Name;
-                model.Description = main.Description;
+                return Json(new { Result = result });
             }
-            return View(model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> AddOrUpdate(CategoryEditViewModel model)
-        {
-            if (ModelState.IsValid)
+            result.Data.SinifDuzeyiId = model.SinifDuzeyiId;
+            result.Data.Content = model.Content;
+            result.Data.Name = model.Name;
+            result.Data.Description = model.Description;
+            result.Data.Picture = "~/images/avatar/default.jpg";
+            if (result.Data.Id == 0)
             {
-                var result = await _mainService.GetById(model.Id.HasValue?model.Id.Value:0);
-                if (result.ResultStatus == ResultStatus.Success && result.Data.Id < 0)
+                result.Data.IsDeleted = false;
+                result.Data.UpdateDate = DateTime.Now;
+                var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                result.Data.UpdateUserId = userId != null && int.TryParse(userId, out int _userId) ? _userId : 0;
+            }
+            var addOrUpdateResult = result.Data.Id > 0 ? await _mainService.UpdateOrDelete(result.Data) : await _mainService.InsertAsync(result.Data) ;
+           
+            return Json(new { Result = addOrUpdateResult});
+        }
+        return Json(new { Result = new Result(ResultStatus.Error, Messages.PageIsNotFound) });
+    }
+
+    public JsonResult GetAllToGrid()
+    {
+        var data = _mainService.FetchAllDtos().Data;
+        return Json( data, new Newtonsoft.Json.JsonSerializerSettings());
+    }
+
+    public async Task<JsonResult> Delete(int? id)
+    {
+        if (id.HasValue)
+        {
+            var result = await _mainService.GetById(id.Value);
+            if (result.ResultStatus == ResultStatus.Error)
+            {
+                return Json(new { Result = result });
+            }
+            result.Data.IsDeleted = true;
+            var updateResut = await _mainService.UpdateOrDelete(result.Data);
+            return Json(new { Result = updateResut });
+        }
+        return Json(new { Result = new Result(ResultStatus.Error, Messages.ResultIsNotFound) });
+    }
+
+    public SelectList GetAsSelectList()
+    {
+        var result = _mainService.FetchAllDtos();
+
+        if (result.ResultStatus == ResultStatus.Success)
+        {
+            var categoryList = result.Data;
+            var selectListItems = categoryList
+                .Select(category => new SelectListItem
                 {
-                    return Json(new { Result = result });
-                }
-                result.Data.SinifDuzeyiId = model.SinifDuzeyiId;
-                result.Data.Content = model.Content;
-                result.Data.Name = model.Name;
-                result.Data.Description = model.Description;
-                result.Data.Picture = "~/images/avatar/default.jpg";
-                if (result.Data.Id == 0)
-                {
-                    result.Data.IsDeleted = false;
-                    result.Data.UpdateDate = DateTime.Now;
-                    var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                    result.Data.UpdateUserId = userId != null && int.TryParse(userId, out int _userId) ? _userId : 0;
-                }
-                var addOrUpdateResult = result.Data.Id > 0 ? await _mainService.UpdateOrDelete(result.Data) : await _mainService.InsertAsync(result.Data) ;
-               
-                return Json(new { Result = addOrUpdateResult});
-            }
-            return Json(new { Result = new Result(ResultStatus.Error, Messages.PageIsNotFound) });
+                    Text = category.Name,
+                    Value = category.Id.ToString()
+                })
+                .ToList();
+            var selectList = new SelectList(selectListItems, "Value", "Text");
+            return selectList;
         }
-
-        public JsonResult GetAllToGrid()
+        else
         {
-            var data = _mainService.FetchAllDtos().Data;
-            return Json( data, new Newtonsoft.Json.JsonSerializerSettings());
-        }
-
-        public async Task<JsonResult> Delete(int? id)
-        {
-            if (id.HasValue)
-            {
-                var result = await _mainService.GetById(id.Value);
-                if (result.ResultStatus == ResultStatus.Error)
-                {
-                    return Json(new { Result = result });
-                }
-                result.Data.IsDeleted = true;
-                var updateResut = await _mainService.UpdateOrDelete(result.Data);
-                return Json(new { Result = updateResut });
-            }
-            return Json(new { Result = new Result(ResultStatus.Error, Messages.ResultIsNotFound) });
-        }
-
-        public SelectList GetAsSelectList()
-        {
-            var result = _mainService.FetchAllDtos();
-
-            if (result.ResultStatus == ResultStatus.Success)
-            {
-                var categoryList = result.Data;
-                var selectListItems = categoryList
-                    .Select(category => new SelectListItem
-                    {
-                        Text = category.Name,
-                        Value = category.Id.ToString()
-                    })
-                    .ToList();
-                var selectList = new SelectList(selectListItems, "Value", "Text");
-                return selectList;
-            }
-            else
-            {
-                return null;
-            }
+            return null;
         }
     }
 }
