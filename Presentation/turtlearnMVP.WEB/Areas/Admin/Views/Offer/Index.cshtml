@@ -1,5 +1,110 @@
 ﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    ViewData["Title"] = "Kampanya";
 }
+@* <!-- Gritter.js script -->
+<script src="https://cdn.jsdelivr.net/npm/gritter@1.7.4/js/jquery.gritter.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/gritter@1.7.4/css/jquery.gritter.min.css" rel="stylesheet"> *@
+<!--=================================
+   blog single -->
+<section style="max-width:100vw !important;" class="space-ptb">
+    @* <div  style="max-width:1000vw !important;" class="container"> *@
+    <div class="row">
+        <div class="col-md-12 col-xl-12 mt-4 mt-md-0 order-2 order-lg-1">
+            <div class="blog-sidebar">
+                <div class="widgets">
+                    <div class="widget">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h3>
+                                    Kampanya
+                                </h3>
+                            </div>
+                            <div class="col-md-4">
+                            </div>
+                            <div class="col-md-4 widget-title-right">
+                                <button onclick="openEditForm('/Admin/Offer',0,'jqGrid')" id="addButton" class="btn btn-primary">
+                                    <i class="fa fa-plus"></i>   <span style="font-weight:bold">Ekle</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="widget-content">
+                            <table id="jqGrid"></table>
+                            <div id="jqGridPager"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="partialEditContent"></div>
+</section>
+<!--=================================
+blog single -->
+<script type="text/javascript">
+    var grid = $("#jqGrid");
+    $(document).ready(function () {
+
+
+
+        grid.jqGrid({
+            url: '/Admin/Offer/GetAllToGrid',
+            mtype: "GET",
+            datatype: "json",
+            colNames: ["Id", "Name", "TypeTitle", "Code", "DiscountRate", "Description","Actions"],
+            colModel: [
+                { name: 'Id', key: true, width: 15, hidden: true },
+                { name: 'Name', width: 100 },
+                { name: 'TypeTitle', width: 100 },
+                { name: 'Code', width: 100 },
+                { name: 'DiscountRate', width: 100 },
+                { name: 'Description', width: 100 },
+                {
+                    name: 'actions',
+                    width: 100,
+                    align: 'center',
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return '<button style="padding:5px;" class="btn btn-sm btn-primary" onclick="openEditForm(\'/Admin/Offer\',' + options.rowId + ',' + "grid" + ')">Edit</button>&nbsp;&nbsp;&nbsp;' +
+                            '<button style="padding:5px;" class="btn btn-sm btn-error" onclick="deleteRow(\'/Admin/Offer\',' + options.rowId + ',' + "grid" + ')">Delete</button>';
+                    }
+                }
+            ],
+            // loadonce: true,
+            navOptions: { reloadGridOptions: { fromServer: true } },
+            multiSort: true,
+            multiSelect: true,
+            sortable: true,
+            viewrecords: true,
+            search: true,
+            width: "auto",
+            height: "400",
+            rowNum: 15,
+            pager: "#jqGridPager",
+
+        });
+
+    });
+    $(document).ready(function () {
+
+        setGridWidth(grid);
+
+    });
+
+    $(window).on('resize', function () {
+        setGridWidth(grid);
+    });
+
+    // function reloadGrid(targetGrid) {
+    //     var gridElement = $(targetGrid);
+    //     console.log(gridElement); // Check if gridElement is correctly selected
+    //     console.log(typeof gridElement); // Check if jqGrid function is available
+    //     // gridElement.jqGrid('setGridParam', { datatype: 'json' }).trigger('reloadGrid');
+    //     gridElement.trigger("reloadGrid");
+    // }
+    function closeModal() {
+        $('#editModal').modal('hide');
+    }
+
+</script>

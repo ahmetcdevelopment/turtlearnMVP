@@ -35,7 +35,10 @@ namespace turtlearnMVP.Persistance
             services.AddScoped<IUserSettingService, UserSettingManager>();
             services.AddScoped<IClaimService, ClaimManager>();
             services.AddScoped<IZrfRoleService, ZrfRoleManager>();
-
+            services.AddScoped<IOfferService, OfferManager>();
+            services.AddScoped<IOrderService, OrderManager>();
+            services.AddScoped<IOfferDetailService, OfferDetailManager>();
+            services.AddScoped<IOrderDetailService, OrderDetailManager>();
 
             //services.AddScoped<ISearchService, SearchManager>();
 

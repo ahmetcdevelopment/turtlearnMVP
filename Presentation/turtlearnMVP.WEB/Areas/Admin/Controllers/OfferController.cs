@@ -11,10 +11,11 @@ using turtlearnMVP.WEB.Helpers;
 
 namespace turtlearnMVP.WEB.Areas.Admin.Controllers;
 
+[Area("Admin")]
 public class OfferController : Controller
 {
     private readonly IOfferService _offerService;
-
+    private static string _code = "";
     public OfferController(IOfferService offerService)
     {
         _offerService = offerService;
@@ -29,16 +30,18 @@ public class OfferController : Controller
     {
         var model = new OfferEditViewModel();
         model.SelTypes = EnumHelper.GetEnumSelectList<OfferType>();
+        _code = Guid.NewGuid().ToString().Substring(0, 20);
         if (id.HasValue && id.Value > 0)
         {
             var entity = (await _offerService.GetById(id.Value)).Data ?? new Offer();
             model.Id = entity.Id;
             model.Name = entity.Name;
             model.Description = entity.Description;
-            model.Code = Guid.NewGuid().ToString();
             model.DiscountRate = entity.DiscountRate;
             model.Type = entity.Type;
         }
+        model.Code = _code;
+
         return View(model);
     }
     [HttpPost]
@@ -52,7 +55,7 @@ public class OfferController : Controller
                 return Json(new { Result = result });
             }
             result.Data.Name = model.Name;
-            result.Data.Code = model.Code;
+            result.Data.Code = _code;
             result.Data.Description = model.Description;
             result.Data.DiscountRate = model.DiscountRate;
             result.Data.Type = model.Type;
