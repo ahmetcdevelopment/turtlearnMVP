@@ -37,14 +37,12 @@ namespace turtlearnMVP.WEB.Models.User
         [DisplayName("Telefon Numarası")]
         [Required(ErrorMessage = "{0} Boş Geçilmemelidir.")]
         [MaxLength(13, ErrorMessage = "{0} {1} karakterden büyük olmamalıdır.")]
-        [MinLength(13, ErrorMessage = "{0} {1} karakterden küçük olmamalıdır.")]
         [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }
         //doğrulama için kontrol checkpassword gibi
 
         [DisplayName("Şifre")]
         [Required(ErrorMessage = "{0} Boş Geçilmemelidir.")]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{3,50}$", ErrorMessage = "{0} şu koşulları sağlamalıdır: en az bir küçük harf, en az bir büyük harf, en az bir rakam, en az bir özel karakter. Uzunluk 3 ile 50 karakter arasında olmalıdır.")]
         public string Password { get; set; }
 
 

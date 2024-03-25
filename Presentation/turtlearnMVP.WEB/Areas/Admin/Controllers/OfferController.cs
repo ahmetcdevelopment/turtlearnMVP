@@ -69,4 +69,24 @@ public class OfferController : Controller
         }
         return Json(new { Result = new Result(ResultStatus.Error, Messages.PageIsNotFound) });
     }
+    public async Task<JsonResult> DeleteOffer(int? id)
+    {
+        if (id.HasValue)
+        {
+            var result = await _offerService.GetById(id.Value);
+            if (result.ResultStatus == ResultStatus.Error)
+            {
+                return Json(new { Result = result });
+            }
+            result.Data.IsDeleted = true;
+            var updateResut = await _offerService.UpdateOrDelete(result.Data);
+            return Json(new { Result = updateResut });
+        }
+        return Json(new { Result = new Result(ResultStatus.Error, Messages.ResultIsNotFound) });
+    }
+    public async Task<JsonResult> GetAllToGrid()
+    {
+        var result = _offerService.FetchAllDtos().Data;
+        return Json(result, new Newtonsoft.Json.JsonSerializerSettings());
+    }
 }
