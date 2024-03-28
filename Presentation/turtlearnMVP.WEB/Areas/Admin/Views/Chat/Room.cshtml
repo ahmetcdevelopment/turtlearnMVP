@@ -1,5 +1,481 @@
 ﻿@{
+    var messangerId = ViewBag.MessangerId as string;
 }
+<meta charset="UTF-8">
+<link href="~/lib/scenary/controls/styles.css" rel="stylesheet" />
+<link href="~/lib/scenary/general/styles.css" rel="stylesheet" />
+<link href="~/lib/scenary/core/styles.css" rel="stylesheet" />
+<link href="~/css/zurafworks/chat.css" rel="stylesheet" />
+<script src="~/lib/scenary/core/script.js"></script>
+<link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+
+<!--BURADAN İTİBAREN CHAT-->
+@section Scripts {
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+    <!--BURADAN İTİBAREN GÖRÜNTÜLÜ GÖRÜŞME-->
+
+    <script src="~/lib/scenary/controls/script.js"></script>
+
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+    <script src="https://unpkg.com/peerjs@1.3.2/dist/peerjs.min.js"></script>
+    <script type="text/javascript">
+        var groupname = $('#messengerGroupName').val();
+        var connection = new signalR.HubConnectionBuilder().withUrl("/liveMeetingHub").build();
+        function convertUtcToDate(utcDateStr) {
+            // UTC zamanıyla gelen tarih
+            var utcDate = new Date(utcDateStr); // Örnek bir UTC tarihi
+
+            // Tarayıcının zaman dilimini al Örn : '2024-01-06T12:34:56Z'
+            var browserTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+            // Tarayıcının zaman dilimine göre tarihi formatla
+            var localDate = new Date(utcDate.toLocaleString('en-US', { timeZone: browserTimeZone }));
+            return localDate.toLocaleString();
+        }
+
+        function sendMessageHub() {
+            if ($('#txtMessage').val().length > 0) {
+                var message = $('#txtMessage').val();
+                connection.invoke("SendGroupMessage", groupname, message).catch(function (err) {
+                    return console.error(err.toString());
+                });
+                $('#txtMessage').val('');
+                $('#txtMessage').focus();
+            }
+        }
+
+        // function receiveMessageHub() {
+        //     connection.on("ReceiveGroupMessage", (name, msgDate, connectionId) => {
+        //         var bgClassName = connectionId == connection.connectionId ? 'bg-success' : 'bg-info';
+        //         $('#listName').append($('<li>').addClass('list-group-item ' + bgClassName).text(convertUtcToDate(msgDate) + " : " + name))
+        //     });
+        // }
+
+        function receiveMessageHub() {
+            connection.on("ReceiveGroupMessage", (name, msgDate, connectionId, msg) => {
+                debugger;
+                var liElement = $('<li>').css('margin-top', '10px');;
+                var msgElement = $('<div>').addClass('msg');
+                if (connectionId == connection.connectionId) {
+                    msgElement.addClass('right-msg');
+                } else {
+                    msgElement.addClass('left-msg');
+                }
+
+                var msgBubbleElement = $('<div>').addClass('msg-bubble');
+                var msgInfoElement = $('<div>').addClass('msg-info');
+                var msgInfoNameElement = $('<div>').addClass('msg-info-name').text("name");
+                var msgInfoTimeElement = $('<div>').addClass('msg-info-time').text(convertUtcToDate(msgDate));
+                var msgTextElement = $('<div>').addClass('msg-text').text(msg);
+
+                msgInfoElement.append(msgInfoNameElement, msgInfoTimeElement);
+                msgBubbleElement.append(msgInfoElement, msgTextElement);
+                msgElement.append(msgBubbleElement);
+
+                liElement.append(msgElement);  // Append the msg element to the li element
+                debugger;
+                $('#listName').append(liElement);  // Append the li element to the list
+                // $('#listName').append(msgElement);
+            });
+        }
+
+        function eventSendMessage() {
+            $('#btnSenderName').click(() => {
+                sendMessageHub();
+            });
+            $('#txtMessage').on('keyup', function (event) {
+                if (event.keyCode === 13) {
+                    sendMessageHub();
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            function ShowConnectionState() {
+                $('#connectionState').html(`<div class="alert alert-success">Connection Status : ${connection.q} </div>`);
+            }
+            connection.start().then(() => {
+                ShowConnectionState();
+                connection.invoke("JoinGroupChat", groupname).catch(function (err) {
+                    console.error(err.toString());
+                });
+            }).catch((err) => {
+                ShowConnectionState();
+                console.log('Hata : ' + err.toString());
+            });
+
+            eventSendMessage();
+            receiveMessageHub();
+        });
+        // $(document).ready(() => {
+
+
+        //     var connection = new signalR.HubConnectionBuilder().configureLogging(signalR.LogLevel.Debug).withAutomaticReconnect().withUrl("https://localhost:5000/myhub").build();
+        //     //Hub'ımızı çağırdık. Bağlantı kurduk ve bağlantıyı kimle kuracağımızı yazdık.
+        //     $("#sohbet1").hide();
+        //     $("#sohbet2").hide();
+        //     statusShow()
+        //     Start()
+
+        //     function Start() {
+        //         connection.start().then(() => {
+        //             statusShow()
+        //             if (connection.connectionState == "Connected") {
+        //                 $("#conStatus").text("Bağlandı!");
+        //                 $("#conStatus").addClass("text-success");
+        //                 $("#loading").hide();
+        //                 //connection.invoke("GetNames");
+        //                 connection.invoke("GetNamesByGroup");
+        //             }
+        //         }).catch((err) => {
+        //             console.log(err);
+        //             setTimeout(() => Start(), 2000)
+        //         })
+        //     }
+
+        //     function statusShow() {
+        //         $("#conStatus").text(connection.connectionState);
+        //     }
+
+
+
+        //     connection.onreconnecting(err => {
+        //         alert(err)
+        //         $("#loading").show();
+        //         statusShow()
+        //         console.log("onreconnection:" + err);
+        //     });
+
+        //     connection.onreconnected(connectionId => {
+        //         $("#loading").hide();
+        //         statusShow()
+        //         console.log("connectionId: " + connectionId)
+        //     });
+
+        //     connection.onclose(() => {
+        //         $("#loading").hide();
+        //         statusShow();
+        //         $("#conStatus").addClass("text-danger");
+        //         alert("Yeniden bağlanma başarısız oldu!");
+        //         Start();
+        //     });
+
+        //     connection.on("recieveClientCount", (clientCount) => {
+        //         $("#clientCount").text(clientCount);
+        //     });
+
+        //     connection.on("Notify", (countText) => {
+        //         console.log(countText);
+        //         $("#notify").html(`<div class="alert alert-warning alert-dismissible fade show" role="alert"> ${countText}
+        //                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        //                                             <span aria-hidden="true">&times;</span>
+        //                                         </button>
+        //                                    </div>`);
+        //     });
+
+        //     connection.on("Error", (errorText) => {
+        //         alert(errorText);
+        //     });
+
+        //     connection.on("recieveNames", (names) => {
+        //         $("#namesList").empty();
+        //         names.forEach((item, index) => {
+        //             var colon = item.split(':');
+        //             var messageName = colon[0];
+        //             var messageMsg = colon[1];
+        //             $("#namesList").append(`<li class="list-group-item"><b>${messageName}: </b>${messageMsg}</li>`)
+        //         })
+        //     });
+
+        //     connection.on("recieveName", (newMessage) => {
+        //         console.log(newMessage);
+
+
+        //         var colon = newMessage.split(':');
+        //         var messageName = colon[0];
+        //         var messageMsg = colon[1];
+        //         $("#namesList").append(`<li class="list-group-item"><b>${messageName}: </b>${messageMsg}</li>`)
+        //     })
+        //     //on methodu bir methoda subscribe olma işlemine yarar.
+
+        //     connection.on("recieveMessageByGroup", (name, teamId) => {
+        //         let listName;
+
+        //         if (teamId == 1) {
+        //             listName = "ATeamList";
+        //         }
+        //         else {
+        //             listName = "BTeamList"
+        //         }
+
+        //         let colon = name.split(':');
+        //         let messageName = colon[0];
+        //         let messageMsg = colon[1];
+        //         $(`#${listName}`).append(`<li class="list-group-item"><b>${messageName}</b>: ${messageMsg}</li>`)
+        //     })
+
+        //     connection.on("recieveNamesByGroup", (teams) => {
+
+        //         teams.forEach((team, index) => {
+
+        //             let listName;
+        //             if (team.teamId == 1) {
+        //                 listName = "ATeamList";
+        //             }
+        //             else {
+        //                 listName = "BTeamList";
+        //             }
+        //             team.users.forEach((user, index2) => {
+        //                 let colon = user.name.split(':');
+        //                 let messageName = colon[0];
+        //                 let messageMsg = colon[1];
+        //                 $(`#${listName}`).append(`<li class="list-group-item"><b>${messageName}</b>: ${messageMsg}</li>`)
+
+        //             })
+        //         })
+        //     })
+
+        //     connection.on("RecieveProduct", (product) => {
+        //         console.log(product);
+        //     })
+
+
+        //     $("#btnNameSave").click(() => {
+        //         let name = $("#txtName").val();
+
+        //         let message = $("#txtMessage").val();
+
+        //         let newMessage = name.concat(": ", message);
+        //         connection.invoke("SendName", newMessage).catch((err) =>
+        //             console.log(err))
+        //         //server tarafındaki methodları çağırmaya yarar. (invoke)
+        //     })
+
+        //     $("#btnNameTeam").click(() => {
+        //         let name = $("#txtName").val();
+        //         let message = $("#txtMessage").val();
+        //         let concatName = name.concat(": ", message);
+        //         let teamName = $("input[type=radio]:checked").val();
+        //         if (teamName == null) {
+        //             alert("Sohbet odası seçiniz");
+        //             return;
+        //         }
+
+        //         connection.invoke("SendNameByGroup", concatName, teamName).catch((err) => {
+        //             console.log(err);
+        //         })
+        //     })
+
+        //     $("input[type=radio]").change(() => {
+        //         let value = $(`input[type=radio]:checked`).val();
+
+        //         if (value == "TeamA") {
+        //             $("#sohbet2").hide();
+        //             $("#sohbet1").show();
+        //             connection.invoke("AddToGroup", value);
+        //             connection.invoke("RemoveToGroup", "TeamB");
+
+        //         }
+        //         else {
+        //             $("#sohbet1").hide();
+        //             $("#sohbet2").show();
+        //             connection.invoke("AddToGroup", value);
+        //             connection.invoke("RemoveToGroup", "TeamA");
+        //         }
+        //     })
+
+        // })
+
+
+        // <!--BURADAN YUKARUSI CHAT AŞAĞISI VİDEO-- >
+
+        const ROOM_ID = '@ViewBag.roomId'
+
+        const videoElements = [];
+        let userId = null
+        let localStream = null
+        let scenary = document.getElementsByClassName("Scenary")[0];
+        let userPeerIds = {};
+
+        //mic cam check
+        let micState = false;
+        let cameraState = false;
+
+
+        // create dish
+        let dish = new Dish(scenary);
+
+        // set controls (optional)
+        let controls = new Controls(dish, scenary);
+
+        // const connection = new signalR.HubConnectionBuilder().withUrl("/liveMeetingHub").build();
+
+        const myPeer = new Peer()
+
+        // myPeer.on('open', id => {
+        //     userId = id;
+        //     const startSignalR = async () => {
+        //         await connection.start();
+        //         await connection.invoke("JoinRoom", ROOM_ID, userId)
+        //         connection.on('user-connected', id => {
+        //             console.log(`User connected : ${id}`)
+        //         })
+        //     }
+        //     startSignalR();
+        // })
+
+        myPeer.on('open', id => {
+            userId = id;
+            const startSignalR = async () => {
+                console.log(`Local user ID: ${userId} mypeer on open`);
+                const now = new Date();
+                console.log(`Time: ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`); // Log current time
+                console.log(`--------------------------------------------------------------`); // Log current time
+                await connection.start();
+                await connection.invoke("JoinRoom", ROOM_ID, userId)
+                connection.on('user-connected', onUserConnected)
+
+            }
+            startSignalR();
+        })
+
+        const onUserConnected = (id) => {
+            userId = id;
+            console.log(`Local user ID: ${userId} onuserconnected`);
+            const now = new Date();
+            console.log(`Time: ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`); // Log current time
+            console.log(`--------------------------------------------------------------`); // Log current time
+        }
+
+
+        const videoGrid = document.querySelector('[video-grid]')
+        const myVideo = document.createElement('video')
+        // myVideo.muted = true;
+
+        // navigator.mediaDevices.getUserMedia({
+        //     audio: true,
+        //     video: true
+        // }).then(stream => {
+        //     debugger;
+        //     addVideoStream(myVideo, stream)
+
+        //     localStream = stream
+        // }).catch(error => {
+        //     console.error('Microphone access denied:', error);
+        // });
+
+        navigator.mediaDevices.getUserMedia({
+            audio: true,
+            video: true
+        }).then(stream => {
+            debugger;
+            console.log(`User connected: ${stream.id} (method: navigator media devices)`);
+            const now = new Date();
+            console.log(`Time: ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`); // Log current time
+            console.log(`--------------------------------------------------------------`); // Log current time
+            addVideoStream(myVideo, stream, stream.id); // Log user ID
+            localStream = stream;
+        })
+
+        connection.on('user-connected', id => {
+            debugger;
+            console.log(`User connected: ${id} (method: connection on userconnected)`);
+            const now = new Date();
+            console.log(`Time: <span class="math-inline">\{now\.getHours\(\)\}\:</span>{now.getMinutes()}:${now.getSeconds()}`); // Log current time
+            console.log(`--------------------------------------------------------------`); // Log current time
+            // connectedNewUser(id, localStream); // Her yeni bağlantıda bu fonksiyonu çağırın
+            // Mevcut kullanıcı varsa onun video akışını da ekleyin (aşağıdaki koda bakın)
+            // Mevcut kullanıcıların video akışlarını yeni kullanıcıyla paylaş
+            connection.invoke('GetConnectedUsers')
+                .then(connectedUsers => {
+                    for (const connectedUserId of connectedUsers) {
+                        if (connectedUserId === userId) continue;
+                        const connectedPeerId = userPeerIds[connectedUserId];
+                        if (connectedPeerId) {
+                            myPeer.call(connectedPeerId, localStream);
+                        }
+                    }
+                });
+            if (userId === id) return;
+        });
+
+        myPeer.on('call', call => {
+            call.answer(localStream);
+
+            const userVideo = document.createElement('video');
+            call.on('stream', userVideoStream => {
+                console.log(`Adding video stream for user ${userId} (method: mypeer on call)`); // Log with user ID
+                const now = new Date();
+                console.log(`Time: ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`); // Log current time
+                console.log(`--------------------------------------------------------------`); // Log current time
+                addVideoStream(userVideo, userVideoStream);
+            });
+        });
+
+
+        const addVideoStream = (video, stream, userId) => {
+            video.srcObject = stream;
+            video.addEventListener('loadedmetadata', () => {
+                // video.play()
+            });
+            console.log(`Adding video stream for user ${userId} (method: addVideoStream)`); // Log with user ID and method name
+            const now = new Date();
+            console.log(`Time: ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`); // Log current time
+            console.log(`--------------------------------------------------------------`); // Log current time
+            // videoGrid.appendChild(video)
+            // controls.append();
+            controls.addVideo(video, userId);
+        };
+
+        // const connectedNewUser = (userId, localStream) => {
+        //     const userVideo = document.createElement('video');
+        //     // Yeni kullanıcıyı arayın
+        //     const call = myPeer.call(userId, localStream);
+
+        //     call.on('stream', userVideoStream => {
+        //         console.log(`Adding video stream for user ${userId}`);
+        //         addVideoStream(userVideo, userVideoStream, userId);
+        //     });
+
+        //     // Mevcut kullanıcılara kendinizi gösterin
+        //     connection.invoke('GetConnectedUsers')
+        //         .then(connectedUsers => {
+        //             for (const connectedUserId of connectedUsers) {
+        //                 if (connectedUserId === userId) continue; // Kendinizi aramayın
+        //                 myPeer.call(connectedUserId, localStream);
+        //             }
+        //         });
+        // };
+
+        const connectedNewUser = (userId, localStream) => {
+            const userVideo = document.createElement('video');
+            // Yeni kullanıcıyı PeerJS ile ara
+            const peerId = userPeerIds[userId]; // userId ile connectionId (peerId) yi al
+            if (peerId) {
+                const call = myPeer.call(peerId, localStream);
+                call.on('stream', userVideoStream => {
+                    console.log(`Kullanıcı ${userId} için video akışı ekleniyor`);
+                    addVideoStream(userVideo, userVideoStream, userId);
+                });
+            }
+
+            // Mevcut kullanıcılara kendinizi gösterin
+            connection.invoke('GetConnectedUsers')
+                .then(connectedUsers => {
+                    for (const connectedUserId of connectedUsers) {
+                        if (connectedUserId === userId) continue; // Kendinizi aramayın
+                        const connectedPeerId = userPeerIds[connectedUserId]; // userId ile connectionId (peerId) yi al
+                        if (connectedPeerId) {
+                            myPeer.call(connectedPeerId, localStream);
+                        }
+                    }
+                });
+        };
+    </script>
+}
+@* <video controls="controls">
+    <source src="" type="video/mp4" />
+</video> *@
 <style>
     div[video-grid] {
         display: grid;
@@ -10,76 +486,340 @@
         div[video-grid] > video {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
         }
+
+    .video-widget {
+        height: 70vh;
+    }
+
+    .video-title {
+        margin-bottom: 0px !important;
+    }
 </style>
-<div video-grid>
+
+
+@* <div class="row">
+    <div class="col-lg-9">
+        <div class="widgets">
+            <div class="widget widget-serach video-widget">
+                <div class="widget">
+
+                    <div class="widget-content" style="height:70vh">
+                        <div video-grid>
+                        </div>
+                    </div>
+                    @*   <div class="widget-title video-title">
+                    <h6>İçerik Başlığı</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3">
+        <div class="widgets">
+            <div class="widget widget-serach">
+                <div class="widget">
+
+                    <div class="widget-content">
+                        <div video-grid>
+                        </div>
+                    </div>
+                    <div class="widget-title">
+                        <h6>Type</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+<hr /> *@
+<div class="row">
+    @* <hr /> *@
+    <div class="col-lg-9">
+        <div class="widgets">
+            <div class="widget widget-serach video-widget">
+                <div class="widget">
+
+                    <div class="widget-content" style="height:70vh">
+                        <div class="Scenary"></div>
+                    </div>
+                    @*   <div class="widget-title video-title">
+                    <h6>İçerik Başlığı</h6>
+                    </div> *@
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3">
+        <div class="widgets">
+            <div class="widget widget-serach video-widget">
+                <div class="widget">
+
+                    <div class="widget-content">
+                        <section class="space-ptb">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div id="connectionState">
+                                        </div>
+                                        @* <div class="mb-4">
+                                            <label for="name" class="form-label">Mesaj :</label>
+                                            <input type="text" class="form-control" id="txtMessage" placeholder="">
+                                        </div>
+                                        <hr />
+                                        <button class="btn btn-primary" id="btnSenderName">Gönder</button>
+                                        <hr /> *@
+                                        <div class="clearfix"></div>
+                                        <div class="col-md-12">
+                                            <ul class="list-group" id="listName">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="widget-title">
+                        <div class="mb-8">
+                            <label for="name" class="form-label">Mesaj :</label>
+                            <input type="text" class="form-control" id="txtMessage" placeholder="">
+                        </div>
+                        <div class="mb-8">
+
+                            <button class="btn btn-primary" id="btnSenderName">Gönder</button>
+                        </div>
+                        <input type="hidden" id="messengerGroupName" value="@messangerId" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!--BURADAN İTİBAREN GÖRÜNTÜLÜ GÖRÜŞME-->
+
+<script src="~/lib/scenary/controls/script.js"></script>
+
 <script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
 <script src="https://unpkg.com/peerjs@1.3.2/dist/peerjs.min.js"></script>
+
 <script>
-    const ROOM_ID = '@ViewBag.roomId'
-    let userId = null
-    let localStream = null
 
-    const connection = new signalR.HubConnectionBuilder().withUrl("/liveMeetingHub").build();
 
-    const myPeer = new Peer()
+    // const ROOM_ID = '@ViewBag.roomId'
 
-    myPeer.on('open', id => {
-        userId = id;
-        const startSignalR = async () => {
-            await connection.start();
-            await connection.invoke("JoinRoom", ROOM_ID, userId)
-            connection.on('user-connected', id => {
-                console.log(`User connected : ${id}`)
-            })
-        }
-        startSignalR();
-    })
+    // const videoElements = [];
+    // let userId = null
+    // let localStream = null
+    // let scenary = document.getElementsByClassName("Scenary")[0];
+    // let userPeerIds = {};
 
-    const videoGrid = document.querySelector('[video-grid]')
-    const myVideo = document.createElement('video')
-    myVideo.muted = true;
+    // //mic cam check
+    // let micState = false;
+    // let cameraState = false;
 
-    navigator.mediaDevices.getUserMedia({
-        audio: true,
-        video: true
-    }).then(stream => {
-        addVideoStream(myVideo, stream)
 
-        localStream = stream
-    })
+    // // create dish
+    // let dish = new Dish(scenary);
 
-    connection.on('user-connected', id => {
-        if (userId === id) return;
-        console.log(`User connected : ${id}`)
-        connectedNewUser(id,localStream)
-    })
-    
-    myPeer.on('call',call=>{
-        call.answer(localStream)
+    // // set controls (optional)
+    // let controls = new Controls(dish, scenary);
 
-        const userVideo = document.createElement('video')
-        call.on('stream', userVideoStream=>{
-            addVideoStream(userVideo,userVideoStream)
-        })
-    })
+    // // const connection = new signalR.HubConnectionBuilder().withUrl("/liveMeetingHub").build();
 
-    const addVideoStream = (video, stream) => {
-        video.srcObject = stream;
-        video.addEventListener('loadedmetadata', () => {
-            video.play()
-        })
-        videoGrid.appendChild(video)
-    }
+    // const myPeer = new Peer()
 
-    const connectedNewUser = (userId, localStream) => {
-        const userVideo = document.createElement('video')
-        const call = myPeer.call(userId,localStream)
-        
-        call.on('stream', userVideoStream => {
-            addVideoStream(userVideo, userVideoStream)
-        })
-    }
+    // // myPeer.on('open', id => {
+    // //     userId = id;
+    // //     const startSignalR = async () => {
+    // //         await connection.start();
+    // //         await connection.invoke("JoinRoom", ROOM_ID, userId)
+    // //         connection.on('user-connected', id => {
+    // //             console.log(`User connected : ${id}`)
+    // //         })
+    // //     }
+    // //     startSignalR();
+    // // })
+
+    // myPeer.on('open', id => {
+    //     userId = id;
+    //     const startSignalR = async () => {
+    //         console.log(`Local user ID: ${userId} mypeer on open`);
+    //         const now = new Date();
+    //         console.log(`Time: ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`); // Log current time
+    //         console.log(`--------------------------------------------------------------`); // Log current time
+    //         await connection.start();
+    //         await connection.invoke("JoinRoom", ROOM_ID, userId)
+    //         connection.on('user-connected', onUserConnected)
+
+    //     }
+    //     startSignalR();
+    // })
+
+    // const onUserConnected = (id) => {
+    //     userId = id;
+    //     console.log(`Local user ID: ${userId} onuserconnected`);
+    //     const now = new Date();
+    //     console.log(`Time: ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`); // Log current time
+    //     console.log(`--------------------------------------------------------------`); // Log current time
+    // }
+
+
+    // const videoGrid = document.querySelector('[video-grid]')
+    // const myVideo = document.createElement('video')
+    // // myVideo.muted = true;
+
+    // // navigator.mediaDevices.getUserMedia({
+    // //     audio: true,
+    // //     video: true
+    // // }).then(stream => {
+    // //     debugger;
+    // //     addVideoStream(myVideo, stream)
+
+    // //     localStream = stream
+    // // }).catch(error => {
+    // //     console.error('Microphone access denied:', error);
+    // // });
+
+    // navigator.mediaDevices.getUserMedia({
+    //     audio: true,
+    //     video: true
+    // }).then(stream => {
+    //     debugger;
+    //     console.log(`User connected: ${stream.id} (method: navigator media devices)`);
+    //     const now = new Date();
+    //     console.log(`Time: ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`); // Log current time
+    //     console.log(`--------------------------------------------------------------`); // Log current time
+    //     addVideoStream(myVideo, stream, stream.id); // Log user ID
+    //     localStream = stream;
+    // })
+
+    // connection.on('user-connected', id => {
+    //     debugger;
+    //     console.log(`User connected: ${id} (method: connection on userconnected)`);
+    //     const now = new Date();
+    //     console.log(`Time: <span class="math-inline">\{now\.getHours\(\)\}\:</span>{now.getMinutes()}:${now.getSeconds()}`); // Log current time
+    //     console.log(`--------------------------------------------------------------`); // Log current time
+    //     // connectedNewUser(id, localStream); // Her yeni bağlantıda bu fonksiyonu çağırın
+    //     // Mevcut kullanıcı varsa onun video akışını da ekleyin (aşağıdaki koda bakın)
+    //     // Mevcut kullanıcıların video akışlarını yeni kullanıcıyla paylaş
+    //     connection.invoke('GetConnectedUsers')
+    //         .then(connectedUsers => {
+    //             for (const connectedUserId of connectedUsers) {
+    //                 if (connectedUserId === userId) continue;
+    //                 const connectedPeerId = userPeerIds[connectedUserId];
+    //                 if (connectedPeerId) {
+    //                     myPeer.call(connectedPeerId, localStream);
+    //                 }
+    //             }
+    //         });
+    //     if (userId === id) return;
+    // });
+
+    // myPeer.on('call', call => {
+    //     call.answer(localStream);
+
+    //     const userVideo = document.createElement('video');
+    //     call.on('stream', userVideoStream => {
+    //         console.log(`Adding video stream for user ${userId} (method: mypeer on call)`); // Log with user ID
+    //         const now = new Date();
+    //         console.log(`Time: ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`); // Log current time
+    //         console.log(`--------------------------------------------------------------`); // Log current time
+    //         addVideoStream(userVideo, userVideoStream);
+    //     });
+    // });
+
+
+    // const addVideoStream = (video, stream, userId) => {
+    //     video.srcObject = stream;
+    //     video.addEventListener('loadedmetadata', () => {
+    //         // video.play()
+    //     });
+    //     console.log(`Adding video stream for user ${userId} (method: addVideoStream)`); // Log with user ID and method name
+    //     const now = new Date();
+    //     console.log(`Time: ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`); // Log current time
+    //     console.log(`--------------------------------------------------------------`); // Log current time
+    //     // videoGrid.appendChild(video)
+    //     // controls.append();
+    //     controls.addVideo(video, userId);
+    // };
+
+    // // const connectedNewUser = (userId, localStream) => {
+    // //     const userVideo = document.createElement('video');
+    // //     // Yeni kullanıcıyı arayın
+    // //     const call = myPeer.call(userId, localStream);
+
+    // //     call.on('stream', userVideoStream => {
+    // //         console.log(`Adding video stream for user ${userId}`);
+    // //         addVideoStream(userVideo, userVideoStream, userId);
+    // //     });
+
+    // //     // Mevcut kullanıcılara kendinizi gösterin
+    // //     connection.invoke('GetConnectedUsers')
+    // //         .then(connectedUsers => {
+    // //             for (const connectedUserId of connectedUsers) {
+    // //                 if (connectedUserId === userId) continue; // Kendinizi aramayın
+    // //                 myPeer.call(connectedUserId, localStream);
+    // //             }
+    // //         });
+    // // };
+
+    // const connectedNewUser = (userId, localStream) => {
+    //     const userVideo = document.createElement('video');
+    //     // Yeni kullanıcıyı PeerJS ile ara
+    //     const peerId = userPeerIds[userId]; // userId ile connectionId (peerId) yi al
+    //     if (peerId) {
+    //         const call = myPeer.call(peerId, localStream);
+    //         call.on('stream', userVideoStream => {
+    //             console.log(`Kullanıcı ${userId} için video akışı ekleniyor`);
+    //             addVideoStream(userVideo, userVideoStream, userId);
+    //         });
+    //     }
+
+    //     // Mevcut kullanıcılara kendinizi gösterin
+    //     connection.invoke('GetConnectedUsers')
+    //         .then(connectedUsers => {
+    //             for (const connectedUserId of connectedUsers) {
+    //                 if (connectedUserId === userId) continue; // Kendinizi aramayın
+    //                 const connectedPeerId = userPeerIds[connectedUserId]; // userId ile connectionId (peerId) yi al
+    //                 if (connectedPeerId) {
+    //                     myPeer.call(connectedPeerId, localStream);
+    //                 }
+    //             }
+    //         });
+    // };
 </script>
+
+<script>
+    window.addEventListener("load", function () {
+        debugger;
+        // select parent of dish
+
+        controls.append();
+
+        // render dish
+        dish.append();
+
+        // resize the cameras
+        dish.resize()
+
+        // resize event of window
+        window.addEventListener("resize", function () {
+
+            // resize event to dimension cameras
+            dish.resize();
+
+        });
+
+    }, false);
+</script>
+
+
+<!--BURADAN İTİBAREN CHAT-->
