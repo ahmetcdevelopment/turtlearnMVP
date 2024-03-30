@@ -41,7 +41,7 @@ namespace turtlearnMVP.Persistance.Services
         {
             var comment = await _UnitOfWork.Comments.GetByIdAsync(id);
             return comment == null || comment.Id <= 0 ?
-                new DataResult<Comment>(ResultStatus.Error, Messages.ResultIsNotFound, comment) :
+                new DataResult<Comment>(ResultStatus.Error, Messages.ResultIsNotFound, new Comment()) :
                 new DataResult<Comment>(ResultStatus.Success, comment);
         }
 

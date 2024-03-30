@@ -57,11 +57,15 @@
                             <div class="widget widget-serach">
                                 <h6 class="widget-title">Yorumlar</h6>
                                 <div class="widget-content">
-                                    <form class="fill-form">
+                                    <form class="fill-form" asp-area="Admin" asp-controller="Comment" asp-action="Send" method="post" onsubmit="return false" id="editForma">
+                                        @* @Html.HiddenFor(x=>x.) *@
                                         <div class="form-group mb-3">
-                                            <input type="text" class="form-control" placeholder="Yorum...">
+                                            @if (Model.CommentSendModel != null)
+                                            {
+                                                @Html.TextAreaFor(m => m.CommentSendModel.Text, new { @class = "form-control form-setting", @placeholder = "Yorum..." })
+                                            }
                                         </div>
-                                        <button type="button" class="btn btn-primary">Gönder</button>
+                                        <button id="saveButtoni" type="button" class="btn btn-primary">Gönder</button>
                                     </form>
                                 </div>
                             </div>
@@ -83,8 +87,52 @@
     $(document).ready(function () {
 
         var componentTarget = $("#viewComponentContainerSidebar")
-        getViewComponent(componentTarget, "/Admin/Course/GetSidebarViewComponent?courseId="+@Model.Id)
+        getViewComponent(componentTarget, "/Admin/Course/GetSidebarViewComponent?courseId=" + @Model.Id)
 
+
+        // // Handle click event on the login tab
+        // $('#login-tab').on('click', function () {
+        //     // Set the value of RegUserTypeId to -1
+        //     $('input[name="RegUserTypeId"]').val('-1');
+        // });
+
+        // Handle click event on the register tab
+
+        $('#saveButtoni').on('click', function () {
+            submitForm(1);
+        });
+
+        function submitForm(submitType) {
+            // Serialize the form data
+            var formData = $('#editForma').serialize();
+
+            var grid = getOperationGrid();
+            $.ajax({
+                url: "/Admin" + $('#editForma').attr('action'),
+                type: 'POST',
+                data: formData,
+                success: function (result) {
+                    $.gritter.add({
+                        title: 'Başarılı',
+                        text: result.message,
+                        class_name: 'gritter-success',
+                        sticky: false,
+                        time: 5000
+                    });
+                    reloadGrid(grid);
+                    closeModal();
+                },
+                error: function (result) {
+                    $.gritter.add({
+                        title: 'Hata',
+                        text: result.message,
+                        class_name: 'gritter-error',
+                        sticky: false,
+                        time: 5000
+                    });
+                }
+            });
+        }
     });
 </script>
 

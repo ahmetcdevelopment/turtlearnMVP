@@ -53,6 +53,7 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
         public async Task<IActionResult> CourseDetail(int id)
         {
             var model = new CourseDetailViewModel();
+            model.CommentSendModel = new CommentSendEditViewModel();
             var entity = _mainService.GetById(id).GetAwaiter().GetResult().Data;
             if (entity != null)
             {

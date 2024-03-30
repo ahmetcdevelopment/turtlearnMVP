@@ -4,13 +4,14 @@
 <div class="widgets">
     <h6 class="widget-title">
         <ul class="meta-course">
-            <li><i class="fa fa-clock"></i>Buraya saat gelecek</li>
+            <li><i class="fa fa-clock"></i>@Model.StartDate.ToString("HH:MM")</li>
             <li><i class="far fa-calendar"></i>@Model.StartDate.ToString("dd/MM/yyyy")</li>
-            <li><i class="fa fa-link"></i><a href="@Model.Link">@Model.Link</a></li>
+            <li><i class="fa fa-link"></i><a href="https://localhost:7290/Admin/Chat/@Model.Link">@Model.Link.Trim()</a></li>
         </ul>
     </h6>
 
     <div class="widget-content">
+        <div id="sessionId" style="display:none;">@Model.Id</div>
         <h2> @Model.Name</h2>
         <p class="mb-4 mb-sm-5"> @Model.Description</p>
         

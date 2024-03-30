@@ -24,7 +24,7 @@
         @* modal-lg modal-xl pop up genişliği için*@
         <div class="modal-content">
             <div class="modal-header border-0">
-                <h5 class="modal-title" id="loginModalLabel">Kurs</h5>
+                <h5 class="modal-title" id="loginModalLabel">Oturum</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -36,9 +36,9 @@
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="mb-12 col-sm-12 form-floating">
-                                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control form-setting", @placeholder = "Kurs Adı" })
+                                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control form-setting", @placeholder = "Oturum Başlığı" })
                                     @Html.ValidationMessageFor(m => m.Name)
-                                    <label class="float-setting text-dark fw-bold" for="floatingInput">Kurs Adı</label>
+                                    <label class="float-setting text-dark fw-bold" for="floatingInput">Oturum Başlığı</label>
                                 </div>
                             </div>
                             <div class="row">
@@ -66,19 +66,19 @@
                                 <label class="float-setting text-dark fw-bold" for="floatingInput">Açıklama</label>
                             </div>
                         </div>
-                        <div class="row">
+                        @* <div class="row">
                             <div class="mb-12 col-sm-12 form-floating">
                                 @Html.TextAreaFor(m => m.Link, new { @class = "form-control form-setting", @placeholder = "Ders Linki" })
                                 @Html.ValidationMessageFor(m => m.Link)
                                 <label class="float-setting text-dark fw-bold" for="floatingInput">Ders Linki</label>
                             </div>
-                        </div>
+                        </div> *@
                         <div class="row form-setting">
                             <div class="col-sm-6">
-                                <button id="cancelButton" class="btn btn-error">Cancel</button>
+                                <button id="cancelButton" class="btn btn-error">İptal</button>
                             </div>
                             <div class="col-sm-6 text-lg-end">
-                                <button id="saveButton" class="btn btn-primary">Save</button>
+                                <button id="saveButton" class="btn btn-primary">Kaydet</button>
                             </div>
                         </div>
                     </div>

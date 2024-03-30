@@ -45,7 +45,6 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
                 model.Name = resultData.Name;
                 model.Description = resultData.Description;
                 model.StartDate = resultData.StartDate;
-                model.Link = resultData.Link;
             }
             else
             {
@@ -70,10 +69,10 @@ namespace turtlearnMVP.WEB.Areas.Admin.Controllers
                 result.Data.Name = model.Name;
                 result.Data.Description = model.Description;
                 result.Data.StartDate = model.StartDate;
-                result.Data.Link = model.Link;
                 result.Data.Queue = last + 1;
                 if (result.Data.Id == 0)
                 {
+                    result.Data.Link = $"{Guid.NewGuid()}";//Ders Linkleri bu şekilde atanacak.
                     result.Data.IsDeleted = false;
                     result.Data.UpdateDate = DateTime.Now;
                     var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

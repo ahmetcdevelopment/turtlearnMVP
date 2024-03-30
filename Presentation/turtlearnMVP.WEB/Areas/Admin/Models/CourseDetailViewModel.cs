@@ -4,6 +4,7 @@ namespace turtlearnMVP.WEB.Areas.Admin.Models
 {
     public class CourseDetailViewModel
     {
+        public CommentSendEditViewModel? CommentSendModel { get; set; }
         public int? Id { get; set; }
         public int TeacherId { get; set; } //UserId'den. her kursun bir öğretmeni vardır.
         public string TeacherName { get; set; } //UserId'den. her kursun bir öğretmeni vardır.

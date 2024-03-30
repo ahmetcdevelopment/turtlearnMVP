@@ -19,7 +19,7 @@ namespace turtlearnMVP.WEB.Areas.Admin.Models
         /// <summary>
         /// ders linki
         /// </summary>
-        public string Link { get; set; }// dersin yapılacağı link
+        //public string Link { get; set; }// dersin yapılacağı link
 
 
         [StringLength(350)]
