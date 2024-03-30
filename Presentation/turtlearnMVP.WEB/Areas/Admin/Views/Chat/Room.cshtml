@@ -8,7 +8,29 @@
 <link href="~/css/zurafworks/chat.css" rel="stylesheet" />
 <script src="~/lib/scenary/core/script.js"></script>
 <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+<style>
+    .role-scroll {
+        overflow-y: auto;
+        max-height: 70vh;
+    }
 
+        .role-scroll::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            border-radius: 10px;
+            background-color: #F5F5F5;
+        }
+
+        .role-scroll::-webkit-scrollbar {
+            width: 12px;
+            background-color: #F5F5F5;
+        }
+
+        .role-scroll::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+            background-color: #538662;
+        }
+</style>
 <!--BURADAN İTİBAREN CHAT-->
 @section Scripts {
     <script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
@@ -21,6 +43,17 @@
     <script type="text/javascript">
         var groupname = $('#messengerGroupName').val();
         var connection = new signalR.HubConnectionBuilder().withUrl("/liveMeetingHub").build();
+        // const roleScroll = document.getElementById("role-scroll"); // Get the element
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.scrollIntoView();
+                    observer.unobserve(entry.target);  // Stop observing after it's visible
+                }
+            });
+        });
+
         function convertUtcToDate(utcDateStr) {
             // UTC zamanıyla gelen tarih
             var utcDate = new Date(utcDateStr); // Örnek bir UTC tarihi
@@ -52,8 +85,8 @@
         // }
 
         function receiveMessageHub() {
-            connection.on("ReceiveGroupMessage", (name, msgDate, connectionId, msg) => {
-                debugger;
+            connection.on("ReceiveGroupMessage", (message, msgDate, connectionId, senderName) => {
+                // debugger;
                 var liElement = $('<li>').css('margin-top', '10px');;
                 var msgElement = $('<div>').addClass('msg');
                 if (connectionId == connection.connectionId) {
@@ -64,18 +97,24 @@
 
                 var msgBubbleElement = $('<div>').addClass('msg-bubble');
                 var msgInfoElement = $('<div>').addClass('msg-info');
-                var msgInfoNameElement = $('<div>').addClass('msg-info-name').text("name");
+                var msgInfoNameElement = $('<div>').addClass('msg-info-name').text(senderName);
                 var msgInfoTimeElement = $('<div>').addClass('msg-info-time').text(convertUtcToDate(msgDate));
-                var msgTextElement = $('<div>').addClass('msg-text').text(msg);
+                var msgTextElement = $('<div>').addClass('msg-text').text(message);
 
                 msgInfoElement.append(msgInfoNameElement, msgInfoTimeElement);
                 msgBubbleElement.append(msgInfoElement, msgTextElement);
                 msgElement.append(msgBubbleElement);
 
                 liElement.append(msgElement);  // Append the msg element to the li element
-                debugger;
+                // debugger;
                 $('#listName').append(liElement);  // Append the li element to the list
                 // $('#listName').append(msgElement);
+                // roleScroll.scrollTop = roleScroll.scrollHeight; // Scroll to bottom
+                // const element = document.querySelector('.new-element');
+                // liElement.scrollIntoView(liElement);
+                // debugger;
+                // $('#listName').scrollTop($('#listName')[0].scrollHeight);
+                observer.observe(liElement[0]);
             });
         }
 
@@ -107,6 +146,13 @@
             eventSendMessage();
             receiveMessageHub();
         });
+
+       
+
+        // // Event listener for new messages
+        // connection.on("ReceiveGroupMessage", () => {
+            
+        // });
         // $(document).ready(() => {
 
 
@@ -558,13 +604,12 @@
             <div class="widget widget-serach video-widget">
                 <div class="widget">
 
-                    <div class="widget-content">
-                        <section class="space-ptb">
-                            <div class="container">
+                    <div class="widget-content role-scroll" style="height:70vh">
+                       @*  <section class="space-ptb">
+                            <div class="container"> *@
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div id="connectionState">
-                                        </div>
+                                        Herkese Açık Sohbete Hoşgeldiniz...
                                         @* <div class="mb-4">
                                             <label for="name" class="form-label">Mesaj :</label>
                                             <input type="text" class="form-control" id="txtMessage" placeholder="">
@@ -579,18 +624,20 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </section>
+                    @*         </div>
+                        </section> *@
                     </div>
-                    <div class="widget-title">
-                        <div class="mb-8">
-                            <label for="name" class="form-label">Mesaj :</label>
-                            <input type="text" class="form-control" id="txtMessage" placeholder="">
-                        </div>
-                        <div class="mb-8">
+                    <div class="widget-title video-title">
+                       <div class="row">
+                            <div class="col-md-8">
+                                @* <label for="name" class="form-label">Mesaj :</label> *@
+                                <input type="text" class="form-control" id="txtMessage" placeholder="">
+                            </div>
+                            <div class="col-md-4">
 
-                            <button class="btn btn-primary" id="btnSenderName">Gönder</button>
-                        </div>
+                                <button class="btn btn-primary" id="btnSenderName">Gönder</button>
+                            </div>
+                       </div>
                         <input type="hidden" id="messengerGroupName" value="@messangerId" />
                     </div>
                 </div>
@@ -600,7 +647,8 @@
 </div>
 
 
-
+<div style="position:fixed; margin-bottom: 5px; margin-left:5px; max-width:500px;" id="connectionState">
+</div>
 
 
 <!--BURADAN İTİBAREN GÖRÜNTÜLÜ GÖRÜŞME-->

@@ -50,9 +50,16 @@ body {
     left: -10px !important;
     border: none !important;
     /*height: 70px !important;*/
-    padding-top:7px;
-    padding-bottom:7px;
-    padding-left:15px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    padding-left: 15px;
+    /*padding-right: 15px;*/
+    max-width: 500px;
+    height:70px;
+    max-height:70px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .popover-header {
