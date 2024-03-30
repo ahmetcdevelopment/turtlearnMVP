@@ -2,13 +2,19 @@
 @* <script src="~/js/bootstrap/bootstrap.min.js"></script> *@
 
 @* <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script> *@
-
+<style>
+    body {
+        overflow: hidden;
+    }
+</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script>
     $(function () {
         $('[data-toggle="popover"]').popover({
-            trigger: 'hover' // Set trigger to 'hover'
+            trigger: 'hover', // Set trigger to 'hover'
+                 boundary: 'window',
+            html: true
         });
     });
 
@@ -16,6 +22,16 @@
 <script type="text/javascript">
     $(document).ready(function () {
         const $ = document.querySelectorAll.bind(document);
+
+        $(".session").on("mouseenter", function () {
+            this.style.pointerEvents = "none";
+            $(this).popover("show");
+        });
+
+        $(".session").on("mouseleave", function () {
+            $(this).popover("hide");
+            this.style.pointerEvents = "auto";
+        });
 
         $(".focusable, .button").forEach(el => {
             // blur only on mouse click
@@ -46,7 +62,7 @@
     {
         foreach (var session in Model.Sessions)
         {
-            <div onclick="getSession(@session.Id)" class="sessions-collection" data-toggle="popover" title="@session.SessionName" data-trigger="hover" data-content="Popover Content" animation="true">
+            <div onclick="getSession(@session.Id)" class="sessions-collection" data-toggle="popover" title="@session.SessionName" data-trigger="hover" @* data-content="Popover Content" *@ animation="true">
                 <div class="session focusable @(session.Queue == 1 ? "active" : "unread")" role="button" aria-label="Discord Developers unread" @(session.Queue == 1 ? "aria-selected=\"true\"" : "") @* data-toggle="popover" title="Popover title" data-trigger="hover" data-content="Popover Content" *@>
                     <div class="session-icon">@session.Queue</div>
                 </div>

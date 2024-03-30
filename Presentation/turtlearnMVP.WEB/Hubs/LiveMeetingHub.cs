@@ -74,8 +74,9 @@ public class LiveMeetingHub : Hub
     }
     public async Task SendGroupMessage(string groupName, string message)
     {
+        var senderName = "deneme";
         await Clients.Group(groupName)
-  .SendAsync("ReceiveGroupMessage", message, DateTime.UtcNow, Context.ConnectionId);
+  .SendAsync("ReceiveGroupMessage", message, DateTime.UtcNow, Context.ConnectionId, senderName);
     }
     //public async Task SendGroupMessage(string groupName, string message)
     //{
