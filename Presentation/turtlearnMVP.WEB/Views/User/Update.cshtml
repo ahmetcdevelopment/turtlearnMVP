@@ -6,97 +6,134 @@
 @{
     Layout = null;
 }
+
+<style>
+    #file {
+        /* visibility: hidden !important; */
+        /* z-index:-9999; */
+    }
+
+    .gallery-icon a {
+        cursor: pointer; /* Change cursor to pointer on hover */
+    }
+</style>
 <!-- Gritter.js script -->
 <script src="https://cdn.jsdelivr.net/npm/gritter@1.7.4/js/jquery.gritter.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/gritter@1.7.4/css/jquery.gritter.min.css" rel="stylesheet">
 <!--=================================
   Modal login -->
 <div class="modal login fade show" id="editModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header border-0">
-                <h5 class="modal-title" id="loginModalLabel">Kategori</h5>
+                <h5 class="modal-title" id="loginModalLabel">@Model.UserName</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="editForm" method="post" onsubmit="return false" asp-controller="Category" asp-action="AddOrUpdate">
-                    @Html.HiddenFor(m => m.Id)
-                    <div class="row my-4 align-items-center">
-                        <div class="col-md-4 col-sm-6">
-                            <div class="gallery-item">
-                                <img class="img-fluid" src="images/gallery/01.jpg" alt="">
-                                <div class="gallery-overlay">
-                                    <div class="gallery-description">
-                                        <div class="gallery-icon">
-                                            <a class="popup gallery-img" href="images/gallery/01.jpg"><i class="fa fa-camera"></i></a>
+                <form id="editForm" method="post" enctype="multipart/form-data" onsubmit="return false" asp-controller="User" asp-action="Update">
+                    <div class="row">
+                        <div class="col-md-4">
+                            @Html.HiddenFor(m => m.Id)
+                            @Html.HiddenFor(u => u.PictureStr)
+                            @* @Html.TextBoxFor(u => u.Picture, new { type = "file", id = "file", accept = "image/*", @onchange = "loadFile(this)" }) *@
+
+                            <div class="row my-4 align-items-center">
+                                <div class="col-md-12 col-sm-6">
+                                    <div class="gallery-item">
+                                        <img id="img" class="img-fluid" src="~/images/avatar/@Model.PictureStr" alt="">
+                                        <label for="file">
+                                            @Html.TextBoxFor(u => u.Picture, new { type = "file", id = "file", accept = "image/*", style = "display:none !important;", @onchange = "loadProfilePicture(this, 'img', 'resizedImageInput')" })
+                                            @Html.TextBoxFor(u => u.CheckedPicture, new { type = "file", id = "resizedImageInput", name = "ResizedImage", accept = "image/*",  style="display:none !important;" /* , @onchange = "loadFile(this, 'img')"  */})
+                                        
+                                        <div class="gallery-overlay">
+                                            <div class="gallery-description">
+                                                <div class="gallery-icon">
+                                                    <a class="popup gallery-img"><i class="fa fa-camera"></i></a><br />
+                                                </div>
+                                                <h6 style="margin-left:-15px !important;">
+                                                    Dosya Seç!
+                                                </h6>
+                                            </div>
                                         </div>
+                                        </label>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="mb-12 col-sm-12 form-floating">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="mb-12 col-sm-12 form-floating">
 
-                                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control form-setting", @placeholder = "Kullanıcı Adı" })
-                                @Html.ValidationMessageFor(m => m.UserName)
-                                <label class="float-setting text-dark fw-bold" for="floatingInput">Kullanıcı Adı</label>
+                                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control form-setting", @placeholder = "Kullanıcı Adı" })
+                                    @Html.ValidationMessageFor(m => m.UserName)
+                                    <label class="float-setting text-dark fw-bold" for="floatingInput">Kullanıcı Adı</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="mb-12 col-sm-12 form-floating">
+
+                                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control form-setting", @placeholder = "Adı" })
+                                    @Html.ValidationMessageFor(m => m.FirstName)
+                                    <label class="float-setting text-dark fw-bold" for="floatingInput">Adı</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="mb-12 col-sm-12 form-floating">
+
+                                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control form-setting", @placeholder = "Soyadı" })
+                                    @Html.ValidationMessageFor(m => m.LastName)
+                                    <label class="float-setting text-dark fw-bold" for="floatingInput">Soyadı</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="mb-12 col-sm-12 form-floating">
+
+                                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control form-setting", @placeholder = "Email" })
+                                    @Html.ValidationMessageFor(m => m.Email)
+                                    <label class="float-setting text-dark fw-bold" for="floatingInput">Email</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="mb-12 col-sm-12 form-floating">
+
+                                    @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control form-setting", @placeholder = "Telefon" })
+                                    @Html.ValidationMessageFor(m => m.PhoneNumber)
+                                    <label class="float-setting text-dark fw-bold" for="floatingInput">Telefon</label>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="mb-12 col-sm-12 form-floating">
-
-                                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control form-setting", @placeholder = "Adı" })
-                                @Html.ValidationMessageFor(m => m.FirstName)
-                                <label class="float-setting text-dark fw-bold" for="floatingInput">Adı</label>
+                        <div class="col-md-4">
+                            <div style="height:100% !important" class="mb-12 col-sm-12 form-floating">
+                                @Html.TextAreaFor(m => m.Biography, new { @class = "form-control form-setting", @placeholder = "Biyografi", @style="height:95% !important;" })
+                                @Html.ValidationMessageFor(m => m.Biography)
+                                <label class="float-setting text-dark fw-bold" for="floatingInput">Biyografi</label>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="mb-12 col-sm-12 form-floating">
+                    </div>
 
-                                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control form-setting", @placeholder = "Soyadı" })
-                                @Html.ValidationMessageFor(m => m.LastName)
-                                <label class="float-setting text-dark fw-bold" for="floatingInput">Soyadı</label>
-                            </div>
+                    @*  <div class="row"> <!-- For Bio -->
+                    <div class="mb-12 col-sm-12 form-floating">
+                    @Html.TextAreaFor(m => m.Content, new { @class = "form-control form-setting", @placeholder = "İçerik" })
+                    @Html.ValidationMessageFor(m => m.Content)
+                    <label class="float-setting text-dark fw-bold" for="floatingInput">İçerik</label>
+                    </div>
+                    </div> *@
+                    @*  <div class="row">
+                    <div class="mb-12 col-sm-12 form-floating">
+                    @Html.TextAreaFor(m => m.Description, new { @class = "form-control form-setting", @placeholder = "Açıklama" })
+                    @Html.ValidationMessageFor(m => m.Description)
+                    <label class="float-setting text-dark fw-bold" for="floatingInput">Açıklama</label>
+                    </div>
+                    </div> *@
+                    <div class="row form-setting">
+                        <div class="col-sm-6">
+                            <button id="cancelButton" class="btn btn-error">İptal</button>
                         </div>
-                        <div class="row">
-                            <div class="mb-12 col-sm-12 form-floating">
+                        <div class="col-sm-6 text-lg-end">
+                            <button id="saveButton" class="btn btn-primary">Kaydet</button>
 
-                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control form-setting", @placeholder = "Email" })
-                                @Html.ValidationMessageFor(m => m.Email)
-                                <label class="float-setting text-dark fw-bold" for="floatingInput">Email</label>
-                            </div>
                         </div>
-                        <div class="row">
-                            <div class="mb-12 col-sm-12 form-floating">
-
-                                @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control form-setting", @placeholder = "Telefon" })
-                                @Html.ValidationMessageFor(m => m.PhoneNumber)
-                                <label class="float-setting text-dark fw-bold" for="floatingInput">Telefon</label>
-                            </div>
-                        </div>
-                       @*  <div class="row"> <!-- For Bio -->
-                            <div class="mb-12 col-sm-12 form-floating">
-                                @Html.TextAreaFor(m => m.Content, new { @class = "form-control form-setting", @placeholder = "İçerik" })
-                                @Html.ValidationMessageFor(m => m.Content)
-                                <label class="float-setting text-dark fw-bold" for="floatingInput">İçerik</label>
-                            </div>
-                        </div> *@
-                       @*  <div class="row">
-                            <div class="mb-12 col-sm-12 form-floating">
-                                @Html.TextAreaFor(m => m.Description, new { @class = "form-control form-setting", @placeholder = "Açıklama" })
-                                @Html.ValidationMessageFor(m => m.Description)
-                                <label class="float-setting text-dark fw-bold" for="floatingInput">Açıklama</label>
-                            </div>
-                        </div> *@
-                        <div class="row form-setting">
-                            <div class="col-sm-6">
-                                <button id="cancelButton" class="btn btn-error">Cancel</button>
-                            </div>
-                            <div class="col-sm-6 text-lg-end">
-                                <button id="saveButton" class="btn btn-primary">Save</button>
-
-                            </div>
-                        </div>
+                    </div>
                 </form>
             </div>
         </div>
@@ -106,6 +143,11 @@
 Modal login -->
 <script>
     $(document).ready(function () {
+
+        
+
+
+
         // // Handle click event on the login tab
         // $('#login-tab').on('click', function () {
         //     // Set the value of RegUserTypeId to -1
@@ -127,14 +169,22 @@ Modal login -->
         });
 
         function submitForm(submitType) {
-            // Serialize the form data
-            var formData = $('#editForm').serialize();
+            var formData = new FormData(document.getElementById('editForm'));
 
-            var grid = getOperationGrid();
+            var fileInput = document.getElementById("file");
+            var checkedFileInput = document.getElementById("resizedImageInput");
+            if (fileInput.files && fileInput.files[0]) {
+                formData.append("Picture", fileInput.files[0]);
+                formData.append("CheckedPicture", checkedFileInput.files[0]);
+            }
+
+            debugger;
             $.ajax({
-                url: "/Admin" + $('#editForm').attr('action'),
+                url: $('#editForm').attr('action'),
                 type: 'POST',
                 data: formData,
+                processData: false,  // Bu satırı eklemelisiniz.
+                contentType: false,  // Bu satırı eklemelisiniz.
                 success: function (result) {
                     $.gritter.add({
                         title: 'Başarılı',
@@ -143,7 +193,6 @@ Modal login -->
                         sticky: false,
                         time: 5000
                     });
-                    reloadGrid(grid);
                     closeModal();
                 },
                 error: function (result) {

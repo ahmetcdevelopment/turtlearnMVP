@@ -67,5 +67,14 @@ namespace turtlearnMVP.Persistance.Services
             Random random = new Random();
             return Task.FromResult(random.Next(100000, 999999));
         }
+
+        public async Task<IDataResult<UserSetting>> GetByUserIdAndKey(int userId, int typeId, int key)
+        {
+            var userSetting = _UnitOfWork.UserSettings.GetAll().Where(x => x.UserId == userId && x.TypeId == typeId && x.Key == key && x.IsDeleted == false).FirstOrDefault();
+
+            return userSetting == null || userSetting.Id <= 0 ?
+                new DataResult<UserSetting>(ResultStatus.Error, Messages.ResultIsNotFound, new UserSetting()) :
+                new DataResult<UserSetting>(ResultStatus.Success, userSetting);
+        }
     }
 }

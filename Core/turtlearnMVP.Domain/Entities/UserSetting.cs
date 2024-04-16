@@ -10,12 +10,12 @@ namespace turtlearnMVP.Domain.Entities
 {
     [TableInfo("Kullanıcı Ayarları", 20)]
     /// <summary>
-    /// Her ders dalı bir kategoriyi temsil eder. Örneğin Matematik kategorisi ya da Biyoloji kategorisi
+    /// Kullanıcının ayarlarını temsil eder. her biri farklı bir ayardır örneğin bildirim kapatma ya da mail doğrulaması
     /// </summary>
     public class UserSetting : EntityBase<int>, IEntity
     {
         /// <summary>
-        /// Ayar Türü. Enum. Örneğin(Doğrulama, Bildirim ya da olabilecek diğer hesap ayarları)
+        /// İlgili Kullanıcının Id'si
         /// </summary>
         public int UserId { get; set; }
 

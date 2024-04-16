@@ -41,6 +41,13 @@ namespace turtlearnMVP.WEB.Models.User
         public string PhoneNumber { get; set; }
 
         [DisplayName("Resim")]
-        public string Picture { get; set; }
+        public IFormFile? Picture { get; set; }
+        [DisplayName("Resim Dosya Adı")]
+        public string PictureStr { get; set; } = "default.jpg";
+        [DisplayName("Kontrol Edilmiş Resim")]
+        public IFormFile? CheckedPicture { get; set; }
+
+        [DisplayName("Biyografi")]
+        public string? Biography { get; set; }
     }
 }

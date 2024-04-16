@@ -49,6 +49,75 @@
 
     <!-- Template Style -->
     <link rel="stylesheet" href="~/css/style.css" />
+    <script type="text/javascript">
+        var operationGrid;
+
+        function reloadGrid(targetGrid) {
+            targetGrid.trigger("reloadGrid");
+        }
+
+        function setOperationGrid(targetGridId) {
+            debugger;
+            operationGrid = targetGridId;
+        }
+
+        function getOperationGrid() {
+            debugger;
+            return operationGrid;
+        }
+
+        function setDatePicker(targetElement) {
+            try {
+                targetElement.datetimepicker({
+                    format: 'DD/MM/YYYY',
+                    showTimepicker: false
+                });
+            } catch (error) {
+                console.error('Datetimepicker initialization error:', error);
+            }
+        }
+
+        function fillDropdowns() {
+            $(".zuraf-select").each(function () {
+                var dropdown = $(this);
+                var targetUrl = dropdown.data("fill-target-url");
+                // Placeholder değerini al
+                var placeholder = dropdown.attr("placeholder");
+
+                // AJAX isteği göndererek verileri al
+                $.ajax({
+                    url: targetUrl,
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        // Verileri alındıktan sonra dropdown'u doldur
+                        dropdown.empty(); // Önce dropdown'u temizle
+
+                        // Placeholder'ı ekleyin, eğer varsa
+                        if (placeholder) {
+                            dropdown.append($('<option disabled selected value="0"></option>').text(placeholder));
+                        }
+
+                        $.each(data, function (key, entry) {
+                            dropdown.append($('<option></option>').attr('value', entry.value).text(entry.text));
+                        });
+
+                        // İlgili dropdown seçilen değeri yükle
+                        dropdown.val(0);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                        // Hata durumunda bir işlem yapılabilir
+                    }
+                });
+            });
+        }
+
+
+        // $(function () {
+        //     $('[data-toggle="popover"]').popover();
+        // });
+    </script>
 </head>
 <body>
     <div id="loginOrRegisterPartialZone"></div>
@@ -341,6 +410,178 @@
                 target.html(data);
             });
         }
+
+        // function loadFile(inputFile, imgElementId) {
+        //     // **Fonksiyon, seçilen dosyayı okur ve önizlemeyi belirtilen görüntü öğesine gösterir**
+
+        //     // 1. Görüntü öğesini parametre olarak alınan ID'ye göre al
+        //     var img = document.getElementById(imgElementId);
+
+        //     // 2. Bir dosya seçilip seçilmediğini kontrol edin
+        //     if (inputFile.files && inputFile.files[0]) {
+        //         // 3. Bir FileReader nesnesi oluşturun
+        //         var reader = new FileReader();
+
+        //         // 4. Dosya başarıyla okunduktan sonra çalıştırılacak işlev
+        //         reader.onload = function (e) {
+        //             // **Dosya yüklendikten sonra yapılacak işlemler**
+
+        //             // 4.1. Geçici bir resim elemanı oluştur ve önizlemeyi göster
+        //             var tempImg = new Image();
+        //             tempImg.src = e.target.result;
+
+        //             // 4.2. Geçici resmin yüklenmesini bekle
+        //             tempImg.onload = function () {
+        //                 // 4.2.1. Gerçek resim öğesinin src'sini geçici resmin src'si ile güncelle
+        //                 img.src = tempImg.src;
+        //             };
+
+        //             // 4.3. (Opsiyonel) Dosya verisini daha fazla işleme için kullanın (örneğin, sunucuya gönderme)
+        //             // var fileData = e.target.result;
+        //             // // ... İşlemlerinizi burada gerçekleştirin
+
+        //             // 4.4. (Opsiyonel) Hata ayıklama için dosya adını ve türünü yazdırın
+        //             // console.log("Dosya adı:", inputFile.files[0].name);
+        //             // console.log("Dosya türü:", inputFile.files[0].type);
+        //         }
+
+        //         // 5. Seçili dosyayı veri URL'si olarak oku
+        //         reader.readAsDataURL(inputFile.files[0]);
+        //     }
+        // }
+
+
+        function loadProfilePicture(inputFile, imgElementId, hiddenInputId) {
+            var canvas = document.createElement('canvas');
+            // **Fonksiyon, seçilen dosyayı okur ve önizlemeyi belirtilen görüntü öğesine gösterir**
+
+            // 1. Görüntü öğesini parametre olarak alınan ID'ye göre al
+            var img = document.getElementById(imgElementId);
+
+            // 2. Bir dosya seçilip seçilmediğini kontrol edin
+            if (inputFile.files && inputFile.files[0]) {
+                // 3. Bir FileReader nesnesi oluşturun
+                var reader = new FileReader();
+
+                // 4. Dosya başarıyla okunduktan sonra çalıştırılacak işlev
+                reader.onload = function (e) {
+                    // **Dosya yüklendikten sonra yapılacak işlemler**
+
+                    // 4.1. Geçici bir resim elemanı oluştur ve önizlemeyi göster
+                    var tempImg = new Image();
+                    tempImg.src = e.target.result;
+
+                    // 4.2. Geçici resmin yüklenmesini bekle
+                    tempImg.onload = function () {
+                        // **Resim boyutlarını ve boyut oranını kontrol edin**
+
+                        // Minimum ve maksimum boyutlar
+                        var minWidth = 192;
+                        var minHeight = 192;
+                        var maxWidth = 500;
+                        var maxHeight = 500;
+
+                        // Resim boyutlarını al
+                        var width = tempImg.naturalWidth;
+                        var height = tempImg.naturalHeight;
+
+                        // Boyut oranını hesaplayın
+                        var aspectRatio = width / height;
+
+                        // Hedef genişlik ve yüksekliği hesaplayın
+                        var targetWidth = 500;
+                        var targetHeight = 500;
+
+                        if (width > maxWidth) {
+                            targetWidth = maxWidth;
+                        }
+
+                        if (height > maxHeight) {
+                            targetHeight = maxHeight;
+                        }
+                        if (width < minWidth) {
+                            targetWidth = minWidth;
+                        }
+                        if (height < minHeight) {
+                            targetHeight = minHeight;
+                        }
+
+                        // Canvas elemanını ve bağlamını oluşturun
+                        var canvas = document.createElement('canvas');
+                        var ctx = canvas.getContext('2d');
+
+                        // Yeniden boyutlandırılmış görüntü için tuval boyutlarını ayarlayın
+                        canvas.width = targetWidth;
+                        canvas.height = targetHeight;
+
+                        // Yeniden boyutlandırılmış resmin tuvale çizilmesi
+                        ctx.drawImage(tempImg, 0, 0, width, height, 0, 0, targetWidth, targetHeight);
+
+                        // Yeniden boyutlandırılmış resmin veri URL'sini alın
+                        var resizedImageDataURL = canvas.toDataURL('image/jpeg'); // Formatı gerektiği gibi ayarlayın
+
+                        // Yeniden boyutlandırılmış görüntü veri URL'sini resim öğesine ayarlayın
+                        img.src = resizedImageDataURL;
+                    };
+
+                    // 4.3. (Opsiyonel) Dosya verisini daha fazla işleme için kullanın (örneğin, sunucuya gönderme)
+                    // var fileData = e.target.result;
+                    // // ... İşlemlerinizi burada gerçekleştirin
+
+                    // 4.4. (Opsiyonel) Hata ayıklama için dosya adını ve türünü yazdırın
+                    // console.log("Dosya adı:", inputFile.files[0].name);
+                    // console.log("Dosya türü:", inputFile.files[0].type);
+                }
+
+                // 5. Seçili dosyayı veri URL'si olarak oku
+                reader.readAsDataURL(inputFile.files[0]);
+            }
+            // 12. Get the resized image data URL
+            var resizedImageDataURL = canvas.toDataURL('image/jpeg'); // Formatı gerektiği gibi ayarlayın
+
+            // // 13. Set the resized image data URL in the hidden input
+            // // var resizedImageInput = document.getElementById(hiddenInputId);
+            //  debugger;
+            // // resizedImageInput.value = resizedImageDataURL;
+            // var resizedImageInput = document.getElementById(hiddenInputId);
+            // if (resizedImageInput) {
+            //     resizedImageInput.value = resizedImageDataURL;
+            // } else {
+            //     console.error("Hidden input element with ID '" + hiddenInputId + "' not found.");
+            // }
+
+            // **Form elementini al ve güncelle**
+            // Get the hidden input element
+            // var hiddenInput = document.getElementById(hiddenInputId);
+
+            // // Create a new image data object
+            // var imageData = {
+            //     dataURL: resizedImageDataURL, // Base64 encoded image data
+            //     filename: inputFile.files[0].name // Original filename
+            // };
+
+            // // If the hidden input exists, set its value to the resized image data URL
+            // if (hiddenInput) {
+            //     hiddenInput.value = JSON.stringify(imageData); // Assuming you want to store the image data as JSON
+            // } else {
+            //     console.error("Hidden input element with ID '" + hiddenInputId + "' not found.");
+            // } 
+            var checked = document.getElementById(hiddenInputId);
+
+            canvas.toBlob((blob) => {
+                let file = new File([blob], "resized.jpg", { type: "image/jpeg" });
+                let dt = new DataTransfer(); // Create a DataTransfer object
+                dt.items.add(file); // Add the File object to the DataTransfer
+                checked.files = dt.files; // Assign the files from DataTransfer to the input
+            }, 'image/jpeg');
+
+            debugger;
+            // 14. (Optional) Display the resized image in the target element
+            var img = document.getElementById(imgElementId);
+            img.src = resizedImageDataURL;
+        }
+
+
         $(document).on('click', '#loginbtn', function () {
             // var row = $(this).closest('tr.jqgrow');
             // var rowId = row.attr('id');
@@ -414,6 +655,32 @@
                     }
                 });
             };
+
+            openEditFormCustomUrl = function (controllerUrl) {
+                debugger;
+                $.ajax({
+                    url: controllerUrl,
+                    type: 'GET',
+                    // data: { id: id },
+                    success: function (result) {
+                        $('#partialEditContent').html(result);
+                        $('#editModal').modal({
+                            backdrop: 'static',
+                            keyboard: false
+                        }).modal('show');;
+                    },
+                    error: function () {
+                        $.gritter.add({
+                            title: 'Hata',
+                            text: result.message,
+                            class_name: 'gritter-error',
+                            sticky: false,
+                            time: 5000
+                        });
+                    }
+                });
+            }
+
         });
 
         function displayValidationErrors(data) {

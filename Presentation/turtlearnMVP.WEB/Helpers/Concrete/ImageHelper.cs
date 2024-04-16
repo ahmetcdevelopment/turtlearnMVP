@@ -16,8 +16,8 @@ namespace turtlearnMVP.WEB.Helpers.Concrete
             _env = env;
         }
 
-        private readonly string wwwroot;
-        private readonly string imgFolder = "img";
+        private readonly string wwwroot = "wwwroot";
+        private readonly string imgFolder = "images";
         public IDataResult<ImageDeletedDto> DeleteImg(string pictureName)
         {
             var fileToDelete = Path.Combine($"{wwwroot}/{imgFolder}/", pictureName);
@@ -40,7 +40,7 @@ namespace turtlearnMVP.WEB.Helpers.Concrete
             }
         }
 
-        public async Task<IDataResult<ImageUploadedDto>> UploadUserImg(string userName, IFormFile pictureFile, string folderName = "userImages")
+        public async Task<IDataResult<ImageUploadedDto>> UploadUserImg(string userName, IFormFile pictureFile, string folderName = "avatar")
         {
             if (!Directory.Exists($"{wwwroot}/{imgFolder}/{folderName}"))
             {
@@ -52,7 +52,7 @@ namespace turtlearnMVP.WEB.Helpers.Concrete
             //.png
             string fileExtensions = Path.GetExtension(pictureFile.FileName);
             DateTime dateTime = DateTime.Now;
-            string newFileName = $"{userName}_{dateTime.FullDateAndTimeStringWithUnderScore()}{fileExtensions}";
+            string newFileName = $"{userName}-{dateTime.FullDateAndTimeStringWithUnderScore()}{fileExtensions}";
             var path = Path.Combine($"{wwwroot}/{imgFolder}/{folderName}", newFileName);
             await using (var stream = new FileStream(path, FileMode.Create))
             {
@@ -62,6 +62,7 @@ namespace turtlearnMVP.WEB.Helpers.Concrete
             return new DataResult<ImageUploadedDto>(ResultStatus.Success, $"{userName} adlı kullanıcının resmi başarıyla güncellenmiştir.", new ImageUploadedDto
             {
                 FullName = $"{folderName}/{newFileName}",
+                FileName = newFileName,
                 OldName = oldFileName,
                 Extension = fileExtensions,
                 FolderName = folderName,

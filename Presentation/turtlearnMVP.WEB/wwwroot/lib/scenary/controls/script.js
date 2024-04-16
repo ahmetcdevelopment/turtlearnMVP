@@ -375,13 +375,13 @@ class Controls {
 
     addVideo(videoElement, userId) {
         debugger;
-        // Kullanýcý kimliði kontrolü
+        //Kullanýcý kimliði kontrolü
         if (!userId) {
             //console.error("Hata: Kullanýcý kimliði (userId) undefined!");
             return;
         }
 
-        // Mevcut video elementini kontrol et
+        //Mevcut video elementini kontrol et
         const existingVideoElement = document.querySelector(`[data-userid="${userId}"]`);
 
         if (existingVideoElement) {

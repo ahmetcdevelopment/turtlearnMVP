@@ -1,10 +1,16 @@
 ﻿using AutoMapper.Internal;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using System.Collections.Concurrent;
+using TurtLearn.Shared.Entities.Concrete;
 using turtlearnMVP.Persistance.Context;
 
 namespace turtlearnMVP.WEB.Hubs;
-
+public class VideoInfo
+{
+    public string UserId { get; set; }
+    public string StreamUrl { get; set; }
+}
 public class LiveMeetingHub : Hub
 {
 
@@ -12,12 +18,30 @@ public class LiveMeetingHub : Hub
     private static List<string> Names { get; set; } = new List<string>();
     public static int ClientCount { get; set; } = 0;
     private static int TeamCount { get; set; } = 3;
+    private readonly UserManager<User> _userManager;
     private readonly turtlearnMVPContext _Context;
+    private readonly ConcurrentDictionary<string, VideoInfo> _videoInfos = new ConcurrentDictionary<string, VideoInfo>();
     public LiveMeetingHub(turtlearnMVPContext context)
     {
         _Context = context;
     }
+    private static readonly List<string> SharedList = new List<string>();
 
+    // Listeye yeni bir eleman ekleyen metod
+    public async Task AddToList(string item)
+    {
+        if (!SharedList.Contains(item))
+        {
+            SharedList.Add(item); // Öğe listede yoksa, listeye ekleyin
+            await Clients.All.SendAsync("UpdateList", SharedList); // Tüm istemcilere güncellenmiş listeyi gönderin
+        }
+    }
+
+    // Listedeki tüm elemanları dönen metod
+    public async Task<List<string>> GetList()
+    {
+        return SharedList;
+    }
     public async Task SendMessageAsync(string message)
     {
         //abone olan tüm clientlar'a mesajı gönder
@@ -42,10 +66,50 @@ public class LiveMeetingHub : Hub
     }
     public async override Task OnConnectedAsync()
     {
-        ClientCount++;
-        await Clients.All.SendAsync("receiveClientCount", ClientCount);
+
+        //if (!_videoInfos.Any())
+        //{
+        //    _videoInfos.TryAdd("user1", new VideoInfo { UserId = "user1", StreamUrl = "sample_stream_url_1" });
+        //    _videoInfos.TryAdd("user2", new VideoInfo { UserId = "user2", StreamUrl = "sample_stream_url_2" });
+        //}
+
+        await Clients.All.SendAsync("receiveClientCount", _videoInfos.Values.ToList());
         await base.OnConnectedAsync();
     }
+
+
+    public async Task JoinCall(string userId = "deneme", string streamUrl = "")
+    {
+        // Store the video information for the connected user
+        _videoInfos[userId] = new VideoInfo
+        {
+            UserId = userId,
+            StreamUrl = streamUrl
+        };
+
+        // Notify other connected clients about the new participant
+        await Clients.Others.SendAsync("newParticipant", userId, streamUrl);
+    }
+
+    public async Task GetExistingVideos()
+    {
+       
+
+        // Send the list of existing video information to the caller
+        await Clients.Caller.SendAsync("receiveExistingVideos", _videoInfos);
+    }
+
+    public async Task LeaveCall(string userId)
+    {
+        // Remove the video information for the disconnected user
+        _videoInfos.TryRemove(userId, out _);
+
+        // Notify other connected clients about the leaving participant
+        await Clients.Others.SendAsync("participantLeft", userId);
+    }
+
+
+
     //public async Task AddToGroup(string teamName)
     //{
     //    await Groups.AddToGroupAsync(Context.ConnectionId, teamName);
@@ -72,9 +136,9 @@ public class LiveMeetingHub : Hub
     {
         await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
     }
-    public async Task SendGroupMessage(string groupName, string message)
+    public async Task SendGroupMessage(string groupName, string message, string senderName)
     {
-        var senderName = "deneme";
+        //var senderName = ;
         await Clients.Group(groupName)
   .SendAsync("ReceiveGroupMessage", message, DateTime.UtcNow, Context.ConnectionId, senderName);
     }

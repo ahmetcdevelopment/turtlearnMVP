@@ -13,6 +13,7 @@ using turtlearnMVP.Domain.Entities;
 using turtlearnMVP.Domain.Enums;
 using turtlearnMVP.WEB.Areas.Admin.Models;
 using turtlearnMVP.WEB.Helpers;
+using turtlearnMVP.WEB.Helpers.Abstract;
 using turtlearnMVP.WEB.Models;
 using turtlearnMVP.WEB.Models.User;
 
@@ -24,18 +25,21 @@ namespace turtlearnMVP.WEB.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly IMailService _mailService;
         private readonly IUserSettingService _userSettingService;
+        private readonly IImageHelper _imageHelper;
         public UserController
             (
                 UserManager<User> userManager, 
                 SignInManager<User> signInManager,
                 IMailService mailService,
-                IUserSettingService userSettingService
+                IUserSettingService userSettingService,
+                IImageHelper imageHelper
             )
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _mailService = mailService;
             _userSettingService = userSettingService;
+            _imageHelper = imageHelper;
         }
         public IActionResult Index()
         {
@@ -101,43 +105,48 @@ namespace turtlearnMVP.WEB.Controllers
                 model.LastName = user.LastName;
                 model.Email = user.Email;
                 model.PhoneNumber = user.PhoneNumber;
-                model.Picture = user.Photo;
-             
+                model.PictureStr = user.Photo;
+                model.Biography = user.Biography;
             }
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(UserEditViewModel model)
+        public async Task<IActionResult> Update([FromForm] UserEditViewModel model)
         {
             if (ModelState.IsValid)
             {
-                //var result = await _mainService.GetById(model.Id.HasValue ? model.Id.Value : 0);
-                //if (result.ResultStatus == ResultStatus.Success && result.Data.Id < 0)
-                //{
-                //    return Json(new { Result = result });
-                //}
-                //result.Data.TeacherId = model.TeacherId;
-                //result.Data.CategoryId = model.CategoryId;
-                //result.Data.StartDate = model.StartDate;
-                //result.Data.EndDate = model.EndDate;
-                //result.Data.Quota = model.Quota;
-                //result.Data.Name = model.Name;
-                //result.Data.PricePerHour = model.PricePerHour;
-                //result.Data.TotalHour = model.TotalHour;
-                //result.Data.TotalPrice = model.PricePerHour * model.TotalHour;
-                //result.Data.Description = model.Description;
-                //result.Data.Status = model.Status;
-                //if (result.Data.Id == 0)
-                //{
-                //    result.Data.IsDeleted = false;
-                //    result.Data.UpdateDate = DateTime.Now;
-                //    var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                //    result.Data.UpdateUserId = userId != null && int.TryParse(userId, out int _userId) ? _userId : 0;
-                //}
-                //var addOrUpdateResult = result.Data.Id > 0 ? await _mainService.UpdateOrDelete(result.Data) : await _mainService.InsertAsync(result.Data);
+                var user = await _userManager.FindByIdAsync(model.Id.ToString());
+                if(user == null)
+                {
+                    return Json(new { Result = "Kullanıcı bulunamadı!" });
+                }
+
+                if(user.Email != model.Email)
+                {
+                    var userSetting = await _userSettingService.GetByUserIdAndKey(user.Id, (int)UserSettingType.Verify, (int)UserSettingVerify.Email);
+                    if(userSetting.ResultStatus == ResultStatus.Success)
+                    {
+                        userSetting.Data.IsDeleted = true;
+                        _userSettingService.UpdateOrDelete(userSetting.Data);
+                    }
+                }
+
+                user.UserName = model.UserName;
+                user.FirstName  = model.FirstName;
+                user.LastName = model.LastName;
+                user.Email = model.Email;
+                user.PhoneNumber = model.PhoneNumber;
+                user.Biography = model.Biography;
+                
+                if (model.Picture != null)
+                {
+                   user.Photo = _imageHelper.UploadUserImg(user.UserName, model.Picture, "avatar").GetAwaiter().GetResult().Data.FileName;
+                }
+                var addOrUpdateResult =  await _userManager.UpdateAsync(user);
                 ////var component = ViewComponent("Course");
-                //return Json(new { Result = addOrUpdateResult/*, Compoent = component */});
+                return Json(new { Result = addOrUpdateResult/*, Compoent = component */});
+
             }
             return Json(new { Result = new Result(ResultStatus.Error, Messages.PageIsNotFound) });
         }

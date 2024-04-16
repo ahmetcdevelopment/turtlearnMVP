@@ -17,5 +17,6 @@ namespace turtlearnMVP.Application.Persistance.Services
         //IDataResult<IList<UserSettingDTO>> FetchAllDtos();
         Task<IDataResult<UserSetting>> GetById(int id);
         Task<int> GenerateRandomVerificationCode();
+        Task<IDataResult<UserSetting>> GetByUserIdAndKey(int userId, int typeId, int key);
     }
 }

@@ -6223,3 +6223,7 @@ option{
         max-width: 100vw;
     }
 }
+
+.auto-newline {
+    word-wrap: break-word;
+}

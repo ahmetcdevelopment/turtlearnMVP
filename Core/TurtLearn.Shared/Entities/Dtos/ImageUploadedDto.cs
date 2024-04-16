@@ -9,6 +9,7 @@ namespace TurtLearn.Shared.Entities.Dtos
     public class ImageUploadedDto
     {
         public string FullName { get; set; }
+        public string FileName { get; set; }
         public string OldName { get; set; }
         public string Extension { get; set; }//uzantıyı anlamamız için
         public string Path { get; set; }
